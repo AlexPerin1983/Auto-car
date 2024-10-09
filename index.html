@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los_PelikoSs - Orçamento Automotivo</title>
+    <!-- Importando Materialize CSS e Icons via CDN -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fafafa;
+        }
+        .brand-logo {
+            font-size: 1.5rem;
+        }
+        .progress-bar-container {
+            margin-top: 20px;
+        }
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        .progress-steps .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .progress-steps .step .circle {
+            width: 30px;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            display: inline-block;
+            line-height: 30px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .progress-steps .step.active .circle {
+            background-color: #26a69a;
+        }
+        .progress-steps .step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: calc(50% + 15px);
+            width: calc(100% - 30px);
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: -1;
+        }
+        .progress-steps .step:last-child::after {
+            display: none;
+        }
+        .progress-steps .step.active::after {
+            background-color: #26a69a;
+        }
+        .screen {
+            display: none;
+        }
+        .active-screen {
+            display: block;
+        }
+        .loading {
+            display: none;
+        }
+        .btn-primary {
+            background-color: #26a69a;
+        }
+        .btn-primary:hover {
+            background-color: #2bbbad;
+        }
+        .summary-card {
+            padding: 20px;
+        }
+        .summary-card h5 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="teal lighten-1">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">Los_PelikoSs - Auto-CAR</a>
+        </div>
+    </nav>
+
+    <!-- Conteúdo principal -->
+    <div class="container">
+        <!-- Barra de progresso -->
+        <div class="progress-bar-container">
+            <div class="progress-steps">
+                <div class="step active">
+                    <div class="circle">1</div>
+                    <p>Veículo</p>
+                </div>
+                <div class="step">
+                    <div class="circle">2</div>
+                    <p>Serviços</p>
+                </div>
+                <div class="step">
+                    <div class="circle">3</div>
+                    <p>Orçamento</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela de Cadastro da Empresa -->
+        <div id="empresaScreen" class="screen">
+            <h4>Cadastro da Empresa</h4>
+            <form id="empresaForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="nomeEmpresa" type="text" required>
+                        <label for="nomeEmpresa">Nome da Empresa</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="nomeResponsavel" type="text" required>
+                        <label for="nomeResponsavel">Nome do Responsável</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="telefoneEmpresa" type="tel" required>
+                        <label for="telefoneEmpresa">Telefone</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="emailEmpresa" type="email" required>
+                        <label for="emailEmpresa">Email</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="enderecoEmpresa" type="text" required>
+                        <label for="enderecoEmpresa">Endereço</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="cpfCnpjEmpresa" type="text" required>
+                        <label for="cpfCnpjEmpresa">CPF/CNPJ</label>
+                    </div>
+                    <div class="file-field input-field col s12">
+                        <div class="btn btn-small btn-primary">
+                            <span>Logotipo</span>
+                            <input type="file" id="logoEmpresa" accept="image/*">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text" placeholder="Faça upload do logotipo da empresa">
+                        </div>
+                    </div>
+                    <div class="input-field col s6">
+                        <input type="color" id="corPrimaria" value="#26a69a">
+                        <label for="corPrimaria" class="active">Cor Primária</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input type="color" id="corSecundaria" value="#ffffff">
+                        <label for="corSecundaria" class="active">Cor Secundária</label>
+                    </div>
+                    <div class="col s12">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tela 1: Informações do Veículo -->
+        <div id="veiculoScreen" class="screen active-screen">
+            <h4>Informações do Veículo</h4>
+            <form id="vehicleInfoForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <select id="marca" required>
+                            <option value="" disabled selected>Selecione a marca</option>
+                        </select>
+                        <label>Marca</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <select id="modelo" disabled required>
+                            <option value="" disabled selected>Selecione o modelo</option>
+                        </select>
+                        <label>Modelo</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <select id="ano" disabled required>
+                            <option value="" disabled selected>Selecione o ano</option>
+                        </select>
+                        <label>Ano</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="placa" type="text" required>
+                        <label for="placa">Placa</label>
+                    </div>
+                    <div class="input-field col s12">
+                        <select id="pelicula" required>
+                            <option value="" disabled selected>Selecione o tipo de película</option>
+                            <option value="standard">Película Standard</option>
+                            <option value="premium">Película Premium</option>
+                            <option value="ceramica">Película Cerâmica</option>
+                        </select>
+                        <label>Película</label>
+                    </div>
+                    <div class="col s12">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Próximo</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tela 2: Seleção de Serviços -->
+        <div id="servicosScreen" class="screen">
+            <h4>Seleção de Serviços</h4>
+            <form id="servicosForm">
+                <div class="row">
+                    <h5>Áreas do Veículo</h5>
+                    <p>
+                        <label>
+                            <input type="checkbox" name="servicos" value="para-brisa" />
+                            <span>Para-brisa</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="checkbox" name="servicos" value="vidro-lateral-dianteiro" />
+                            <span>Vidro lateral dianteiro</span>
+                        </label>
+                    </p>
+                    <div class="input-field col s12">
+                        <p class="range-field">
+                            <label>Lado(s)</label><br>
+                            <label>
+                                <input type="checkbox" name="lado-dianteiro" value="D" />
+                                <span>Direito</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="lado-dianteiro" value="E" />
+                                <span>Esquerdo</span>
+                            </label>
+                        </p>
+                    </div>
+                    <!-- Repita o padrão para os demais serviços -->
+                    <h5>Serviços Adicionais</h5>
+                    <p>
+                        <label>
+                            <input type="checkbox" name="servicos-adicionais" value="remocao-pelicula" />
+                            <span>Remoção de Película Antiga</span>
+                        </label>
+                    </p>
+                    <div class="col s12">
+                        <button type="submit" class="btn btn-primary waves-effect waves-light">Calcular Orçamento</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tela 3: Prévia do Orçamento -->
+        <div id="orcamentoScreen" class="screen">
+            <h4>Prévia do Orçamento</h4>
+            <div class="card summary-card">
+                <div class="card-content">
+                    <div id="orcamentoDetalhes"></div>
+                </div>
+            </div>
+            <button class="btn btn-primary waves-effect waves-light" onclick="imprimirOrcamento()">Imprimir Orçamento</button>
+        </div>
+
+        <!-- Indicador de carregamento -->
+        <div class="loading center-align">
+            <div class="preloader-wrapper active">
+                <div class="spinner-layer spinner-teal-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div><div class="gap-patch">
+                        <div class="circle"></div>
+                    </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Carregando...</p>
+        </div>
+
+    </div>
+
+    <!-- Importando jQuery e Materialize JS via CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <!-- Script personalizado -->
+    <script>
+        $(document).ready(function() {
+            // Inicializa componentes do Materialize
+            $('select').formSelect();
+            $('.sidenav').sidenav();
+
+            // Variáveis globais
+            const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
+            let db;
+
+            // Elementos do DOM
+            const $marcaSelect = $('#marca');
+            const $modeloSelect = $('#modelo');
+            const $anoSelect = $('#ano');
+            const $progressSteps = $('.progress-steps .step');
+
+            // Função para buscar dados da API FIPE
+            async function fetchFipeData(endpoint) {
+                $('.loading').show();
+                try {
+                    const response = await fetch(`${BASE_URL}/${endpoint}`);
+                    const data = await response.json();
+                    $('.loading').hide();
+                    return data;
+                } catch (error) {
+                    console.error('Erro ao buscar dados:', error);
+                    $('.loading').hide();
+                    return [];
+                }
+            }
+
+            // Carregar marcas de veículos
+            async function loadBrands() {
+                const brands = await fetchFipeData('marcas');
+                brands.forEach(brand => {
+                    $marcaSelect.append(`<option value="${brand.codigo}">${brand.nome}</option>`);
+                });
+                $('select').formSelect();
+            }
+
+            // Evento de mudança na seleção da marca
+            $marcaSelect.on('change', async function() {
+                $modeloSelect.empty().append('<option value="" disabled selected>Selecione o modelo</option>');
+                $anoSelect.empty().append('<option value="" disabled selected>Selecione o ano</option>').prop('disabled', true);
+                $('select').formSelect();
+
+                const marcaId = $(this).val();
+                if (marcaId) {
+                    $modeloSelect.prop('disabled', false);
+                    const models = await fetchFipeData(`marcas/${marcaId}/modelos`);
+                    models.modelos.forEach(model => {
+                        $modeloSelect.append(`<option value="${model.codigo}">${model.nome}</option>`);
+                    });
+                    $('select').formSelect();
+                } else {
+                    $modeloSelect.prop('disabled', true);
+                    $('select').formSelect();
+                }
+            });
+
+            // Evento de mudança na seleção do modelo
+            $modeloSelect.on('change', async function() {
+                $anoSelect.empty().append('<option value="" disabled selected>Selecione o ano</option>');
+                $('select').formSelect();
+
+                const modeloId = $(this).val();
+                const marcaId = $marcaSelect.val();
+                if (modeloId) {
+                    $anoSelect.prop('disabled', false);
+                    const years = await fetchFipeData(`marcas/${marcaId}/modelos/${modeloId}/anos`);
+                    years.forEach(year => {
+                        $anoSelect.append(`<option value="${year.codigo}">${year.nome}</option>`);
+                    });
+                    $('select').formSelect();
+                } else {
+                    $anoSelect.prop('disabled', true);
+                    $('select').formSelect();
+                }
+            });
+
+            // Função para navegar entre as telas
+            function navegarParaTela(numeroTela) {
+                const telas = ['empresaScreen', 'veiculoScreen', 'servicosScreen', 'orcamentoScreen'];
+                $('.screen').removeClass('active-screen');
+                $(`#${telas[numeroTela]}`).addClass('active-screen');
+
+                // Atualizar barra de progresso
+                $progressSteps.each(function(index) {
+                    if (index <= numeroTela - 1) {
+                        $(this).addClass('active');
+                    } else {
+                        $(this).removeClass('active');
+                    }
+                });
+            }
+
+            // Função para verificar dados do veículo
+            function verificarDadosVeiculo() {
+                return $('#marca').val() && $('#modelo').val() && $('#ano').val() && $('#placa').val() && $('#pelicula').val();
+            }
+
+            // Função para verificar seleção de serviços
+            function verificarServicosSelecionados() {
+                return $('input[name="servicos"]:checked').length > 0;
+            }
+
+            // Função para calcular o orçamento
+            function calcularOrcamento() {
+                const servicosSelecionados = $('input[name="servicos"]:checked').map(function() {
+                    const servico = $(this).val();
+                    const lados = $(`input[name="lado-${servico}"]:checked`).map(function() {
+                        return $(this).val();
+                    }).get();
+                    return { servico, lados };
+                }).get();
+
+                const servicosAdicionais = $('input[name="servicos-adicionais"]:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                preencherPreviewOrcamento(servicosSelecionados, servicosAdicionais);
+            }
+
+            // Funções para lidar com o IndexedDB
+            function initDB() {
+                const request = indexedDB.open("LosPerikosAutoCar", 1);
+
+                request.onerror = function(event) {
+                    console.error("Erro ao abrir o banco de dados:", event.target.error);
+                };
+
+                request.onsuccess = function(event) {
+                    db = event.target.result;
+                    checkEmpresaData();
+                };
+
+                request.onupgradeneeded = function(event) {
+                    db = event.target.result;
+                    const objectStore = db.createObjectStore("empresa", { keyPath: "id" });
+                    objectStore.createIndex("nomeEmpresa", "nomeEmpresa", { unique: true });
+                };
+            }
+
+            function saveEmpresaData(data) {
+                const transaction = db.transaction(["empresa"], "readwrite");
+                const objectStore = transaction.objectStore("empresa");
+                const request = objectStore.put({ id: 1, ...data });
+
+                request.onerror = function(event) {
+                    console.error("Erro ao salvar dados da empresa:", event.target.error);
+                };
+
+                request.onsuccess = function(event) {
+                    M.toast({html: 'Dados da empresa salvos com sucesso!'});
+                    navegarParaTela(1);
+                };
+            }
+
+            function checkEmpresaData() {
+                const transaction = db.transaction(["empresa"], "readonly");
+                const objectStore = transaction.objectStore("empresa");
+                const request = objectStore.get(1);
+
+                request.onerror = function(event) {
+                    console.error("Erro ao buscar dados da empresa:", event.target.error);
+                };
+
+                request.onsuccess = function(event) {
+                    if (request.result) {
+                        navegarParaTela(1);
+                    } else {
+                        navegarParaTela(0);
+                    }
+                };
+            }
+
+            // Event listener para o formulário de cadastro da empresa
+            $('#empresaForm').on('submit', function(event) {
+                event.preventDefault();
+                const empresaData = {
+                    logo: $('#logoEmpresa')[0].files[0],
+                    corPrimaria: $('#corPrimaria').val(),
+                    corSecundaria: $('#corSecundaria').val(),
+                    nomeResponsavel: $('#nomeResponsavel').val(),
+                    nomeEmpresa: $('#nomeEmpresa').val(),
+                    telefone: $('#telefoneEmpresa').val(),
+                    email: $('#emailEmpresa').val(),
+                    endereco: $('#enderecoEmpresa').val(),
+                    cpfCnpj: $('#cpfCnpjEmpresa').val()
+                };
+                saveEmpresaData(empresaData);
+            });
+
+            // Função para preencher a prévia do orçamento
+            function preencherPreviewOrcamento(servicos, adicionais) {
+                const marca = $('#marca option:selected').text();
+                const modelo = $('#modelo option:selected').text();
+                const ano = $('#ano option:selected').text();
+                const placa = $('#placa').val();
+                const pelicula = $('#pelicula option:selected').text();
+
+                let html = `
+                    <h5>Detalhes do Veículo</h5>
+                    <p><strong>Marca:</strong> ${marca}</p>
+                    <p><strong>Modelo:</strong> ${modelo}</p>
+                    <p><strong>Ano:</strong> ${ano}</p>
+                    <p><strong>Placa:</strong> ${placa}</p>
+                    <p><strong>Película:</strong> ${pelicula}</p>
+
+                    <h5>Serviços Selecionados</h5>
+                    <ul class="collection">
+                `;
+
+                servicos.forEach(servico => {
+                    html += `<li class="collection-item">${servico.servico} ${servico.lados.length > 0 ? '(' + servico.lados.join(', ') + ')' : ''}</li>`;
+                });
+
+                html += `</ul>`;
+
+                if (adicionais.length > 0) {
+                    html += `
+                        <h5>Serviços Adicionais</h5>
+                        <ul class="collection">
+                            ${adicionais.map(adicional => `<li class="collection-item">${adicional}</li>`).join('')}
+                        </ul>
+                    `;
+                }
+
+                // Aqui você pode adicionar o cálculo do preço total
+                html += `<h5>Preço Total: <strong>R$ XX,XX</strong></h5>`;
+
+                $('#orcamentoDetalhes').html(html);
+            }
+
+            // Função para imprimir o orçamento
+            function imprimirOrcamento() {
+                window.print();
+            }
+
+            // Event listeners para os formulários
+            $('#vehicleInfoForm').on('submit', function(event) {
+                event.preventDefault();
+                if (!verificarDadosVeiculo()) {
+                    M.toast({html: 'Por favor, preencha todos os dados do veículo antes de prosseguir.'});
+                    return;
+                }
+                navegarParaTela(2);
+            });
+
+            $('#servicosForm').on('submit', function(event) {
+                event.preventDefault();
+                if (!verificarServicosSelecionados()) {
+                    M.toast({html: 'Por favor, selecione pelo menos um serviço antes de prosseguir.'});
+                    return;
+                }
+                calcularOrcamento();
+                navegarParaTela(3);
+            });
+
+            // Inicialização
+            initDB();
+            loadBrands();
+        });
+    </script>
+</body>
+</html>
