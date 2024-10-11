@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <style>
-        /* Estilos anteriores mantidos */
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f5f5f5;
@@ -337,6 +336,7 @@
     </div>
 
     <!-- Modal Editar Cliente -->
+     <!-- Modal Editar Cliente -->
     <div id="modal-editar-cliente" class="modal">
         <div class="modal-content">
             <h4>Editar Cliente</h4>
@@ -691,7 +691,8 @@
                         <td>${servico.nome}</td>
                         <td>R$ ${orcamento.valor.toFixed(2)}</td>
                         <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                    </tr`;
+                    </tr>
+                `;
             }
         }
 
@@ -885,14 +886,85 @@
             }
         }
 
-        // Funções para manipulação de orçamentos
+        // Configuração e funções para a API FIPE
+        const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
+        const $marcaSelect = document.getElementById('marca');
+        const $modeloSelect = document.getElementById('modelo');
+        const $anoSelect = document.getElementById('ano');
+
+        async function fetchFipeData(endpoint) {
+            try {
+                const response = await fetch(`${BASE_URL}/${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao buscar dados da API FIPE:', error);
+                M.toast({html: 'Erro ao carregar dados de veículos. Por favor, tente novamente.', classes: 'rounded red'});
+                return [];
+            }
+        }
+
+        async function loadBrands() {
+            $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
+            const brands = await fetchFipeData('marcas');
+            brands.forEach(brand => {
+                $marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
+            });
+            M.FormSelect.init($marcaSelect);
+        }
+
+        $marcaSelect.addEventListener('change', async function() {
+            $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
+            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+            $modeloSelect.disabled = true;
+            $anoSelect.disabled = true;
+            M.FormSelect.init($modeloSelect);
+            M.FormSelect.init($anoSelect);
+
+            const marcaId = this.value;
+            if (marcaId) {
+                $modeloSelect.disabled = false;
+                const models = await fetchFipeData(`marcas/${marcaId}/modelos`);
+                models.modelos.forEach(model => {
+                    $modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
+                });
+                M.FormSelect.init($modeloSelect);
+            }
+        });
+
+        $modeloSelect.addEventListener('change', async function() {
+            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+            $anoSelect.disabled = true;
+            M.FormSelect.init($anoSelect);
+
+            const modeloId = this.value;
+            const marcaId = $marcaSelect.value;
+            if (modeloId) {
+                $anoSelect.disabled = false;
+                const years = await fetchFipeData(`marcas/${marcaId}/modelos/${modeloId}/anos`);
+                years.forEach(year => {
+                    $anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
+                });
+                M.FormSelect.init($anoSelect);
+            }
+        });
+
+        // Função para obter o veículo selecionado
+        function getSelectedVehicle() {
+            const marca = $marcaSelect.options[$marcaSelect.selectedIndex].text;
+            const modelo = $modeloSelect.options[$modeloSelect.selectedIndex].text;
+            const ano = $anoSelect.options[$anoSelect.selectedIndex].text;
+            return `${marca} ${modelo} ${ano}`;
+        }
+
+        // Função para calcular orçamento
         async function calcularOrcamento(event) {
             event.preventDefault();
             const clienteId = parseInt(document.getElementById('cliente').value);
-            const marca = document.getElementById('marca').options[document.getElementById('marca').selectedIndex].text;
-            const modelo = document.getElementById('modelo').options[document.getElementById('modelo').selectedIndex].text;
-            const ano = document.getElementById('ano').options[document.getElementById('ano').selectedIndex].text;
             const servicoId = parseInt(document.getElementById('servico').value);
+            const veiculo = getSelectedVehicle();
             const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
             const observacoes = document.getElementById('observacoes').value;
 
@@ -908,7 +980,7 @@
                 const novoOrcamento = {
                     clienteId,
                     servicoId,
-                    veiculo: `${marca} ${modelo} ${ano}`,
+                    veiculo,
                     partes: partesSelecionadas,
                     valor: valorTotal,
                     observacoes,
@@ -960,69 +1032,11 @@
             
             // Event listeners
             document.getElementById('orcamentoForm').addEventListener('submit', calcularOrcamento);
+
+            // Carregar dados iniciais
+            loadBrands();
+            carregarDados();
         });
-
-        // Carregar dados da API FIPE
-        const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
-        const $marcaSelect = document.getElementById('marca');
-        const $modeloSelect = document.getElementById('modelo');
-        const $anoSelect = document.getElementById('ano');
-
-        async function fetchFipeData(endpoint) {
-            try {
-                const response = await fetch(`${BASE_URL}/${endpoint}`);
-                return await response.json();
-            } catch (error) {
-                console.error('Erro ao buscar dados:', error);
-                return [];
-            }
-        }
-
-        async function loadBrands() {
-            const brands = await fetchFipeData('marcas');
-            brands.forEach(brand => {
-                $marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
-            });
-            M.FormSelect.init($marcaSelect);
-        }
-
-        $marcaSelect.addEventListener('change', async function() {
-            $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
-            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-            $anoSelect.disabled = true;
-            M.FormSelect.init($modeloSelect);
-            M.FormSelect.init($anoSelect);
-
-            const marcaId = this.value;
-            if (marcaId) {
-                $modeloSelect.disabled = false;
-                const models = await fetchFipeData(`marcas/${marcaId}/modelos`);
-                models.modelos.forEach(model => {
-                    $modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
-                });
-                M.FormSelect.init($modeloSelect);
-            }
-        });
-
-        $modeloSelect.addEventListener('change', async function() {
-            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-            M.FormSelect.init($anoSelect);
-
-            const modeloId = this.value;
-            const marcaId = $marcaSelect.value;
-            if (modeloId) {
-                $anoSelect.disabled = false;
-                const years = await fetchFipeData(`marcas/${marcaId}/modelos/${modeloId}/anos`);
-                years.forEach(year => {
-                    $anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
-                });
-                M.FormSelect.init($anoSelect);
-            }
-        });
-
-        // Inicializar carregamento de dados
-        loadBrands();
-        carregarDados();
     </script>
 </body>
 </html>
