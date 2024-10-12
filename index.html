@@ -82,16 +82,21 @@
 <body>
 
     <!-- Navbar -->
-    <nav class="teal darken-2">
-        <div class="nav-wrapper">
+    <nav>
+        <div class="nav-wrapper teal darken-2">
             <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <a href="#" class="brand-logo">AUTO-CAR Pro</a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a href="#perfil"><i class="material-icons left">account_circle</i>Perfil</a></li>
-                <li><a href="#sair"><i class="material-icons left">exit_to_app</i>Sair</a></li>
+            <a href="#" class="brand-logo center">AUTO-CAR Pro</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a class="dropdown-trigger" href="#!" data-target="dropdown-config"><i class="material-icons">settings</i></a></li>
             </ul>
         </div>
     </nav>
+    
+    <!-- Dropdown Structure -->
+    <ul id="dropdown-config" class="dropdown-content">
+        <li><a href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
+        <li><a href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
+    </ul>
 
     <!-- Sidenav -->
     <ul id="slide-out" class="sidenav">
@@ -107,9 +112,19 @@
         <li><a href="#clientes"><i class="material-icons">people</i>Clientes</a></li>
         <li><a href="#orcamentos"><i class="material-icons">description</i>Orçamentos</a></li>
         <li><a href="#servicos"><i class="material-icons">build</i>Serviços</a></li>
-        <li><a href="#configuracoes"><i class="material-icons">settings</i>Configurações</a></li>
-        <li><div class="divider"></div></li>
-        <li><a href="#ajuda"><i class="material-icons">help</i>Ajuda</a></li>
+        <li>
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">settings</i>Configurações</div>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li><a href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
+                            <li><a href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
     </ul>
 
     <!-- Conteúdo principal -->
@@ -293,6 +308,105 @@
         </div>
     </div>
 
+<!-- Modal Dados da Empresa -->
+<div id="modal-dados-empresa" class="modal">
+    <div class="modal-content">
+        <h4>Dados da Empresa</h4>
+        <form id="formDadosEmpresa">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="nome_empresa" type="text" class="validate" required>
+                    <label for="nome_empresa">Nome da Empresa</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="cnpj_empresa" type="text" class="validate" required>
+                    <label for="cnpj_empresa">CNPJ</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="endereco_empresa" type="text" class="validate" required>
+                    <label for="endereco_empresa">Endereço</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="telefone_empresa" type="tel" class="validate" required>
+                    <label for="telefone_empresa">Telefone</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="email_empresa" type="email" class="validate" required>
+                    <label for="email_empresa">E-mail</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>Logo</span>
+                        <input type="file" id="logo_empresa" accept="image/*">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarDadosEmpresa()">Salvar</a>
+    </div>
+</div>
+
+<!-- Modal Formas de Pagamento -->
+<div id="modal-formas-pagamento" class="modal">
+    <div class="modal-content">
+        <h4>Formas de Pagamento</h4>
+        <form id="formFormasPagamento">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="chave_pix" type="text" class="validate">
+                    <label for="chave_pix">Chave PIX</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select multiple id="prazos_boleto">
+                        <option value="15">15 dias</option>
+                        <option value="30">30 dias</option>
+                        <option value="45">45 dias</option>
+                        <option value="60">60 dias</option>
+                        <option value="90">90 dias</option>
+                    </select>
+                    <label>Prazos de Boleto</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="parcelas_sem_juros" type="number" class="validate" min="1">
+                    <label for="parcelas_sem_juros">Parcelas sem Juros</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="parcelas_com_juros" type="number" class="validate" min="1">
+                    <label for="parcelas_com_juros">Parcelas com Juros</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="taxa_juros" type="number" step="0.1" class="validate" min="0">
+                    <label for="taxa_juros">Taxa de Juros (%)</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarFormasPagamento()">Salvar</a>
+    </div>
+</div>
+
     <!-- Modal Novo Cliente -->
     <div id="modal-novo-cliente" class="modal">
         <div class="modal-content">
@@ -465,6 +579,62 @@
                 orcamentosStore.createIndex('data', 'data', { unique: false });
             }
         };
+
+        function abrirModalDadosEmpresa() {
+    carregarDadosEmpresa();
+    var modal = M.Modal.getInstance(document.getElementById('modal-dados-empresa'));
+    modal.open();
+}
+
+function abrirModalFormasPagamento() {
+    carregarFormasPagamento();
+    var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
+    modal.open();
+}
+
+// Funções para carregar dados da empresa e formas de pagamento
+async function carregarDadosEmpresa() {
+    const dadosEmpresa = await buscarDadosEmpresa();
+    if (dadosEmpresa) {
+        document.getElementById('nome_empresa').value = dadosEmpresa.nome || '';
+        document.getElementById('cnpj_empresa').value = dadosEmpresa.cnpj || '';
+        document.getElementById('endereco_empresa').value = dadosEmpresa.endereco || '';
+        document.getElementById('telefone_empresa').value = dadosEmpresa.telefone || '';
+        document.getElementById('email_empresa').value = dadosEmpresa.email || '';
+        M.updateTextFields();
+    }
+}
+
+async function carregarFormasPagamento() {
+    const formasPagamento = await buscarFormasPagamento();
+    if (formasPagamento) {
+        document.getElementById('chave_pix').value = formasPagamento.chavePix || '';
+        M.FormSelect.getInstance(document.getElementById('prazos_boleto')).destroy();
+        document.getElementById('prazos_boleto').value = formasPagamento.prazosBoleto || [];
+        M.FormSelect.init(document.getElementById('prazos_boleto'));
+        document.getElementById('parcelas_sem_juros').value = formasPagamento.parcelasSemJuros || '';
+        document.getElementById('parcelas_com_juros').value = formasPagamento.parcelasComJuros || '';
+        document.getElementById('taxa_juros').value = formasPagamento.taxaJuros || '';
+        M.updateTextFields();
+    }
+}
+
+// Inicialização dos componentes Materialize
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(elems);
+
+    var elems = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(elems);
+
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(elems, {
+        constrainWidth: false,
+        coverTrigger: false
+    });
+
+    // ... outras inicializações ...
+});
 
         // Funções de manipulação de dados
         function adicionarCliente(cliente) {
@@ -1096,18 +1266,37 @@ async function buscarServicoPorId(id) {
 
         // Inicialização de componentes Materialize
         document.addEventListener('DOMContentLoaded', function() {
-            M.AutoInit();
-            var elems = document.querySelectorAll('select');
-            M.FormSelect.init(elems);
-            
-            // Event listeners
-            document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    // Inicializar componentes do Materialize
+    M.AutoInit();
 
-            // Carregar dados iniciais
-            loadBrands();
-            carregarDados();
+    // Lidar com cliques no menu e na engrenagem de configurações
+    document.querySelectorAll('.sidenav a, .nav-wrapper a[href^="#"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            showSection(targetId);
         });
+    });
+});
 
+function showSection(sectionId) {
+    // Esconder todas as seções
+    document.querySelectorAll('.section').forEach(function(section) {
+        section.style.display = 'none';
+    });
+
+    // Mostrar a seção selecionada
+    var targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+
+    // Fechar o sidenav no mobile
+    var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
+    if (sidenav && window.innerWidth < 992) { // 992px é o breakpoint padrão do Materialize para desktop
+        sidenav.close();
+    }
+}
         // Função para inicializar os selects do Materialize
         function initializeSelects() {
             var elems = document.querySelectorAll('select');
