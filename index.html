@@ -133,11 +133,12 @@
             <div class="row">
                 <div class="col s12">
                     <ul class="tabs">
-                        <li class="tab col s3"><a href="#dashboard">Dashboard</a></li>
+                        <li class="tab col s3 active"><a href="#dashboard">Dashboard</a></li>
                         <li class="tab col s3"><a href="#novo-orcamento">Novo Orçamento</a></li>
                         <li class="tab col s3"><a href="#clientes">Clientes</a></li>
                         <li class="tab col s3"><a href="#servicos">Serviços</a></li>
                     </ul>
+                    
                 </div>
             </div>
         </div>
@@ -1462,30 +1463,31 @@
 
    // Função para inicializar todos os componentes do Materialize
    function initializeAllComponents() {
-        M.AutoInit(); // Inicializa a maioria dos componentes automaticamente
+    M.AutoInit(); // Inicializa a maioria dos componentes automaticamente
 
-        // Inicializar componentes específicos se necessário
-        var elemsSidenav = document.querySelectorAll('.sidenav');
-        M.Sidenav.init(elemsSidenav);
+    // Inicializar componentes específicos se necessário
+    var elemsSidenav = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(elemsSidenav);
 
-        var elemsCollapsible = document.querySelectorAll('.collapsible');
-        M.Collapsible.init(elemsCollapsible);
+    var elemsCollapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(elemsCollapsible);
 
-        var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
-        M.Dropdown.init(elemsDropdown, {
-            constrainWidth: false,
-            coverTrigger: false
-        });
+    var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(elemsDropdown, {
+        constrainWidth: false,
+        coverTrigger: false
+    });
 
-        var elemsSelect = document.querySelectorAll('select');
-        M.FormSelect.init(elemsSelect);
+    var elemsSelect = document.querySelectorAll('select');
+    M.FormSelect.init(elemsSelect);
 
-        var elemsModal = document.querySelectorAll('.modal');
-        M.Modal.init(elemsModal);
+    var elemsModal = document.querySelectorAll('.modal');
+    M.Modal.init(elemsModal);
 
-        var elemsTabs = document.querySelectorAll('.tabs');
-        M.Tabs.init(elemsTabs);
-    }
+    var elemsTabs = document.querySelectorAll('.tabs');
+    M.Tabs.init(elemsTabs);
+}
+
 
     // Inicialização quando o documento estiver pronto
     document.addEventListener('DOMContentLoaded', function() {
@@ -1675,30 +1677,18 @@
     }
 
     // Inicializar a exibição das seções
-    function initializeSections() {
-    // Esconder todas as seções inicialmente
-    document.querySelectorAll('.section').forEach(function(section) {
-        section.style.display = 'none';
-    });
-
-    // Mostrar a seção do Dashboard por padrão
-    var dashboardSection = document.getElementById('dashboard');
-    if (dashboardSection) {
-        dashboardSection.style.display = 'block';
-    }
-}
 
 
     // Chamar a função para inicializar as seções
     document.addEventListener('DOMContentLoaded', function() {
-        initializeAllComponents();
-        initializeSections();
-        loadBrands();
-        carregarDados();
+    initializeAllComponents();
+    loadBrands();
+    carregarDados();
 
-        // Adicionar evento ao botão de calcular orçamento
-        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
-    });
+    // Adicionar evento ao botão de calcular orçamento
+    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+});
+
 
     // Event listeners para navegação no sidenav
     document.querySelectorAll('.sidenav a, .nav-wrapper a[href^="#"]').forEach(function(el) {
@@ -1708,7 +1698,12 @@
             showSection(targetId);
         });
     });
+    
 
+
+
+
+    
     // Função para carregar dados do formulário de orçamento ao selecionar um ano
     $anoSelect.addEventListener('change', async function() {
         const anoId = this.value;
