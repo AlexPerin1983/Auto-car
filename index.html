@@ -408,1165 +408,129 @@
     </div>
 </div>
 
-    <!-- Modal Novo Cliente -->
-    <div id="modal-novo-cliente" class="modal">
-        <div class="modal-content">
-            <h4>Novo Cliente</h4>
-            <form id="formNovoCliente">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="nome_cliente" type="text" class="validate" required>
-                        <label for="nome_cliente">Nome Completo</label>
-                    </div>
+<!-- Modal Novo Cliente -->
+<div id="modal-novo-cliente" class="modal">
+    <div class="modal-content">
+        <h4>Novo Cliente</h4>
+        <form id="formNovoCliente">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="nome_cliente" type="text" class="validate" required>
+                    <label for="nome_cliente">Nome Completo</label>
                 </div>
-                <div class="row">
-                    <div class="input-field col s12 m6">
-                        <input id="email_cliente" type="email" class="validate" required>
-                        <label for="email_cliente">E-mail</label>
-                    </div>
-                    <div class="input-field col s12 m6">
-                        <input id="telefone_cliente" type="tel" class="validate" required>
-                        <label for="telefone_cliente">Telefone</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarNovoCliente()">Salvar</a>
-        </div>
-    </div>
-
-    <!-- Modal Novo Serviço -->
-    <div id="modal-novo-servico" class="modal">
-        <div class="modal-content">
-            <h4>Novo Serviço</h4>
-            <form id="formNovoServico">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="nome_servico" type="text" class="validate" required>
-                        <label for="nome_servico">Nome do Serviço</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="descricao_servico" class="materialize-textarea"></textarea>
-                        <label for="descricao_servico">Descrição</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="preco_servico" type="number" step="0.01" class="validate" required>
-                        <label for="preco_servico">Preço (R$)</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarNovoServico()">Salvar</a>
-        </div>
-    </div>
-
-    <!-- Modal Editar Cliente -->
-    <div id="modal-editar-cliente" class="modal">
-        <div class="modal-content">
-            <h4>Editar Cliente</h4>
-            <form id="formEditarCliente">
-                <input type="hidden" id="id_cliente_edit">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="nome_cliente_edit" type="text" class="validate" required>
-                        <label for="nome_cliente_edit">Nome Completo</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12 m6">
-                        <input id="email_cliente_edit" type="email" class="validate" required>
-                        <label for="email_cliente_edit">E-mail</label>
-                    </div>
-                    <div class="input-field col s12 m6">
-                        <input id="telefone_cliente_edit" type="tel" class="validate" required>
-                        <label for="telefone_cliente_edit">Telefone</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="atualizarCliente()">Atualizar</a>
-        </div>
-    </div>
-
-    <!-- Modal Editar Serviço -->
-    <div id="modal-editar-servico" class="modal">
-        <div class="modal-content">
-            <h4>Editar Serviço</h4>
-            <form id="formEditarServico">
-                <input type="hidden" id="id_servico_edit">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="nome_servico_edit" type="text" class="validate" required>
-                        <label for="nome_servico_edit">Nome do Serviço</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="descricao_servico_edit" class="materialize-textarea"></textarea>
-                        <label for="descricao_servico_edit">Descrição</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="preco_servico_edit" type="number" step="0.01" class="validate" required>
-                        <label for="preco_servico_edit">Preço (R$)</label>
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="atualizarServico()">Atualizar</a>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="page-footer teal darken-2">
-        <div class="footer-copyright">
-            <div class="container">
-                © 2024 AUTO-CAR Pro
-                <a class="grey-text text-lighten-4 right" href="#!">Termos de Uso</a>
             </div>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-        // Inicialização do IndexedDB
-        let db;
-        const dbName = 'AutoCarDB';
-        const dbVersion = 1;
-
-        const request = indexedDB.open(dbName, dbVersion);
-
-        request.onerror = function(event) {
-            console.error("Erro ao abrir o banco de dados:", event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            db = event.target.result;
-            console.log("Banco de dados aberto com sucesso");
-            carregarDados();
-        };
-
-        request.onupgradeneeded = function(event) {
-    db = event.target.result;
-    
-    if (!db.objectStoreNames.contains('clientes')) {
-        const clientesStore = db.createObjectStore('clientes', { keyPath: 'id', autoIncrement: true });
-        clientesStore.createIndex('nome', 'nome', { unique: false });
-        clientesStore.createIndex('email', 'email', { unique: true });
-    }
-    
-    if (!db.objectStoreNames.contains('servicos')) {
-        const servicosStore = db.createObjectStore('servicos', { keyPath: 'id', autoIncrement: true });
-        servicosStore.createIndex('nome', 'nome', { unique: true });
-    }
-    
-    if (!db.objectStoreNames.contains('orcamentos')) {
-        const orcamentosStore = db.createObjectStore('orcamentos', { keyPath: 'id', autoIncrement: true });
-        orcamentosStore.createIndex('clienteId', 'clienteId', { unique: false });
-        orcamentosStore.createIndex('data', 'data', { unique: false });
-    }
-
-    // Adicionando o object store 'configuracoes'
-    if (!db.objectStoreNames.contains('configuracoes')) {
-        const configuracoesStore = db.createObjectStore('configuracoes', { keyPath: 'id' });
-        configuracoesStore.createIndex('nome', 'nome', { unique: false });
-    }
-};
-
-function converterImagemParaBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-}
-
-async function buscarDadosEmpresa() {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['configuracoes'], 'readonly');
-        const store = transaction.objectStore('configuracoes');
-        const request = store.get('dadosEmpresa');
-        
-        request.onerror = function(event) {
-            console.error("Erro ao buscar dados da empresa:", event.target.error);
-            reject("Erro ao buscar dados da empresa: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
-async function buscarFormasPagamento() {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['configuracoes'], 'readonly');
-        const store = transaction.objectStore('configuracoes');
-        const request = store.get('formasPagamento');
-        
-        request.onerror = function(event) {
-            console.error("Erro ao buscar formas de pagamento:", event.target.error);
-            reject("Erro ao buscar formas de pagamento: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
-
-
-        function abrirModalDadosEmpresa() {
-    carregarDadosEmpresa();
-    var modal = M.Modal.getInstance(document.getElementById('modal-dados-empresa'));
-    modal.open();
-}
-
-function abrirModalFormasPagamento() {
-    carregarFormasPagamento();
-    var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
-    modal.open();
-}
-
-async function salvarDadosEmpresa() {
-    const dadosEmpresa = {
-        nome: document.getElementById('nome_empresa').value,
-        cnpj: document.getElementById('cnpj_empresa').value,
-        endereco: document.getElementById('endereco_empresa').value,
-        telefone: document.getElementById('telefone_empresa').value,
-        email: document.getElementById('email_empresa').value
-    };
-
-    const logoInput = document.getElementById('logo_empresa');
-    if (logoInput.files.length > 0) {
-        dadosEmpresa.logo = await converterImagemParaBase64(logoInput.files[0]);
-    }
-
-    try {
-        await salvarDadosEmpresaNoIndexedDB(dadosEmpresa);
-        M.toast({html: 'Dados da empresa salvos com sucesso!', classes: 'rounded'});
-        M.Modal.getInstance(document.getElementById('modal-dados-empresa')).close();
-    } catch (error) {
-        M.toast({html: 'Erro ao salvar dados da empresa: ' + error, classes: 'rounded red'});
-    }
-}
-
-async function salvarFormasPagamento() {
-    const formasPagamento = {
-        chavePix: document.getElementById('chave_pix').value,
-        prazosBoleto: M.FormSelect.getInstance(document.getElementById('prazos_boleto')).getSelectedValues(),
-        parcelasSemJuros: parseInt(document.getElementById('parcelas_sem_juros').value),
-        parcelasComJuros: parseInt(document.getElementById('parcelas_com_juros').value),
-        taxaJuros: parseFloat(document.getElementById('taxa_juros').value)
-    };
-
-    try {
-        await salvarFormasPagamentoNoIndexedDB(formasPagamento);
-        M.toast({html: 'Formas de pagamento salvas com sucesso!', classes: 'rounded'});
-        M.Modal.getInstance(document.getElementById('modal-formas-pagamento')).close();
-    } catch (error) {
-        M.toast({html: 'Erro ao salvar formas de pagamento: ' + error, classes: 'rounded red'});
-    }
-}
-
-// Funções auxiliares para salvar no IndexedDB
-async function salvarDadosEmpresaNoIndexedDB(dadosEmpresa) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['configuracoes'], 'readwrite');
-        const store = transaction.objectStore('configuracoes');
-        const request = store.put({ id: 'dadosEmpresa', ...dadosEmpresa });
-        
-        request.onerror = function(event) {
-            reject("Erro ao salvar dados da empresa: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
-async function salvarFormasPagamentoNoIndexedDB(formasPagamento) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['configuracoes'], 'readwrite');
-        const store = transaction.objectStore('configuracoes');
-        const request = store.put({ id: 'formasPagamento', ...formasPagamento });
-        
-        request.onerror = function(event) {
-            reject("Erro ao salvar formas de pagamento: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
-
-
-// Funções para carregar dados da empresa e formas de pagamento
-async function carregarDadosEmpresa() {
-    const dadosEmpresa = await buscarDadosEmpresa();
-    if (dadosEmpresa) {
-        document.getElementById('nome_empresa').value = dadosEmpresa.nome || '';
-        document.getElementById('cnpj_empresa').value = dadosEmpresa.cnpj || '';
-        document.getElementById('endereco_empresa').value = dadosEmpresa.endereco || '';
-        document.getElementById('telefone_empresa').value = dadosEmpresa.telefone || '';
-        document.getElementById('email_empresa').value = dadosEmpresa.email || '';
-        M.updateTextFields();
-    }
-}
-
-async function carregarFormasPagamento() {
-    const formasPagamento = await buscarFormasPagamento();
-    if (formasPagamento) {
-        document.getElementById('chave_pix').value = formasPagamento.chavePix || '';
-        M.FormSelect.getInstance(document.getElementById('prazos_boleto')).destroy();
-        document.getElementById('prazos_boleto').value = formasPagamento.prazosBoleto || [];
-        M.FormSelect.init(document.getElementById('prazos_boleto'));
-        document.getElementById('parcelas_sem_juros').value = formasPagamento.parcelasSemJuros || '';
-        document.getElementById('parcelas_com_juros').value = formasPagamento.parcelasComJuros || '';
-        document.getElementById('taxa_juros').value = formasPagamento.taxaJuros || '';
-        M.updateTextFields();
-    }
-}
-document.addEventListener('DOMContentLoaded', function() {
-    initializeAllComponents();
-    
-    // Event listeners
-    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
-
-    // Carregar dados iniciais
-    loadBrands();
-    carregarDados();
-});
-
-
-
-// Inicialização dos componentes Materialize
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(elems);
-
-    var elems = document.querySelectorAll('.collapsible');
-    M.Collapsible.init(elems);
-
-    var elems = document.querySelectorAll('.dropdown-trigger');
-    M.Dropdown.init(elems, {
-        constrainWidth: false,
-        coverTrigger: false
-    });
-
-    // ... outras inicializações ...
-});
-
-        // Funções de manipulação de dados
-        function adicionarCliente(cliente) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['clientes'], 'readwrite');
-                const store = transaction.objectStore('clientes');
-                const request = store.add(cliente);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao adicionar cliente: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function adicionarServico(servico) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['servicos'], 'readwrite');
-                const store = transaction.objectStore('servicos');
-                const request = store.add(servico);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao adicionar serviço: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function adicionarOrcamento(orcamento) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['orcamentos'], 'readwrite');
-                const store = transaction.objectStore('orcamentos');
-                const request = store.add(orcamento);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao adicionar orçamento: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function atualizarCliente(cliente) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['clientes'], 'readwrite');
-                const store = transaction.objectStore('clientes');
-                const request = store.put(cliente);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao atualizar cliente: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function atualizarServico(servico) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['servicos'], 'readwrite');
-                const store = transaction.objectStore('servicos');
-                const request = store.put(servico);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao atualizar serviço: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function excluirCliente(id) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['clientes'], 'readwrite');
-                const store = transaction.objectStore('clientes');
-                const request = store.delete(id);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao excluir cliente: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve();
-                };
-            });
-        }
-
-        function excluirServico(id) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['servicos'], 'readwrite');
-                const store = transaction.objectStore('servicos');
-                const request = store.delete(id);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao excluir serviço: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve();
-                };
-            });
-        }
-
-        function buscarTodosClientes() {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['clientes'], 'readonly');
-                const store = transaction.objectStore('clientes');
-                const request = store.getAll();
-                
-                request.onerror = function(event) {
-                    reject("Erro ao buscar clientes: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function buscarTodosServicos() {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['servicos'], 'readonly');
-                const store = transaction.objectStore('servicos');
-                const request = store.getAll();
-                
-                request.onerror = function(event) {
-                    reject("Erro ao buscar serviços: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        function buscarTodosOrcamentos() {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['orcamentos'], 'readonly');
-                const store = transaction.objectStore('orcamentos');
-                const request = store.getAll();
-                
-                request.onerror = function(event) {
-                    reject("Erro ao buscar orçamentos: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
-
-        // Funções de interface do usuário
-        async function carregarDados() {
-            await carregarClientes();
-            await carregarServicos();
-            await carregarOrcamentos();
-            atualizarDashboard();
-        }
-
-        async function carregarClientes() {
-            const clientes = await buscarTodosClientes();
-            const listaClientes = document.getElementById('lista-clientes');
-            const selectCliente = document.getElementById('cliente');
-            
-            listaClientes.innerHTML = '';
-            selectCliente.innerHTML = '<option value="" disabled selected>Selecione o cliente</option>';
-            
-            clientes.forEach(cliente => {
-                listaClientes.innerHTML += `
-                    <li class="collection-item avatar">
-                        <img src="/api/placeholder/100/100" alt="" class="circle">
-                        <span class="title">${cliente.nome}</span>
-                        <p>${cliente.email}<br>${cliente.telefone}</p>
-                        <a href="#!" class="secondary-content" onclick="editarCliente(${cliente.id})"><i class="material-icons">edit</i></a>
-                        <a href="#!" class="secondary-content" onclick="confirmarExclusaoCliente(${cliente.id})"><i class="material-icons">delete</i></a>
-                    </li>
-                `;
-                
-                selectCliente.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
-            });
-            
-            M.FormSelect.init(selectCliente);
-        }
-
-        async function carregarServicos() {
-            const servicos = await buscarTodosServicos();
-            const listaServicos = document.getElementById('lista-servicos');
-            const selectServico = document.getElementById('servico');
-            
-            listaServicos.innerHTML = '';
-            selectServico.innerHTML = '<option value="" disabled selected>Selecione o serviço</option>';
-            
-            servicos.forEach(servico => {
-                listaServicos.innerHTML += `
-                    <div class="col s12 m6">
-                        <div class="card">
-                            <div class="card-content">
-                                <span class="card-title">${servico.nome}</span>
-                                <p>${servico.descricao}</p>
-                                <p><strong>Preço:</strong> R$ ${servico.preco.toFixed(2)}</p>
-                            </div>
-                            <div class="card-action">
-                                <a href="#!" class="teal-text" onclick="editarServico(${servico.id})">Editar</a>
-                                <a href="#!" class="red-text" onclick="confirmarExclusaoServico(${servico.id})">Remover</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                selectServico.innerHTML += `<option value="${servico.id}">${servico.nome}</option>`;
-            });
-            
-            M.FormSelect.init(selectServico);
-        }
-
-
-
-
-// function carregar Orcamento
-async function carregarOrcamentos() {
-    const orcamentos = await buscarTodosOrcamentos();
-    const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
-    
-    tabelaOrcamentos.innerHTML = '';
-    
-    for (const orcamento of orcamentos) {
-        const cliente = await buscarClientePorId(orcamento.clienteId);
-        const servico = await buscarServicoPorId(orcamento.servicoId);
-        
-        tabelaOrcamentos.innerHTML += `
-            <tr>
-                <td>${cliente.nome}</td>
-                <td>${orcamento.veiculo}</td>
-                <td>${servico.nome}</td>
-                <td>R$ ${orcamento.valor.toFixed(2)}</td>
-                <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                <td>
-                    <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id})" class="btn-floating btn-small waves-effect waves-light green">
-                        <i class="material-icons">share</i>
-                    </a>
-                </td>
-            </tr>
-        `;
-    }
-}
-
-
-
-
-async function compartilharViaWhatsApp(orcamentoId) {
-    const orcamento = await buscarOrcamentoPorId(orcamentoId);
-    const cliente = await buscarClientePorId(orcamento.clienteId);
-    const servico = await buscarServicoPorId(orcamento.servicoId);
-    const dadosEmpresa = await buscarDadosEmpresa();
-    const formasPagamento = await buscarFormasPagamento();
-
-    let mensagem = `Olá ${cliente.nome},\n\n`;
-    mensagem += `Segue seu orçamento:\n\n`;
-    mensagem += `Veículo: ${orcamento.veiculo}\n`;
-    mensagem += `Serviço: ${servico.nome}\n`;
-    mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
-    mensagem += `Formas de Pagamento:\n`;
-    mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
-    mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
-    mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
-    mensagem += `Atenciosamente,\n${dadosEmpresa.nome}`;
-
-    const mensagemCodificada = encodeURIComponent(mensagem);
-    const numeroWhatsApp = cliente.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
-    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
-
-    window.open(urlWhatsApp, '_blank');
-}
-
-        function getStatusColor(status) {
-            switch (status.toLowerCase()) {
-                case 'aprovado':
-                    return 'green';
-                case 'pendente':
-                    return 'yellow darken-2';
-                case 'cancelado':
-                    return 'red';
-                default:
-                    return 'grey';
-            }
-        }
-//buscarClientePorId
-        async function buscarClientePorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['clientes'], 'readonly');
-        const store = transaction.objectStore('clientes');
-        const request = store.get(id);
-        
-        request.onerror = function(event) {
-            console.error("Erro ao buscar cliente:", event.target.error);
-            reject("Erro ao buscar cliente: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            const cliente = event.target.result;
-            console.log("Cliente encontrado:", cliente);
-            resolve(cliente);
-        };
-    });
-}
-
-async function buscarOrcamentoPorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['orcamentos'], 'readonly');
-        const store = transaction.objectStore('orcamentos');
-        const request = store.get(id);
-        
-        request.onerror = function(event) {
-            console.error("Erro ao buscar orçamento:", event.target.error);
-            reject("Erro ao buscar orçamento: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            const orcamento = event.target.result;
-            if (orcamento) {
-                resolve(orcamento);
-            } else {
-                reject("Orçamento não encontrado");
-            }
-        };
-    });
-}
-
-
-async function buscarServicoPorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['servicos'], 'readonly');
-        const store = transaction.objectStore('servicos');
-        const request = store.get(id);
-        
-        request.onerror = function(event) {
-            console.error("Erro ao buscar serviço:", event.target.error);
-            reject("Erro ao buscar serviço: " + event.target.error);
-        };
-        
-        request.onsuccess = function(event) {
-            const servico = event.target.result;
-            console.log("Serviço encontrado:", servico);
-            resolve(servico);
-        };
-    });
-}
-
-        async function atualizarDashboard() {
-            const totalOrcamentos = await contarOrcamentos();
-            const totalClientes = await contarClientes();
-            const totalServicos = await contarServicos();
-            const faturamentoTotal = await calcularFaturamentoTotal();
-
-            document.getElementById('total-orcamentos').textContent = totalOrcamentos;
-            document.getElementById('total-clientes').textContent = totalClientes;
-            document.getElementById('total-servicos').textContent = totalServicos;
-            document.getElementById('total-faturamento').textContent = `R$ ${faturamentoTotal.toFixed(2)}`;
-        }
-
-        async function contarOrcamentos() {
-            const orcamentos = await buscarTodosOrcamentos();
-            return orcamentos.length;
-        }
-
-        async function contarClientes() {
-            const clientes = await buscarTodosClientes();
-            return clientes.length;
-        }
-
-        async function contarServicos() {
-            const servicos = await buscarTodosServicos();
-            return servicos.length;
-        }
-
-        async function calcularFaturamentoTotal() {
-            const orcamentos = await buscarTodosOrcamentos();
-            return orcamentos.reduce((total, orcamento) => total + orcamento.valor, 0);
-        }
-
-        // Funções de manipulação de formulários
-        async function salvarNovoCliente() {
-            const nome = document.getElementById('nome_cliente').value;
-            const email = document.getElementById('email_cliente').value;
-            const telefone = document.getElementById('telefone_cliente').value;
-
-            try {
-                await adicionarCliente({ nome, email, telefone });
-                M.toast({html: 'Cliente salvo com sucesso!', classes: 'rounded'});
-                document.getElementById('formNovoCliente').reset();
-                M.Modal.getInstance(document.getElementById('modal-novo-cliente')).close();
-                await carregarClientes();
-                atualizarDashboard();
-            } catch (error) {
-                M.toast({html: 'Erro ao salvar cliente: ' + error, classes: 'rounded red'});
-            }
-        }
-
-        async function salvarNovoServico() {
-            const nome = document.getElementById('nome_servico').value;
-            const descricao = document.getElementById('descricao_servico').value;
-            const preco = parseFloat(document.getElementById('preco_servico').value);
-
-            try {
-                await adicionarServico({ nome, descricao, preco });
-                M.toast({html: 'Serviço salvo com sucesso!', classes: 'rounded'});
-                document.getElementById('formNovoServico').reset();
-                M.Modal.getInstance(document.getElementById('modal-novo-servico')).close();
-                await carregarServicos();
-                atualizarDashboard();
-            } catch (error) {
-                M.toast({html: 'Erro ao salvar serviço: ' + error, classes: 'rounded red'});
-            }
-        }
-
-        function editarCliente(id) {
-            buscarClientePorId(id).then(cliente => {
-                document.getElementById('id_cliente_edit').value = cliente.id;
-                document.getElementById('nome_cliente_edit').value = cliente.nome;
-                document.getElementById('email_cliente_edit').value = cliente.email;
-                document.getElementById('telefone_cliente_edit').value = cliente.telefone;
-                M.updateTextFields();
-                M.Modal.getInstance(document.getElementById('modal-editar-cliente')).open();
-            });
-        }
-
-        function editarServico(id) {
-            buscarServicoPorId(id).then(servico => {
-                document.getElementById('id_servico_edit').value = servico.id;
-                document.getElementById('nome_servico_edit').value = servico.nome;
-                document.getElementById('descricao_servico_edit').value = servico.descricao;
-                document.getElementById('preco_servico_edit').value = servico.preco;
-                M.updateTextFields();
-                M.Modal.getInstance(document.getElementById('modal-editar-servico')).open();
-            });
-        }
-
-        async function atualizarCliente() {
-            const id = parseInt(document.getElementById('id_cliente_edit').value);
-            const nome = document.getElementById('nome_cliente_edit').value;
-            const email = document.getElementById('email_cliente_edit').value;
-            const telefone = document.getElementById('telefone_cliente_edit').value;
-
-            try {
-                await atualizarCliente({ id, nome, email, telefone });
-                M.toast({html: 'Cliente atualizado com sucesso!', classes: 'rounded'});
-                M.Modal.getInstance(document.getElementById('modal-editar-cliente')).close();
-                await carregarClientes();
-            } catch (error) {
-                M.toast({html: 'Erro ao atualizar cliente: ' + error, classes: 'rounded red'});
-            }
-        }
-
-        async function atualizarServico() {
-            const id = parseInt(document.getElementById('id_servico_edit').value);
-            const nome = document.getElementById('nome_servico_edit').value;
-            const descricao = document.getElementById('descricao_servico_edit').value;
-            const preco = parseFloat(document.getElementById('preco_servico_edit').value);
-
-            try {
-                await atualizarServico({ id, nome, descricao, preco });
-                M.toast({html: 'Serviço atualizado com sucesso!', classes: 'rounded'});
-                M.Modal.getInstance(document.getElementById('modal-editar-servico')).close();
-                await carregarServicos();
-            } catch (error) {
-                M.toast({html: 'Erro ao atualizar serviço: ' + error, classes: 'rounded red'});
-            }
-        }
-
-        function confirmarExclusaoCliente(id) {
-            if (confirm('Tem certeza que deseja excluir este cliente?')) {
-                excluirCliente(id).then(() => {
-                    M.toast({html: 'Cliente excluído com sucesso!', classes: 'rounded'});
-                    carregarClientes();
-                    atualizarDashboard();
-                }).catch(error => {
-                    M.toast({html: 'Erro ao excluir cliente: ' + error, classes: 'rounded red'});
-                });
-            }
-        }
-
-        function confirmarExclusaoServico(id) {
-            if (confirm('Tem certeza que deseja excluir este serviço?')) {
-                excluirServico(id).then(() => {
-                    M.toast({html: 'Serviço excluído com sucesso!', classes: 'rounded'});
-                    carregarServicos();
-                    atualizarDashboard();
-                }).catch(error => {
-                    M.toast({html: 'Erro ao excluir serviço: ' + error, classes: 'rounded red'});
-                });
-            }
-        }
-
-        // Configuração e funções para a API FIPE
-        const BASE_URL = 'https://fipeapi.appspot.com/api/1/carros';
-
-const $marcaSelect = document.getElementById('marca');
-const $modeloSelect = document.getElementById('modelo');
-const $anoSelect = document.getElementById('ano');
-
-async function fetchFipeData(endpoint) {
-    try {
-        const response = await fetch(`${BASE_URL}/${endpoint}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return await response.json();
-    } catch (error) {
-        console.error('Erro ao buscar dados da API FIPE:', error);
-        M.toast({html: 'Erro ao carregar dados de veículos. Por favor, tente novamente.', classes: 'rounded red'});
-        return [];
-    }
-}
-
-
-async function loadBrands() {
-    $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
-    const brands = await fetchFipeData('marcas.json');
-    brands.forEach(brand => {
-        $marcaSelect.innerHTML += `<option value="${brand.id}">${brand.fipe_name}</option>`;
-    });
-    M.FormSelect.init($marcaSelect);
-}
-
-
-$marcaSelect.addEventListener('change', async function() {
-    $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
-    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-    $modeloSelect.disabled = true;
-    $anoSelect.disabled = true;
-    M.FormSelect.init($modeloSelect);
-    M.FormSelect.init($anoSelect);
-
-    const marcaId = this.value;
-    if (marcaId) {
-        $modeloSelect.disabled = false;
-        const models = await fetchFipeData(`veiculos/${marcaId}.json`);
-        models.forEach(model => {
-            $modeloSelect.innerHTML += `<option value="${model.id}">${model.fipe_name}</option>`;
-        });
-        M.FormSelect.init($modeloSelect);
-    }
-});
-
-$modeloSelect.addEventListener('change', async function() {
-    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-    $anoSelect.disabled = true;
-    M.FormSelect.init($anoSelect);
-
-    const modeloId = this.value;
-    const marcaId = $marcaSelect.value;
-    if (modeloId) {
-        $anoSelect.disabled = false;
-        const years = await fetchFipeData(`veiculo/${marcaId}/${modeloId}.json`);
-        years.forEach(year => {
-            $anoSelect.innerHTML += `<option value="${year.id}">${year.name}</option>`;
-        });
-        M.FormSelect.init($anoSelect);
-    }
-});
-
-
-
-     
-
-        // Função para obter o veículo selecionado
-        function getSelectedVehicle() {
-    const $marcaSelect = document.getElementById('marca');
-    const $modeloSelect = document.getElementById('modelo');
-    const $anoSelect = document.getElementById('ano');
-
-    if (!$marcaSelect || !$modeloSelect || !$anoSelect) {
-        console.error('Elementos de seleção de veículo não encontrados');
-        return '';
-    }
-
-    const marca = $marcaSelect.options[$marcaSelect.selectedIndex]?.text || '';
-    const modelo = $modeloSelect.options[$modeloSelect.selectedIndex]?.text || '';
-    const ano = $anoSelect.options[$anoSelect.selectedIndex]?.text || '';
-
-    return `${marca} ${modelo} ${ano}`.trim();
-}
-
-        
-
-        // Função para calcular orçamento
-        async function calcularOrcamento() {
-    console.log('Iniciando cálculo de orçamento');
-
-    const clienteSelect = document.getElementById('cliente');
-    const servicoSelect = document.getElementById('servico');
-    const partesCarro = document.getElementById('partesCarro');
-
-    if (!clienteSelect || !servicoSelect || !partesCarro) {
-        console.error('Elementos de formulário não encontrados');
-        M.toast({html: 'Erro ao carregar formulário. Por favor, recarregue a página.', classes: 'rounded red'});
-        return;
-    }
-
-    const clienteId = parseInt(clienteSelect.value);
-    const servicoId = parseInt(servicoSelect.value);
-    const veiculo = getSelectedVehicle();
-    const partesSelecionadas = M.FormSelect.getInstance(partesCarro).getSelectedValues();
-    const observacoes = document.getElementById('observacoes')?.value || '';
-
-    console.log('Dados coletados:', { clienteId, servicoId, veiculo, partesSelecionadas, observacoes });
-
-    if (!clienteId || !servicoId || !veiculo) {
-        M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
-        return;
-    }
-
-    try {
-        const cliente = await buscarClientePorId(clienteId);
-        const servico = await buscarServicoPorId(servicoId);
-
-        console.log('Cliente e serviço buscados:', { cliente, servico });
-
-        if (!cliente || !servico) {
-            throw new Error('Cliente ou serviço não encontrado');
-        }
-
-        // Cálculo simplificado do valor do orçamento
-        const valorBase = servico.preco || 0;
-        const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
-        const valorTotal = valorBase + valorPartes;
-
-        console.log('Valores calculados:', { valorBase, valorPartes, valorTotal });
-
-        const novoOrcamento = {
-            clienteId,
-            servicoId,
-            veiculo,
-            partes: partesSelecionadas,
-            valor: valorTotal,
-            observacoes,
-            status: 'Pendente',
-            data: new Date()
-        };
-
-        console.log('Novo orçamento criado:', novoOrcamento);
-
-        const id = await adicionarOrcamento(novoOrcamento);
-        M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
-        
-        // Limpar formulário e atualizar dados
-        document.getElementById('orcamentoForm').reset();
-        M.FormSelect.init(document.querySelectorAll('select'));
-        await carregarOrcamentos();
-        await atualizarDashboard();
-
-        // Exibir resultado do orçamento
-        exibirResultadoOrcamento(id, cliente, servico, novoOrcamento);
-
-        // Navegar para o Dashboard
-        const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
-        if (tabsInstance) {
-            tabsInstance.select('dashboard');
-        } else {
-            console.error('Instância de tabs não encontrada');
-        }
-
-    } catch (error) {
-        console.error('Erro ao calcular orçamento:', error);
-        M.toast({html: 'Erro ao calcular orçamento: ' + error.message, classes: 'rounded red'});
-    }
-}
-
-        function exibirResultadoOrcamento(id, cliente, servico, orcamento) {
-    const resultado = `
-        <h5>Orçamento #${id}</h5>
-        <p><strong>Cliente:</strong> ${cliente.nome}</p>
-        <p><strong>Veículo:</strong> ${orcamento.veiculo}</p>
-        <p><strong>Serviço:</strong> ${servico.nome}</p>
-        <p><strong>Partes:</strong> ${orcamento.partes.join(', ')}</p>
-        <p><strong>Valor Total:</strong> R$ ${orcamento.valor.toFixed(2)}</p>
-        <p><strong>Observações:</strong> ${orcamento.observacoes || 'Nenhuma'}</p>
-        <p><strong>Status:</strong> ${orcamento.status}</p>
-    `;
-
-    const modalContent = document.getElementById('resultado-orcamento-content');
-    modalContent.innerHTML = resultado;
-
-    const modalResultado = M.Modal.getInstance(document.getElementById('modal-resultado-orcamento'));
-    modalResultado.open();
-}
-
-        // Inicialização de componentes Materialize
-        document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar componentes do Materialize
-    M.AutoInit();
-
-    // Lidar com cliques no menu e na engrenagem de configurações
-    document.querySelectorAll('.sidenav a, .nav-wrapper a[href^="#"]').forEach(function(el) {
-        el.addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
-    });
-});
-
-function showSection(sectionId) {
-    // Esconder todas as seções
-    document.querySelectorAll('.section').forEach(function(section) {
-        section.style.display = 'none';
-    });
-
-    // Mostrar a seção selecionada
-    var targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-    }
-
-    // Fechar o sidenav no mobile
-    var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
-    if (sidenav && window.innerWidth < 992) { // 992px é o breakpoint padrão do Materialize para desktop
-        sidenav.close();
-    }
-}
-        // Função para inicializar os selects do Materialize
-        function initializeSelects() {
-            var elems = document.querySelectorAll('select');
-            M.FormSelect.init(elems);
-        }
-
-        // Função para inicializar os modais do Materialize
-        function initializeModals() {
-            var elems = document.querySelectorAll('.modal');
-            M.Modal.init(elems);
-        }
-
-        // Função para inicializar os tooltips do Materialize
-        function initializeTooltips() {
-            var elems = document.querySelectorAll('.tooltipped');
-            M.Tooltip.init(elems);
-        }
-
-        // Função para inicializar o sidenav do Materialize
-        function initializeSidenav() {
-            var elems = document.querySelectorAll('.sidenav');
-            M.Sidenav.init(elems);
-        }
-
-        // Função para inicializar as tabs do Materialize
-        function initializeTabs() {
-            var elems = document.querySelectorAll('.tabs');
-            M.Tabs.init(elems);
-        }
-
-        // Função para inicializar todos os componentes do Materialize
-        function initializeAllComponents() {
-    M.AutoInit(); // Inicializa a maioria dos componentes automaticamente
-
-    // Inicializar componentes específicos se necessário
-    var elemsSidenav = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(elemsSidenav);
-
-    var elemsCollapsible = document.querySelectorAll('.collapsible');
-    M.Collapsible.init(elemsCollapsible);
-
-    var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
-    M.Dropdown.init(elemsDropdown, {
-        constrainWidth: false,
-        coverTrigger: false
-    });
-
-    var elemsSelect = document.querySelectorAll('select');
-    M.FormSelect.init(elemsSelect);
-
-    var elemsModal = document.querySelectorAll('.modal');
-    M.Modal.init(elemsModal);
-
-    var elemsTabs = document.querySelectorAll('.tabs');
-    M.Tabs.init(elemsTabs);
-}
-
-
-    </script>
-
-    <!-- Modal Resultado Orçamento -->
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input id="email_cliente" type="email" class="validate" required>
+                    <label for="email_cliente">E-mail</label>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="telefone_cliente" type="tel" class="validate" required>
+                    <label for="telefone_cliente">Telefone</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarNovoCliente()">Salvar</a>
+    </div>
+</div>
+
+<!-- Modal Novo Serviço -->
+<div id="modal-novo-servico" class="modal">
+    <div class="modal-content">
+        <h4>Novo Serviço</h4>
+        <form id="formNovoServico">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="nome_servico" type="text" class="validate" required>
+                    <label for="nome_servico">Nome do Serviço</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="descricao_servico" class="materialize-textarea"></textarea>
+                    <label for="descricao_servico">Descrição</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="preco_servico" type="number" step="0.01" class="validate" required>
+                    <label for="preco_servico">Preço (R$)</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarNovoServico()">Salvar</a>
+    </div>
+</div>
+
+<!-- Modal Editar Cliente -->
+<div id="modal-editar-cliente" class="modal">
+    <div class="modal-content">
+        <h4>Editar Cliente</h4>
+        <form id="formEditarCliente">
+            <input type="hidden" id="id_cliente_edit">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="nome_cliente_edit" type="text" class="validate" required>
+                    <label for="nome_cliente_edit">Nome Completo</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input id="email_cliente_edit" type="email" class="validate" required>
+                    <label for="email_cliente_edit">E-mail</label>
+                </div>
+                <div class="input-field col s12 m6">
+                    <input id="telefone_cliente_edit" type="tel" class="validate" required>
+                    <label for="telefone_cliente_edit">Telefone</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="atualizarCliente()">Atualizar</a>
+    </div>
+</div>
+
+<!-- Modal Editar Serviço -->
+<div id="modal-editar-servico" class="modal">
+    <div class="modal-content">
+        <h4>Editar Serviço</h4>
+        <form id="formEditarServico">
+            <input type="hidden" id="id_servico_edit">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="nome_servico_edit" type="text" class="validate" required>
+                    <label for="nome_servico_edit">Nome do Serviço</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="descricao_servico_edit" class="materialize-textarea"></textarea>
+                    <label for="descricao_servico_edit">Descrição</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="preco_servico_edit" type="number" step="0.01" class="validate" required>
+                    <label for="preco_servico_edit">Preço (R$)</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+        <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="atualizarServico()">Atualizar</a>
+    </div>
+</div>
+
+<!-- Modal Resultado Orçamento -->
 <div id="modal-resultado-orcamento" class="modal">
     <div class="modal-content" id="resultado-orcamento-content">
         <!-- O conteúdo será preenchido dinamicamente -->
@@ -1575,5 +539,1224 @@ function showSection(sectionId) {
         <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
     </div>
 </div>
+
+<!-- Footer -->
+<footer class="page-footer teal darken-2">
+    <div class="footer-copyright">
+        <div class="container">
+            © 2024 AUTO-CAR Pro
+            <a class="grey-text text-lighten-4 right" href="#!">Termos de Uso</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts do Materialize e jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+    // Inicialização do IndexedDB
+    let db;
+    const dbName = 'AutoCarDB';
+    const dbVersion = 1;
+
+    const request = indexedDB.open(dbName, dbVersion);
+
+    request.onerror = function(event) {
+        console.error("Erro ao abrir o banco de dados:", event.target.error);
+    };
+
+    request.onsuccess = function(event) {
+        db = event.target.result;
+        console.log("Banco de dados aberto com sucesso");
+        carregarDados();
+    };
+
+    request.onupgradeneeded = function(event) {
+        db = event.target.result;
+        
+        if (!db.objectStoreNames.contains('clientes')) {
+            const clientesStore = db.createObjectStore('clientes', { keyPath: 'id', autoIncrement: true });
+            clientesStore.createIndex('nome', 'nome', { unique: false });
+            clientesStore.createIndex('email', 'email', { unique: true });
+        }
+        
+        if (!db.objectStoreNames.contains('servicos')) {
+            const servicosStore = db.createObjectStore('servicos', { keyPath: 'id', autoIncrement: true });
+            servicosStore.createIndex('nome', 'nome', { unique: true });
+        }
+        
+        if (!db.objectStoreNames.contains('orcamentos')) {
+            const orcamentosStore = db.createObjectStore('orcamentos', { keyPath: 'id', autoIncrement: true });
+            orcamentosStore.createIndex('clienteId', 'clienteId', { unique: false });
+            orcamentosStore.createIndex('data', 'data', { unique: false });
+        }
+    
+        if (!db.objectStoreNames.contains('configuracoes')) {
+            const configuracoesStore = db.createObjectStore('configuracoes', { keyPath: 'id' });
+            configuracoesStore.createIndex('nome', 'nome', { unique: false });
+        }
+    };
+
+    // Função para converter imagem para Base64
+    function converterImagemParaBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+    }
+
+    // Funções para buscar e salvar dados no IndexedDB
+
+    async function buscarDadosEmpresa() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['configuracoes'], 'readonly');
+            const store = transaction.objectStore('configuracoes');
+            const request = store.get('dadosEmpresa');
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar dados da empresa:", event.target.error);
+                reject("Erro ao buscar dados da empresa: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function buscarFormasPagamento() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['configuracoes'], 'readonly');
+            const store = transaction.objectStore('configuracoes');
+            const request = store.get('formasPagamento');
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar formas de pagamento:", event.target.error);
+                reject("Erro ao buscar formas de pagamento: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function salvarDadosEmpresaNoIndexedDB(dadosEmpresa) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['configuracoes'], 'readwrite');
+            const store = transaction.objectStore('configuracoes');
+            const request = store.put({ id: 'dadosEmpresa', ...dadosEmpresa });
+            
+            request.onerror = function(event) {
+                reject("Erro ao salvar dados da empresa: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function salvarFormasPagamentoNoIndexedDB(formasPagamento) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['configuracoes'], 'readwrite');
+            const store = transaction.objectStore('configuracoes');
+            const request = store.put({ id: 'formasPagamento', ...formasPagamento });
+            
+            request.onerror = function(event) {
+                reject("Erro ao salvar formas de pagamento: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    // Funções para abrir modais e carregar dados
+    function abrirModalDadosEmpresa() {
+        carregarDadosEmpresa();
+        var modal = M.Modal.getInstance(document.getElementById('modal-dados-empresa'));
+        modal.open();
+    }
+
+    function abrirModalFormasPagamento() {
+        carregarFormasPagamento();
+        var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
+        modal.open();
+    }
+
+    async function salvarDadosEmpresa() {
+        const dadosEmpresa = {
+            nome: document.getElementById('nome_empresa').value,
+            cnpj: document.getElementById('cnpj_empresa').value,
+            endereco: document.getElementById('endereco_empresa').value,
+            telefone: document.getElementById('telefone_empresa').value,
+            email: document.getElementById('email_empresa').value
+        };
+
+        const logoInput = document.getElementById('logo_empresa');
+        if (logoInput.files.length > 0) {
+            dadosEmpresa.logo = await converterImagemParaBase64(logoInput.files[0]);
+        }
+
+        try {
+            await salvarDadosEmpresaNoIndexedDB(dadosEmpresa);
+            M.toast({html: 'Dados da empresa salvos com sucesso!', classes: 'rounded'});
+            M.Modal.getInstance(document.getElementById('modal-dados-empresa')).close();
+        } catch (error) {
+            M.toast({html: 'Erro ao salvar dados da empresa: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    async function salvarFormasPagamento() {
+        const formasPagamento = {
+            chavePix: document.getElementById('chave_pix').value,
+            prazosBoleto: M.FormSelect.getInstance(document.getElementById('prazos_boleto')).getSelectedValues(),
+            parcelasSemJuros: parseInt(document.getElementById('parcelas_sem_juros').value),
+            parcelasComJuros: parseInt(document.getElementById('parcelas_com_juros').value),
+            taxaJuros: parseFloat(document.getElementById('taxa_juros').value)
+        };
+
+        try {
+            await salvarFormasPagamentoNoIndexedDB(formasPagamento);
+            M.toast({html: 'Formas de pagamento salvas com sucesso!', classes: 'rounded'});
+            M.Modal.getInstance(document.getElementById('modal-formas-pagamento')).close();
+        } catch (error) {
+            M.toast({html: 'Erro ao salvar formas de pagamento: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    // Funções auxiliares para salvar no IndexedDB
+
+    // Funções para carregar dados da empresa e formas de pagamento
+    async function carregarDadosEmpresa() {
+        const dadosEmpresa = await buscarDadosEmpresa();
+        if (dadosEmpresa) {
+            document.getElementById('nome_empresa').value = dadosEmpresa.nome || '';
+            document.getElementById('cnpj_empresa').value = dadosEmpresa.cnpj || '';
+            document.getElementById('endereco_empresa').value = dadosEmpresa.endereco || '';
+            document.getElementById('telefone_empresa').value = dadosEmpresa.telefone || '';
+            document.getElementById('email_empresa').value = dadosEmpresa.email || '';
+            if (dadosEmpresa.logo) {
+                // Exibir logo, se necessário
+            }
+            M.updateTextFields();
+        }
+    }
+
+    async function carregarFormasPagamento() {
+        const formasPagamento = await buscarFormasPagamento();
+        if (formasPagamento) {
+            document.getElementById('chave_pix').value = formasPagamento.chavePix || '';
+            M.FormSelect.getInstance(document.getElementById('prazos_boleto')).destroy();
+            document.getElementById('prazos_boleto').value = formasPagamento.prazosBoleto || [];
+            M.FormSelect.init(document.getElementById('prazos_boleto'));
+            document.getElementById('parcelas_sem_juros').value = formasPagamento.parcelasSemJuros || '';
+            document.getElementById('parcelas_com_juros').value = formasPagamento.parcelasComJuros || '';
+            document.getElementById('taxa_juros').value = formasPagamento.taxaJuros || '';
+            M.updateTextFields();
+        }
+    }
+
+    // Funções de manipulação de dados
+
+    async function adicionarCliente(cliente) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readwrite');
+            const store = transaction.objectStore('clientes');
+            const request = store.add(cliente);
+            
+            request.onerror = function(event) {
+                reject("Erro ao adicionar cliente: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function adicionarServico(servico) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readwrite');
+            const store = transaction.objectStore('servicos');
+            const request = store.add(servico);
+            
+            request.onerror = function(event) {
+                reject("Erro ao adicionar serviço: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function adicionarOrcamento(orcamento) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['orcamentos'], 'readwrite');
+            const store = transaction.objectStore('orcamentos');
+            const request = store.add(orcamento);
+            
+            request.onerror = function(event) {
+                reject("Erro ao adicionar orçamento: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function atualizarCliente(cliente) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readwrite');
+            const store = transaction.objectStore('clientes');
+            const request = store.put(cliente);
+            
+            request.onerror = function(event) {
+                reject("Erro ao atualizar cliente: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function atualizarServico(servico) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readwrite');
+            const store = transaction.objectStore('servicos');
+            const request = store.put(servico);
+            
+            request.onerror = function(event) {
+                reject("Erro ao atualizar serviço: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function excluirCliente(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readwrite');
+            const store = transaction.objectStore('clientes');
+            const request = store.delete(id);
+            
+            request.onerror = function(event) {
+                reject("Erro ao excluir cliente: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve();
+            };
+        });
+    }
+
+    async function excluirServico(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readwrite');
+            const store = transaction.objectStore('servicos');
+            const request = store.delete(id);
+            
+            request.onerror = function(event) {
+                reject("Erro ao excluir serviço: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve();
+            };
+        });
+    }
+
+    async function buscarTodosClientes() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readonly');
+            const store = transaction.objectStore('clientes');
+            const request = store.getAll();
+            
+            request.onerror = function(event) {
+                reject("Erro ao buscar clientes: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function buscarTodosServicos() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readonly');
+            const store = transaction.objectStore('servicos');
+            const request = store.getAll();
+            
+            request.onerror = function(event) {
+                reject("Erro ao buscar serviços: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function buscarTodosOrcamentos() {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['orcamentos'], 'readonly');
+            const store = transaction.objectStore('orcamentos');
+            const request = store.getAll();
+            
+            request.onerror = function(event) {
+                reject("Erro ao buscar orçamentos: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                resolve(event.target.result);
+            };
+        });
+    }
+
+    async function buscarClientePorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readonly');
+            const store = transaction.objectStore('clientes');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar cliente:", event.target.error);
+                reject("Erro ao buscar cliente: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const cliente = event.target.result;
+                console.log("Cliente encontrado:", cliente);
+                resolve(cliente);
+            };
+        });
+    }
+
+    async function buscarOrcamentoPorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['orcamentos'], 'readonly');
+            const store = transaction.objectStore('orcamentos');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar orçamento:", event.target.error);
+                reject("Erro ao buscar orçamento: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const orcamento = event.target.result;
+                if (orcamento) {
+                    resolve(orcamento);
+                } else {
+                    reject("Orçamento não encontrado");
+                }
+            };
+        });
+    }
+
+    async function buscarServicoPorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readonly');
+            const store = transaction.objectStore('servicos');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar serviço:", event.target.error);
+                reject("Erro ao buscar serviço: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const servico = event.target.result;
+                console.log("Serviço encontrado:", servico);
+                resolve(servico);
+            };
+        });
+    }
+
+    // Funções de interface do usuário
+
+    async function carregarDados() {
+        await carregarClientes();
+        await carregarServicos();
+        await carregarOrcamentos();
+        atualizarDashboard();
+    }
+
+    async function carregarClientes() {
+        const clientes = await buscarTodosClientes();
+        const listaClientes = document.getElementById('lista-clientes');
+        const selectCliente = document.getElementById('cliente');
+        
+        listaClientes.innerHTML = '';
+        selectCliente.innerHTML = '<option value="" disabled selected>Selecione o cliente</option>';
+        
+        clientes.forEach(cliente => {
+            listaClientes.innerHTML += `
+                <li class="collection-item avatar">
+                    <img src="/api/placeholder/100/100" alt="" class="circle">
+                    <span class="title">${cliente.nome}</span>
+                    <p>${cliente.email}<br>${cliente.telefone}</p>
+                    <a href="#!" class="secondary-content" onclick="editarCliente(${cliente.id})"><i class="material-icons">edit</i></a>
+                    <a href="#!" class="secondary-content" onclick="confirmarExclusaoCliente(${cliente.id})"><i class="material-icons">delete</i></a>
+                </li>
+            `;
+            
+            selectCliente.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
+        });
+        
+        M.FormSelect.init(selectCliente);
+    }
+
+    async function carregarServicos() {
+        const servicos = await buscarTodosServicos();
+        const listaServicos = document.getElementById('lista-servicos');
+        const selectServico = document.getElementById('servico');
+        
+        listaServicos.innerHTML = '';
+        selectServico.innerHTML = '<option value="" disabled selected>Selecione o serviço</option>';
+        
+        servicos.forEach(servico => {
+            listaServicos.innerHTML += `
+                <div class="col s12 m6">
+                    <div class="card">
+                        <div class="card-content">
+                            <span class="card-title">${servico.nome}</span>
+                            <p>${servico.descricao}</p>
+                            <p><strong>Preço:</strong> R$ ${servico.preco.toFixed(2)}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="#!" class="teal-text" onclick="editarServico(${servico.id})">Editar</a>
+                            <a href="#!" class="red-text" onclick="confirmarExclusaoServico(${servico.id})">Remover</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            selectServico.innerHTML += `<option value="${servico.id}">${servico.nome}</option>`;
+        });
+        
+        M.FormSelect.init(selectServico);
+    }
+
+    async function carregarOrcamentos() {
+        const orcamentos = await buscarTodosOrcamentos();
+        const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
+        
+        tabelaOrcamentos.innerHTML = '';
+        
+        for (const orcamento of orcamentos) {
+            const cliente = await buscarClientePorId(orcamento.clienteId);
+            const servico = await buscarServicoPorId(orcamento.servicoId);
+            
+            tabelaOrcamentos.innerHTML += `
+                <tr>
+                    <td>${cliente.nome}</td>
+                    <td>${orcamento.veiculo}</td>
+                    <td>${servico.nome}</td>
+                    <td>R$ ${orcamento.valor.toFixed(2)}</td>
+                    <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
+                    <td>
+                        <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id})" class="btn-floating btn-small waves-effect waves-light green">
+                            <i class="material-icons">share</i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        }
+    }
+
+    async function compartilharViaWhatsApp(orcamentoId) {
+        const orcamento = await buscarOrcamentoPorId(orcamentoId);
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        const servico = await buscarServicoPorId(orcamento.servicoId);
+        const dadosEmpresa = await buscarDadosEmpresa();
+        const formasPagamento = await buscarFormasPagamento();
+
+        let mensagem = `Olá ${cliente.nome},\n\n`;
+        mensagem += `Segue seu orçamento:\n\n`;
+        mensagem += `Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `Serviço: ${servico.nome}\n`;
+        mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        mensagem += `Formas de Pagamento:\n`;
+        mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
+        mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
+        mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
+        mensagem += `Atenciosamente,\n${dadosEmpresa.nome}`;
+
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const numeroWhatsApp = cliente.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+
+        window.open(urlWhatsApp, '_blank');
+    }
+
+    function getStatusColor(status) {
+        switch (status.toLowerCase()) {
+            case 'aprovado':
+                return 'green';
+            case 'pendente':
+                return 'yellow darken-2';
+            case 'cancelado':
+                return 'red';
+            default:
+                return 'grey';
+        }
+    }
+
+    // Funções para buscar cliente e serviço por ID
+    async function buscarClientePorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['clientes'], 'readonly');
+            const store = transaction.objectStore('clientes');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar cliente:", event.target.error);
+                reject("Erro ao buscar cliente: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const cliente = event.target.result;
+                console.log("Cliente encontrado:", cliente);
+                resolve(cliente);
+            };
+        });
+    }
+
+    async function buscarOrcamentoPorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['orcamentos'], 'readonly');
+            const store = transaction.objectStore('orcamentos');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar orçamento:", event.target.error);
+                reject("Erro ao buscar orçamento: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const orcamento = event.target.result;
+                if (orcamento) {
+                    resolve(orcamento);
+                } else {
+                    reject("Orçamento não encontrado");
+                }
+            };
+        });
+    }
+
+    async function buscarServicoPorId(id) {
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(['servicos'], 'readonly');
+            const store = transaction.objectStore('servicos');
+            const request = store.get(id);
+            
+            request.onerror = function(event) {
+                console.error("Erro ao buscar serviço:", event.target.error);
+                reject("Erro ao buscar serviço: " + event.target.error);
+            };
+            
+            request.onsuccess = function(event) {
+                const servico = event.target.result;
+                console.log("Serviço encontrado:", servico);
+                resolve(servico);
+            };
+        });
+    }
+
+    // Funções para carregar dados e atualizar o dashboard
+
+    async function atualizarDashboard() {
+        const totalOrcamentos = await contarOrcamentos();
+        const totalClientes = await contarClientes();
+        const totalServicos = await contarServicos();
+        const faturamentoTotal = await calcularFaturamentoTotal();
+
+        document.getElementById('total-orcamentos').textContent = totalOrcamentos;
+        document.getElementById('total-clientes').textContent = totalClientes;
+        document.getElementById('total-servicos').textContent = totalServicos;
+        document.getElementById('total-faturamento').textContent = `R$ ${faturamentoTotal.toFixed(2)}`;
+    }
+
+    async function contarOrcamentos() {
+        const orcamentos = await buscarTodosOrcamentos();
+        return orcamentos.length;
+    }
+
+    async function contarClientes() {
+        const clientes = await buscarTodosClientes();
+        return clientes.length;
+    }
+
+    async function contarServicos() {
+        const servicos = await buscarTodosServicos();
+        return servicos.length;
+    }
+
+    async function calcularFaturamentoTotal() {
+        const orcamentos = await buscarTodosOrcamentos();
+        return orcamentos.reduce((total, orcamento) => total + orcamento.valor, 0);
+    }
+
+    // Funções para salvar novos clientes e serviços
+    async function salvarNovoCliente() {
+        const nome = document.getElementById('nome_cliente').value;
+        const email = document.getElementById('email_cliente').value;
+        const telefone = document.getElementById('telefone_cliente').value;
+
+        try {
+            await adicionarCliente({ nome, email, telefone });
+            M.toast({html: 'Cliente salvo com sucesso!', classes: 'rounded'});
+            document.getElementById('formNovoCliente').reset();
+            M.Modal.getInstance(document.getElementById('modal-novo-cliente')).close();
+            await carregarClientes();
+            atualizarDashboard();
+        } catch (error) {
+            M.toast({html: 'Erro ao salvar cliente: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    async function salvarNovoServico() {
+        const nome = document.getElementById('nome_servico').value;
+        const descricao = document.getElementById('descricao_servico').value;
+        const preco = parseFloat(document.getElementById('preco_servico').value);
+
+        try {
+            await adicionarServico({ nome, descricao, preco });
+            M.toast({html: 'Serviço salvo com sucesso!', classes: 'rounded'});
+            document.getElementById('formNovoServico').reset();
+            M.Modal.getInstance(document.getElementById('modal-novo-servico')).close();
+            await carregarServicos();
+            atualizarDashboard();
+        } catch (error) {
+            M.toast({html: 'Erro ao salvar serviço: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    // Funções para editar clientes e serviços
+    function editarCliente(id) {
+        buscarClientePorId(id).then(cliente => {
+            document.getElementById('id_cliente_edit').value = cliente.id;
+            document.getElementById('nome_cliente_edit').value = cliente.nome;
+            document.getElementById('email_cliente_edit').value = cliente.email;
+            document.getElementById('telefone_cliente_edit').value = cliente.telefone;
+            M.updateTextFields();
+            M.Modal.getInstance(document.getElementById('modal-editar-cliente')).open();
+        });
+    }
+
+    function editarServico(id) {
+        buscarServicoPorId(id).then(servico => {
+            document.getElementById('id_servico_edit').value = servico.id;
+            document.getElementById('nome_servico_edit').value = servico.nome;
+            document.getElementById('descricao_servico_edit').value = servico.descricao;
+            document.getElementById('preco_servico_edit').value = servico.preco;
+            M.updateTextFields();
+            M.Modal.getInstance(document.getElementById('modal-editar-servico')).open();
+        });
+    }
+
+    async function atualizarCliente() {
+        const id = parseInt(document.getElementById('id_cliente_edit').value);
+        const nome = document.getElementById('nome_cliente_edit').value;
+        const email = document.getElementById('email_cliente_edit').value;
+        const telefone = document.getElementById('telefone_cliente_edit').value;
+
+        try {
+            await atualizarCliente({ id, nome, email, telefone });
+            M.toast({html: 'Cliente atualizado com sucesso!', classes: 'rounded'});
+            M.Modal.getInstance(document.getElementById('modal-editar-cliente')).close();
+            await carregarClientes();
+            atualizarDashboard();
+        } catch (error) {
+            M.toast({html: 'Erro ao atualizar cliente: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    async function atualizarServico() {
+        const id = parseInt(document.getElementById('id_servico_edit').value);
+        const nome = document.getElementById('nome_servico_edit').value;
+        const descricao = document.getElementById('descricao_servico_edit').value;
+        const preco = parseFloat(document.getElementById('preco_servico_edit').value);
+
+        try {
+            await atualizarServico({ id, nome, descricao, preco });
+            M.toast({html: 'Serviço atualizado com sucesso!', classes: 'rounded'});
+            M.Modal.getInstance(document.getElementById('modal-editar-servico')).close();
+            await carregarServicos();
+            atualizarDashboard();
+        } catch (error) {
+            M.toast({html: 'Erro ao atualizar serviço: ' + error, classes: 'rounded red'});
+        }
+    }
+
+    // Funções para confirmar exclusão de clientes e serviços
+    function confirmarExclusaoCliente(id) {
+        if (confirm('Tem certeza que deseja excluir este cliente?')) {
+            excluirCliente(id).then(() => {
+                M.toast({html: 'Cliente excluído com sucesso!', classes: 'rounded'});
+                carregarClientes();
+                atualizarDashboard();
+            }).catch(error => {
+                M.toast({html: 'Erro ao excluir cliente: ' + error, classes: 'rounded red'});
+            });
+        }
+    }
+
+    function confirmarExclusaoServico(id) {
+        if (confirm('Tem certeza que deseja excluir este serviço?')) {
+            excluirServico(id).then(() => {
+                M.toast({html: 'Serviço excluído com sucesso!', classes: 'rounded'});
+                carregarServicos();
+                atualizarDashboard();
+            }).catch(error => {
+                M.toast({html: 'Erro ao excluir serviço: ' + error, classes: 'rounded red'});
+            });
+        }
+    }
+
+    // Configuração e funções para a API FIPE
+    const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
+
+    const $marcaSelect = document.getElementById('marca');
+    const $modeloSelect = document.getElementById('modelo');
+    const $anoSelect = document.getElementById('ano');
+
+    // Função para buscar dados da API com cache
+    async function fetchFipeData(endpoint) {
+        const cacheKey = `fipe_${endpoint}`;
+        const cachedData = localStorage.getItem(cacheKey);
+        
+        if (cachedData) {
+            return JSON.parse(cachedData);
+        }
+
+        try {
+            const url = `${BASE_URL}${endpoint}`;
+            console.log('Fazendo requisição para:', url);
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+            return data;
+        } catch (error) {
+            console.error('Erro ao buscar dados da API FIPE:', error);
+            throw error;
+        }
+    }
+
+    // Função para carregar marcas
+    async function loadBrands() {
+        $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
+        try {
+            const brands = await fetchFipeData('/marcas');
+            if (brands.length > 0) {
+                brands.forEach(brand => {
+                    $marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
+                });
+            } else {
+                $marcaSelect.innerHTML += '<option value="" disabled>Nenhuma marca encontrada</option>';
+            }
+        } catch (error) {
+            console.error('Erro ao carregar marcas:', error);
+            $marcaSelect.innerHTML += '<option value="" disabled>Erro ao carregar marcas</option>';
+        }
+        M.FormSelect.init($marcaSelect);
+    }
+
+    // Evento ao selecionar uma marca
+    $marcaSelect.addEventListener('change', async function() {
+        $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
+        $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+        $modeloSelect.disabled = true;
+        $anoSelect.disabled = true;
+        M.FormSelect.init($modeloSelect);
+        M.FormSelect.init($anoSelect);
+
+        const marcaId = this.value;
+        console.log('Marca selecionada:', marcaId);
+        if (marcaId) {
+            $modeloSelect.disabled = false;
+            try {
+                const modelsData = await fetchFipeData(`/marcas/${marcaId}/modelos`);
+                console.log('Dados dos modelos recebidos:', modelsData);
+                if (modelsData && modelsData.modelos) {
+                    modelsData.modelos.forEach(model => {
+                        $modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
+                    });
+                    console.log('Modelos carregados no dropdown');
+                } else {
+                    console.log('Nenhum modelo encontrado ou estrutura de dados inesperada');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar modelos:', error);
+                $modeloSelect.innerHTML += '<option value="" disabled>Erro ao carregar modelos</option>';
+            }
+            M.FormSelect.init($modeloSelect);
+        }
+    });
+
+    // Evento ao selecionar um modelo
+    $modeloSelect.addEventListener('change', async function() {
+        $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+        $anoSelect.disabled = true;
+        M.FormSelect.init($anoSelect);
+
+        const modeloId = this.value;
+        const marcaId = $marcaSelect.value;
+        if (modeloId) {
+            $anoSelect.disabled = false;
+            try {
+                const years = await fetchFipeData(`/marcas/${marcaId}/modelos/${modeloId}/anos`);
+                if (years.length > 0) {
+                    years.forEach(year => {
+                        $anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar anos:', error);
+                $anoSelect.innerHTML += '<option value="" disabled>Erro ao carregar anos</option>';
+            }
+            M.FormSelect.init($anoSelect);
+        }
+    });
+
+    // Evento ao selecionar um ano
+    $anoSelect.addEventListener('change', async function() {
+        const anoId = this.value;
+        const modeloId = $modeloSelect.value;
+        const marcaId = $marcaSelect.value;
+        if (anoId && modeloId && marcaId) {
+            try {
+                const vehicleData = await fetchFipeData(`/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`);
+                if (vehicleData) {
+                    console.log('Dados do veículo:', vehicleData);
+                    // Aqui você pode adicionar lógica adicional para usar os dados do veículo
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados do veículo:', error);
+            }
+        }
+    });
+
+    // Função para obter o veículo selecionado
+    function getSelectedVehicle() {
+        const marca = $marcaSelect.options[$marcaSelect.selectedIndex]?.text || '';
+        const modelo = $modeloSelect.options[$modeloSelect.selectedIndex]?.text || '';
+        const ano = $anoSelect.options[$anoSelect.selectedIndex]?.text || '';
+
+        return `${marca} ${modelo} ${ano}`.trim();
+    }
+
+   // Função para inicializar todos os componentes do Materialize
+   function initializeAllComponents() {
+        M.AutoInit(); // Inicializa a maioria dos componentes automaticamente
+
+        // Inicializar componentes específicos se necessário
+        var elemsSidenav = document.querySelectorAll('.sidenav');
+        M.Sidenav.init(elemsSidenav);
+
+        var elemsCollapsible = document.querySelectorAll('.collapsible');
+        M.Collapsible.init(elemsCollapsible);
+
+        var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
+        M.Dropdown.init(elemsDropdown, {
+            constrainWidth: false,
+            coverTrigger: false
+        });
+
+        var elemsSelect = document.querySelectorAll('select');
+        M.FormSelect.init(elemsSelect);
+
+        var elemsModal = document.querySelectorAll('.modal');
+        M.Modal.init(elemsModal);
+
+        var elemsTabs = document.querySelectorAll('.tabs');
+        M.Tabs.init(elemsTabs);
+    }
+
+    // Inicialização quando o documento estiver pronto
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeAllComponents();
+        loadBrands();
+        carregarDados();
+
+        // Adicionar evento ao botão de calcular orçamento
+        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    });
+
+    // Função para calcular orçamento
+    async function calcularOrcamento() {
+        console.log('Iniciando cálculo de orçamento');
+
+        const clienteSelect = document.getElementById('cliente');
+        const servicoSelect = document.getElementById('servico');
+        const partesCarro = document.getElementById('partesCarro');
+
+        if (!clienteSelect || !servicoSelect || !partesCarro) {
+            console.error('Elementos de formulário não encontrados');
+            M.toast({html: 'Erro ao carregar formulário. Por favor, recarregue a página.', classes: 'rounded red'});
+            return;
+        }
+
+        const clienteId = parseInt(clienteSelect.value);
+        const servicoId = parseInt(servicoSelect.value);
+        const veiculo = getSelectedVehicle();
+        const partesSelecionadas = M.FormSelect.getInstance(partesCarro).getSelectedValues();
+        const observacoes = document.getElementById('observacoes')?.value || '';
+
+        console.log('Dados coletados:', { clienteId, servicoId, veiculo, partesSelecionadas, observacoes });
+
+        if (!clienteId || !servicoId || !veiculo) {
+            M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
+            return;
+        }
+
+        try {
+            const cliente = await buscarClientePorId(clienteId);
+            const servico = await buscarServicoPorId(servicoId);
+
+            console.log('Cliente e serviço buscados:', { cliente, servico });
+
+            if (!cliente || !servico) {
+                throw new Error('Cliente ou serviço não encontrado');
+            }
+
+            // Cálculo simplificado do valor do orçamento
+            const valorBase = servico.preco || 0;
+            const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
+            const valorTotal = valorBase + valorPartes;
+
+            console.log('Valores calculados:', { valorBase, valorPartes, valorTotal });
+
+            const novoOrcamento = {
+                clienteId,
+                servicoId,
+                veiculo,
+                partes: partesSelecionadas,
+                valor: valorTotal,
+                observacoes,
+                status: 'Pendente',
+                data: new Date()
+            };
+
+            console.log('Novo orçamento criado:', novoOrcamento);
+
+            const id = await adicionarOrcamento(novoOrcamento);
+            M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
+
+            // Limpar formulário e atualizar dados
+            document.getElementById('orcamentoForm').reset();
+            M.FormSelect.init(document.querySelectorAll('select'));
+            await carregarOrcamentos();
+            await atualizarDashboard();
+
+            // Exibir resultado do orçamento
+            exibirResultadoOrcamento(id, cliente, servico, novoOrcamento);
+
+            // Navegar para o Dashboard
+            const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
+            if (tabsInstance) {
+                tabsInstance.select('dashboard');
+            } else {
+                console.error('Instância de tabs não encontrada');
+            }
+
+        } catch (error) {
+            console.error('Erro ao calcular orçamento:', error);
+            M.toast({html: 'Erro ao calcular orçamento: ' + error.message, classes: 'rounded red'});
+        }
+    }
+
+    // Função para exibir o resultado do orçamento
+    function exibirResultadoOrcamento(id, cliente, servico, orcamento) {
+        const resultado = `
+            <h5>Orçamento #${id}</h5>
+            <p><strong>Cliente:</strong> ${cliente.nome}</p>
+            <p><strong>Veículo:</strong> ${orcamento.veiculo}</p>
+            <p><strong>Serviço:</strong> ${servico.nome}</p>
+            <p><strong>Partes:</strong> ${orcamento.partes.join(', ') || 'Nenhuma'}</p>
+            <p><strong>Valor Total:</strong> R$ ${orcamento.valor.toFixed(2)}</p>
+            <p><strong>Observações:</strong> ${orcamento.observacoes || 'Nenhuma'}</p>
+            <p><strong>Status:</strong> ${orcamento.status}</p>
+        `;
+
+        const modalContent = document.getElementById('resultado-orcamento-content');
+        modalContent.innerHTML = resultado;
+
+        const modalResultado = M.Modal.getInstance(document.getElementById('modal-resultado-orcamento'));
+        modalResultado.open();
+    }
+
+    // Funções para compartilhar orçamento via WhatsApp (já implementada anteriormente)
+    // ... [Funções existentes] ...
+
+    // Funções adicionais para melhorar a experiência do usuário
+
+    // Atualizar selects de forma dinâmica quando dados são alterados
+    async function atualizarSelects() {
+        await carregarClientes();
+        await carregarServicos();
+        M.FormSelect.init(document.querySelectorAll('select'));
+    }
+
+    // Atualizar a interface após alterações nos dados
+    async function atualizarInterface() {
+        await atualizarSelects();
+        await carregarOrcamentos();
+        await atualizarDashboard();
+    }
+
+    // Funções para gerenciamento de formatação e validação (opcional)
+    // Exemplo: Formatar campos de telefone e CNPJ
+    function formatarTelefone(input) {
+        let telefone = input.value.replace(/\D/g, '');
+        telefone = telefone.replace(/^(\d{2})(\d)/g, '($1) $2');
+        telefone = telefone.replace(/(\d)(\d{4})$/, '$1-$2');
+        input.value = telefone;
+    }
+
+    function formatarCNPJ(input) {
+        let cnpj = input.value.replace(/\D/g, '');
+        cnpj = cnpj.replace(/^(\d{2})(\d)/, '$1.$2');
+        cnpj = cnpj.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+        cnpj = cnpj.replace(/\.(\d{3})(\d)/, '.$1/$2');
+        cnpj = cnpj.replace(/(\d{4})(\d)/, '$1-$2');
+        input.value = cnpj;
+    }
+
+    // Adicionar eventos de input para formatação
+    document.getElementById('telefone_empresa').addEventListener('input', function() {
+        formatarTelefone(this);
+    });
+
+    document.getElementById('telefone_cliente').addEventListener('input', function() {
+        formatarTelefone(this);
+    });
+
+    document.getElementById('telefone_cliente_edit').addEventListener('input', function() {
+        formatarTelefone(this);
+    });
+
+    document.getElementById('cnpj_empresa').addEventListener('input', function() {
+        formatarCNPJ(this);
+    });
+
+    // Função para gerenciar a navegação entre seções no menu
+    function showSection(sectionId) {
+        // Esconder todas as seções
+        document.querySelectorAll('.section').forEach(function(section) {
+            section.style.display = 'none';
+        });
+
+        // Mostrar a seção selecionada
+        var targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        }
+
+        // Fechar o sidenav no mobile
+        var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
+        if (sidenav && window.innerWidth < 992) { // 992px é o breakpoint padrão do Materialize para desktop
+            sidenav.close();
+        }
+    }
+
+    // Inicializar a exibição das seções
+    function initializeSections() {
+    // Esconder todas as seções inicialmente
+    document.querySelectorAll('.section').forEach(function(section) {
+        section.style.display = 'none';
+    });
+
+    // Mostrar a seção do Dashboard por padrão
+    var dashboardSection = document.getElementById('dashboard');
+    if (dashboardSection) {
+        dashboardSection.style.display = 'block';
+    }
+}
+
+
+    // Chamar a função para inicializar as seções
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeAllComponents();
+        initializeSections();
+        loadBrands();
+        carregarDados();
+
+        // Adicionar evento ao botão de calcular orçamento
+        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    });
+
+    // Event listeners para navegação no sidenav
+    document.querySelectorAll('.sidenav a, .nav-wrapper a[href^="#"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            showSection(targetId);
+        });
+    });
+
+    // Função para carregar dados do formulário de orçamento ao selecionar um ano
+    $anoSelect.addEventListener('change', async function() {
+        const anoId = this.value;
+        const modeloId = $modeloSelect.value;
+        const marcaId = $marcaSelect.value;
+        if (anoId && modeloId && marcaId) {
+            try {
+                const vehicleData = await fetchFipeData(`/marcas/${marcaId}/modelos/${modeloId}/anos/${anoId}`);
+                if (vehicleData) {
+                    console.log('Dados do veículo:', vehicleData);
+                    // Aqui você pode adicionar lógica adicional para usar os dados do veículo
+                }
+            } catch (error) {
+                console.error('Erro ao buscar dados do veículo:', error);
+            }
+        }
+    });
+
+    // Função para carregar e atualizar os selects de forma dinâmica
+    async function carregarSelects() {
+        await carregarClientes();
+        await carregarServicos();
+        M.FormSelect.init(document.querySelectorAll('select'));
+    }
+
+    // Atualizar selects sempre que novos dados são adicionados
+    async function carregarDados() {
+        await carregarClientes();
+        await carregarServicos();
+        await carregarOrcamentos();
+        atualizarDashboard();
+    }
+
+    // Ajuste final para garantir que todas as inicializações sejam feitas
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeAllComponents();
+        initializeSections();
+        carregarSelects();
+        loadBrands();
+        carregarDados();
+
+        // Adicionar evento ao botão de calcular orçamento
+        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    });
+
+    // Funções para manipular dados adicionais, se necessário
+    // ... [Outras funções conforme a necessidade] ...
+
+</script>
 </body>
 </html>
