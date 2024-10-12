@@ -725,38 +725,44 @@
                     return 'grey';
             }
         }
-
+//buscarClientePorId
         async function buscarClientePorId(id) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['clientes'], 'readonly');
-                const store = transaction.objectStore('clientes');
-                const request = store.get(id);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao buscar cliente: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readonly');
+        const store = transaction.objectStore('clientes');
+        const request = store.get(id);
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar cliente:", event.target.error);
+            reject("Erro ao buscar cliente: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            const cliente = event.target.result;
+            console.log("Cliente encontrado:", cliente);
+            resolve(cliente);
+        };
+    });
+}
 
-        async function buscarServicoPorId(id) {
-            return new Promise((resolve, reject) => {
-                const transaction = db.transaction(['servicos'], 'readonly');
-                const store = transaction.objectStore('servicos');
-                const request = store.get(id);
-                
-                request.onerror = function(event) {
-                    reject("Erro ao buscar serviço: " + event.target.error);
-                };
-                
-                request.onsuccess = function(event) {
-                    resolve(event.target.result);
-                };
-            });
-        }
+async function buscarServicoPorId(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['servicos'], 'readonly');
+        const store = transaction.objectStore('servicos');
+        const request = store.get(id);
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar serviço:", event.target.error);
+            reject("Erro ao buscar serviço: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            const servico = event.target.result;
+            console.log("Serviço encontrado:", servico);
+            resolve(servico);
+        };
+    });
+}
 
         async function atualizarDashboard() {
             const totalOrcamentos = await contarOrcamentos();
@@ -970,19 +976,44 @@
 
         // Função para obter o veículo selecionado
         function getSelectedVehicle() {
-            const marca = $marcaSelect.options[$marcaSelect.selectedIndex].text;
-            const modelo = $modeloSelect.options[$modeloSelect.selectedIndex].text;
-            const ano = $anoSelect.options[$anoSelect.selectedIndex].text;
-            return `${marca} ${modelo} ${ano}`;
-        }
+    const $marcaSelect = document.getElementById('marca');
+    const $modeloSelect = document.getElementById('modelo');
+    const $anoSelect = document.getElementById('ano');
+
+    if (!$marcaSelect || !$modeloSelect || !$anoSelect) {
+        console.error('Elementos de seleção de veículo não encontrados');
+        return '';
+    }
+
+    const marca = $marcaSelect.options[$marcaSelect.selectedIndex]?.text || '';
+    const modelo = $modeloSelect.options[$modeloSelect.selectedIndex]?.text || '';
+    const ano = $anoSelect.options[$anoSelect.selectedIndex]?.text || '';
+
+    return `${marca} ${modelo} ${ano}`.trim();
+}
+        
 
         // Função para calcular orçamento
         async function calcularOrcamento() {
-    const clienteId = parseInt(document.getElementById('cliente').value);
-    const servicoId = parseInt(document.getElementById('servico').value);
+    console.log('Iniciando cálculo de orçamento');
+
+    const clienteSelect = document.getElementById('cliente');
+    const servicoSelect = document.getElementById('servico');
+    const partesCarro = document.getElementById('partesCarro');
+
+    if (!clienteSelect || !servicoSelect || !partesCarro) {
+        console.error('Elementos de formulário não encontrados');
+        M.toast({html: 'Erro ao carregar formulário. Por favor, recarregue a página.', classes: 'rounded red'});
+        return;
+    }
+
+    const clienteId = parseInt(clienteSelect.value);
+    const servicoId = parseInt(servicoSelect.value);
     const veiculo = getSelectedVehicle();
-    const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
-    const observacoes = document.getElementById('observacoes').value;
+    const partesSelecionadas = M.FormSelect.getInstance(partesCarro).getSelectedValues();
+    const observacoes = document.getElementById('observacoes')?.value || '';
+
+    console.log('Dados coletados:', { clienteId, servicoId, veiculo, partesSelecionadas, observacoes });
 
     if (!clienteId || !servicoId || !veiculo) {
         M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
@@ -993,10 +1024,18 @@
         const cliente = await buscarClientePorId(clienteId);
         const servico = await buscarServicoPorId(servicoId);
 
+        console.log('Cliente e serviço buscados:', { cliente, servico });
+
+        if (!cliente || !servico) {
+            throw new Error('Cliente ou serviço não encontrado');
+        }
+
         // Cálculo simplificado do valor do orçamento
-        const valorBase = servico.preco;
+        const valorBase = servico.preco || 0;
         const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
         const valorTotal = valorBase + valorPartes;
+
+        console.log('Valores calculados:', { valorBase, valorPartes, valorTotal });
 
         const novoOrcamento = {
             clienteId,
@@ -1009,6 +1048,8 @@
             data: new Date()
         };
 
+        console.log('Novo orçamento criado:', novoOrcamento);
+
         const id = await adicionarOrcamento(novoOrcamento);
         M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
         
@@ -1016,21 +1057,24 @@
         document.getElementById('orcamentoForm').reset();
         M.FormSelect.init(document.querySelectorAll('select'));
         await carregarOrcamentos();
-        atualizarDashboard();
+        await atualizarDashboard();
 
         // Exibir resultado do orçamento
         exibirResultadoOrcamento(id, cliente, servico, novoOrcamento);
 
         // Navegar para o Dashboard
         const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
-        tabsInstance.select('dashboard');
+        if (tabsInstance) {
+            tabsInstance.select('dashboard');
+        } else {
+            console.error('Instância de tabs não encontrada');
+        }
 
     } catch (error) {
         console.error('Erro ao calcular orçamento:', error);
-        M.toast({html: 'Erro ao calcular orçamento: ' + error, classes: 'rounded red'});
+        M.toast({html: 'Erro ao calcular orçamento: ' + error.message, classes: 'rounded red'});
     }
 }
-
         function exibirResultadoOrcamento(id, cliente, servico, orcamento) {
     const resultado = `
         <h5>Orçamento #${id}</h5>
