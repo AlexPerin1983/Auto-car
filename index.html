@@ -978,73 +978,77 @@
 
         // Função para calcular orçamento
         async function calcularOrcamento() {
-            const clienteId = parseInt(document.getElementById('cliente').value);
-            const servicoId = parseInt(document.getElementById('servico').value);
-            const veiculo = getSelectedVehicle();
-            const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
-            const observacoes = document.getElementById('observacoes').value;
+    const clienteId = parseInt(document.getElementById('cliente').value);
+    const servicoId = parseInt(document.getElementById('servico').value);
+    const veiculo = getSelectedVehicle();
+    const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
+    const observacoes = document.getElementById('observacoes').value;
 
-            if (!clienteId || !servicoId || !veiculo) {
-                M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
-                return;
-            }
+    if (!clienteId || !servicoId || !veiculo) {
+        M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
+        return;
+    }
 
-            try {
-                const cliente = await buscarClientePorId(clienteId);
-                const servico = await buscarServicoPorId(servicoId);
+    try {
+        const cliente = await buscarClientePorId(clienteId);
+        const servico = await buscarServicoPorId(servicoId);
 
-                // Cálculo simplificado do valor do orçamento
-                const valorBase = servico.preco;
-                const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
-                const valorTotal = valorBase + valorPartes;
+        // Cálculo simplificado do valor do orçamento
+        const valorBase = servico.preco;
+        const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
+        const valorTotal = valorBase + valorPartes;
 
-                const novoOrcamento = {
-                    clienteId,
-                    servicoId,
-                    veiculo,
-                    partes: partesSelecionadas,
-                    valor: valorTotal,
-                    observacoes,
-                    status: 'Pendente',
-                    data: new Date()
-                };
+        const novoOrcamento = {
+            clienteId,
+            servicoId,
+            veiculo,
+            partes: partesSelecionadas,
+            valor: valorTotal,
+            observacoes,
+            status: 'Pendente',
+            data: new Date()
+        };
 
-                const id = await adicionarOrcamento(novoOrcamento);
-                M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
-                
-                // Limpar formulário e atualizar dados
-                document.getElementById('orcamentoForm').reset();
-                M.FormSelect.init(document.querySelectorAll('select'));
-                await carregarOrcamentos();
-                atualizarDashboard();
+        const id = await adicionarOrcamento(novoOrcamento);
+        M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
+        
+        // Limpar formulário e atualizar dados
+        document.getElementById('orcamentoForm').reset();
+        M.FormSelect.init(document.querySelectorAll('select'));
+        await carregarOrcamentos();
+        atualizarDashboard();
 
-                // Exibir resultado do orçamento
-                exibirResultadoOrcamento(id, cliente, servico, novoOrcamento);
-            } catch (error) {
-                console.error('Erro ao calcular orçamento:', error);
-                M.toast({html: 'Erro ao calcular orçamento: ' + error, classes: 'rounded red'});
-            }
-        }
+        // Exibir resultado do orçamento
+        exibirResultadoOrcamento(id, cliente, servico, novoOrcamento);
+
+        // Navegar para o Dashboard
+        const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
+        tabsInstance.select('dashboard');
+
+    } catch (error) {
+        console.error('Erro ao calcular orçamento:', error);
+        M.toast({html: 'Erro ao calcular orçamento: ' + error, classes: 'rounded red'});
+    }
+}
 
         function exibirResultadoOrcamento(id, cliente, servico, orcamento) {
-            const resultado = `
-                <h5>Orçamento #${id}</h5>
-                <p><strong>Cliente:</strong> ${cliente.nome}</p>
-                <p><strong>Veículo:</strong> ${orcamento.veiculo}</p>
-                <p><strong>Serviço:</strong> ${servico.nome}</p>
-                <p><strong>Partes:</strong> ${orcamento.partes.join(', ')}</p>
-                <p><strong>Valor Total:</strong> R$ ${orcamento.valor.toFixed(2)}</p>
-                <p><strong>Observações:</strong> ${orcamento.observacoes || 'Nenhuma'}</p>
-                <p><strong>Status:</strong> ${orcamento.status}</p>
-            `;
+    const resultado = `
+        <h5>Orçamento #${id}</h5>
+        <p><strong>Cliente:</strong> ${cliente.nome}</p>
+        <p><strong>Veículo:</strong> ${orcamento.veiculo}</p>
+        <p><strong>Serviço:</strong> ${servico.nome}</p>
+        <p><strong>Partes:</strong> ${orcamento.partes.join(', ')}</p>
+        <p><strong>Valor Total:</strong> R$ ${orcamento.valor.toFixed(2)}</p>
+        <p><strong>Observações:</strong> ${orcamento.observacoes || 'Nenhuma'}</p>
+        <p><strong>Status:</strong> ${orcamento.status}</p>
+    `;
 
-            const modalResultado = M.Modal.init(document.createElement('div'), {
-                html: resultado,
-                dismissible: true
-            });
+    const modalContent = document.getElementById('resultado-orcamento-content');
+    modalContent.innerHTML = resultado;
 
-            modalResultado.open();
-        }
+    const modalResultado = M.Modal.getInstance(document.getElementById('modal-resultado-orcamento'));
+    modalResultado.open();
+}
 
         // Inicialização de componentes Materialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1092,25 +1096,35 @@
 
         // Função para inicializar todos os componentes do Materialize
         function initializeAllComponents() {
-            initializeSelects();
-            initializeModals();
-            initializeTooltips();
-            initializeSidenav();
-            initializeTabs();
-        }
+    M.AutoInit(); // Isso inicializará a maioria dos componentes automaticamente
+    var elems = document.querySelectorAll('select');
+    M.FormSelect.init(elems);
+    var tabs = document.querySelectorAll('.tabs');
+    M.Tabs.init(tabs);
+}
 
         // Chamada para inicializar todos os componentes quando o DOM estiver carregado
         document.addEventListener('DOMContentLoaded', function() {
-            initializeAllComponents();
-            
-            // Event listeners
-            document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    initializeAllComponents();
+    
+    // Event listeners
+    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
 
-            // Carregar dados iniciais
-            loadBrands();
-            carregarDados();
-        });
+    // Carregar dados iniciais
+    loadBrands();
+    carregarDados();
+});
 
     </script>
+
+    <!-- Modal Resultado Orçamento -->
+<div id="modal-resultado-orcamento" class="modal">
+    <div class="modal-content" id="resultado-orcamento-content">
+        <!-- O conteúdo será preenchido dinamicamente -->
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+</div>
 </body>
 </html>
