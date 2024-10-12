@@ -193,6 +193,7 @@
                                             <th>Serviço</th>
                                             <th>Valor</th>
                                             <th>Status</th>
+                                            <th>Compartilhar</th>
                                         </tr>
                                     </thead>
                                     <tbody id="orcamentos-recentes">
@@ -560,25 +561,76 @@
         };
 
         request.onupgradeneeded = function(event) {
-            db = event.target.result;
-            
-            if (!db.objectStoreNames.contains('clientes')) {
-                const clientesStore = db.createObjectStore('clientes', { keyPath: 'id', autoIncrement: true });
-                clientesStore.createIndex('nome', 'nome', { unique: false });
-                clientesStore.createIndex('email', 'email', { unique: true });
-            }
-            
-            if (!db.objectStoreNames.contains('servicos')) {
-                const servicosStore = db.createObjectStore('servicos', { keyPath: 'id', autoIncrement: true });
-                servicosStore.createIndex('nome', 'nome', { unique: true });
-            }
-            
-            if (!db.objectStoreNames.contains('orcamentos')) {
-                const orcamentosStore = db.createObjectStore('orcamentos', { keyPath: 'id', autoIncrement: true });
-                orcamentosStore.createIndex('clienteId', 'clienteId', { unique: false });
-                orcamentosStore.createIndex('data', 'data', { unique: false });
-            }
+    db = event.target.result;
+    
+    if (!db.objectStoreNames.contains('clientes')) {
+        const clientesStore = db.createObjectStore('clientes', { keyPath: 'id', autoIncrement: true });
+        clientesStore.createIndex('nome', 'nome', { unique: false });
+        clientesStore.createIndex('email', 'email', { unique: true });
+    }
+    
+    if (!db.objectStoreNames.contains('servicos')) {
+        const servicosStore = db.createObjectStore('servicos', { keyPath: 'id', autoIncrement: true });
+        servicosStore.createIndex('nome', 'nome', { unique: true });
+    }
+    
+    if (!db.objectStoreNames.contains('orcamentos')) {
+        const orcamentosStore = db.createObjectStore('orcamentos', { keyPath: 'id', autoIncrement: true });
+        orcamentosStore.createIndex('clienteId', 'clienteId', { unique: false });
+        orcamentosStore.createIndex('data', 'data', { unique: false });
+    }
+
+    // Adicionando o object store 'configuracoes'
+    if (!db.objectStoreNames.contains('configuracoes')) {
+        const configuracoesStore = db.createObjectStore('configuracoes', { keyPath: 'id' });
+        configuracoesStore.createIndex('nome', 'nome', { unique: false });
+    }
+};
+
+function converterImagemParaBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
+
+async function buscarDadosEmpresa() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readonly');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.get('dadosEmpresa');
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar dados da empresa:", event.target.error);
+            reject("Erro ao buscar dados da empresa: " + event.target.error);
         };
+        
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+async function buscarFormasPagamento() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readonly');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.get('formasPagamento');
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar formas de pagamento:", event.target.error);
+            reject("Erro ao buscar formas de pagamento: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+
 
         function abrirModalDadosEmpresa() {
     carregarDadosEmpresa();
@@ -591,6 +643,82 @@ function abrirModalFormasPagamento() {
     var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
     modal.open();
 }
+
+async function salvarDadosEmpresa() {
+    const dadosEmpresa = {
+        nome: document.getElementById('nome_empresa').value,
+        cnpj: document.getElementById('cnpj_empresa').value,
+        endereco: document.getElementById('endereco_empresa').value,
+        telefone: document.getElementById('telefone_empresa').value,
+        email: document.getElementById('email_empresa').value
+    };
+
+    const logoInput = document.getElementById('logo_empresa');
+    if (logoInput.files.length > 0) {
+        dadosEmpresa.logo = await converterImagemParaBase64(logoInput.files[0]);
+    }
+
+    try {
+        await salvarDadosEmpresaNoIndexedDB(dadosEmpresa);
+        M.toast({html: 'Dados da empresa salvos com sucesso!', classes: 'rounded'});
+        M.Modal.getInstance(document.getElementById('modal-dados-empresa')).close();
+    } catch (error) {
+        M.toast({html: 'Erro ao salvar dados da empresa: ' + error, classes: 'rounded red'});
+    }
+}
+
+async function salvarFormasPagamento() {
+    const formasPagamento = {
+        chavePix: document.getElementById('chave_pix').value,
+        prazosBoleto: M.FormSelect.getInstance(document.getElementById('prazos_boleto')).getSelectedValues(),
+        parcelasSemJuros: parseInt(document.getElementById('parcelas_sem_juros').value),
+        parcelasComJuros: parseInt(document.getElementById('parcelas_com_juros').value),
+        taxaJuros: parseFloat(document.getElementById('taxa_juros').value)
+    };
+
+    try {
+        await salvarFormasPagamentoNoIndexedDB(formasPagamento);
+        M.toast({html: 'Formas de pagamento salvas com sucesso!', classes: 'rounded'});
+        M.Modal.getInstance(document.getElementById('modal-formas-pagamento')).close();
+    } catch (error) {
+        M.toast({html: 'Erro ao salvar formas de pagamento: ' + error, classes: 'rounded red'});
+    }
+}
+
+// Funções auxiliares para salvar no IndexedDB
+async function salvarDadosEmpresaNoIndexedDB(dadosEmpresa) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readwrite');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.put({ id: 'dadosEmpresa', ...dadosEmpresa });
+        
+        request.onerror = function(event) {
+            reject("Erro ao salvar dados da empresa: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+async function salvarFormasPagamentoNoIndexedDB(formasPagamento) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readwrite');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.put({ id: 'formasPagamento', ...formasPagamento });
+        
+        request.onerror = function(event) {
+            reject("Erro ao salvar formas de pagamento: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+
 
 // Funções para carregar dados da empresa e formas de pagamento
 async function carregarDadosEmpresa() {
@@ -618,6 +746,18 @@ async function carregarFormasPagamento() {
         M.updateTextFields();
     }
 }
+document.addEventListener('DOMContentLoaded', function() {
+    initializeAllComponents();
+    
+    // Event listeners
+    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+
+    // Carregar dados iniciais
+    loadBrands();
+    carregarDados();
+});
+
+
 
 // Inicialização dos componentes Materialize
 document.addEventListener('DOMContentLoaded', function() {
@@ -861,27 +1001,64 @@ document.addEventListener('DOMContentLoaded', function() {
             M.FormSelect.init(selectServico);
         }
 
-        async function carregarOrcamentos() {
-            const orcamentos = await buscarTodosOrcamentos();
-            const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
-            
-            tabelaOrcamentos.innerHTML = '';
-            
-            for (const orcamento of orcamentos) {
-                const cliente = await buscarClientePorId(orcamento.clienteId);
-                const servico = await buscarServicoPorId(orcamento.servicoId);
-                
-                tabelaOrcamentos.innerHTML += `
-                    <tr>
-                        <td>${cliente.nome}</td>
-                        <td>${orcamento.veiculo}</td>
-                        <td>${servico.nome}</td>
-                        <td>R$ ${orcamento.valor.toFixed(2)}</td>
-                        <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                    </tr>
-                `;
-            }
-        }
+
+
+
+// function carregar Orcamento
+async function carregarOrcamentos() {
+    const orcamentos = await buscarTodosOrcamentos();
+    const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
+    
+    tabelaOrcamentos.innerHTML = '';
+    
+    for (const orcamento of orcamentos) {
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        const servico = await buscarServicoPorId(orcamento.servicoId);
+        
+        tabelaOrcamentos.innerHTML += `
+            <tr>
+                <td>${cliente.nome}</td>
+                <td>${orcamento.veiculo}</td>
+                <td>${servico.nome}</td>
+                <td>R$ ${orcamento.valor.toFixed(2)}</td>
+                <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
+                <td>
+                    <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id})" class="btn-floating btn-small waves-effect waves-light green">
+                        <i class="material-icons">share</i>
+                    </a>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+
+
+
+async function compartilharViaWhatsApp(orcamentoId) {
+    const orcamento = await buscarOrcamentoPorId(orcamentoId);
+    const cliente = await buscarClientePorId(orcamento.clienteId);
+    const servico = await buscarServicoPorId(orcamento.servicoId);
+    const dadosEmpresa = await buscarDadosEmpresa();
+    const formasPagamento = await buscarFormasPagamento();
+
+    let mensagem = `Olá ${cliente.nome},\n\n`;
+    mensagem += `Segue seu orçamento:\n\n`;
+    mensagem += `Veículo: ${orcamento.veiculo}\n`;
+    mensagem += `Serviço: ${servico.nome}\n`;
+    mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+    mensagem += `Formas de Pagamento:\n`;
+    mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
+    mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
+    mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
+    mensagem += `Atenciosamente,\n${dadosEmpresa.nome}`;
+
+    const mensagemCodificada = encodeURIComponent(mensagem);
+    const numeroWhatsApp = cliente.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+    const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+
+    window.open(urlWhatsApp, '_blank');
+}
 
         function getStatusColor(status) {
             switch (status.toLowerCase()) {
@@ -914,6 +1091,29 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     });
 }
+
+async function buscarOrcamentoPorId(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orcamentos'], 'readonly');
+        const store = transaction.objectStore('orcamentos');
+        const request = store.get(id);
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar orçamento:", event.target.error);
+            reject("Erro ao buscar orçamento: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            const orcamento = event.target.result;
+            if (orcamento) {
+                resolve(orcamento);
+            } else {
+                reject("Orçamento não encontrado");
+            }
+        };
+    });
+}
+
 
 async function buscarServicoPorId(id) {
     return new Promise((resolve, reject) => {
@@ -1080,69 +1280,76 @@ async function buscarServicoPorId(id) {
         }
 
         // Configuração e funções para a API FIPE
-        const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
-        const $marcaSelect = document.getElementById('marca');
-        const $modeloSelect = document.getElementById('modelo');
-        const $anoSelect = document.getElementById('ano');
+        const BASE_URL = 'https://fipeapi.appspot.com/api/1/carros';
 
-        async function fetchFipeData(endpoint) {
-            try {
-                const response = await fetch(`${BASE_URL}/${endpoint}`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return await response.json();
-            } catch (error) {
-                console.error('Erro ao buscar dados da API FIPE:', error);
-                M.toast({html: 'Erro ao carregar dados de veículos. Por favor, tente novamente.', classes: 'rounded red'});
-                return [];
-            }
+const $marcaSelect = document.getElementById('marca');
+const $modeloSelect = document.getElementById('modelo');
+const $anoSelect = document.getElementById('ano');
+
+async function fetchFipeData(endpoint) {
+    try {
+        const response = await fetch(`${BASE_URL}/${endpoint}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao buscar dados da API FIPE:', error);
+        M.toast({html: 'Erro ao carregar dados de veículos. Por favor, tente novamente.', classes: 'rounded red'});
+        return [];
+    }
+}
 
-        async function loadBrands() {
-            $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
-            const brands = await fetchFipeData('marcas');
-            brands.forEach(brand => {
-                $marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
-            });
-            M.FormSelect.init($marcaSelect);
-        }
 
-        $marcaSelect.addEventListener('change', async function() {
-            $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
-            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-            $modeloSelect.disabled = true;
-            $anoSelect.disabled = true;
-            M.FormSelect.init($modeloSelect);
-            M.FormSelect.init($anoSelect);
+async function loadBrands() {
+    $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
+    const brands = await fetchFipeData('marcas.json');
+    brands.forEach(brand => {
+        $marcaSelect.innerHTML += `<option value="${brand.id}">${brand.fipe_name}</option>`;
+    });
+    M.FormSelect.init($marcaSelect);
+}
 
-            const marcaId = this.value;
-            if (marcaId) {
-                $modeloSelect.disabled = false;
-                const models = await fetchFipeData(`marcas/${marcaId}/modelos`);
-                models.modelos.forEach(model => {
-                    $modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
-                });
-                M.FormSelect.init($modeloSelect);
-            }
+
+$marcaSelect.addEventListener('change', async function() {
+    $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
+    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+    $modeloSelect.disabled = true;
+    $anoSelect.disabled = true;
+    M.FormSelect.init($modeloSelect);
+    M.FormSelect.init($anoSelect);
+
+    const marcaId = this.value;
+    if (marcaId) {
+        $modeloSelect.disabled = false;
+        const models = await fetchFipeData(`veiculos/${marcaId}.json`);
+        models.forEach(model => {
+            $modeloSelect.innerHTML += `<option value="${model.id}">${model.fipe_name}</option>`;
         });
+        M.FormSelect.init($modeloSelect);
+    }
+});
 
-        $modeloSelect.addEventListener('change', async function() {
-            $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-            $anoSelect.disabled = true;
-            M.FormSelect.init($anoSelect);
+$modeloSelect.addEventListener('change', async function() {
+    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+    $anoSelect.disabled = true;
+    M.FormSelect.init($anoSelect);
 
-            const modeloId = this.value;
-            const marcaId = $marcaSelect.value;
-            if (modeloId) {
-                $anoSelect.disabled = false;
-                const years = await fetchFipeData(`marcas/${marcaId}/modelos/${modeloId}/anos`);
-                years.forEach(year => {
-                    $anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
-                });
-                M.FormSelect.init($anoSelect);
-            }
+    const modeloId = this.value;
+    const marcaId = $marcaSelect.value;
+    if (modeloId) {
+        $anoSelect.disabled = false;
+        const years = await fetchFipeData(`veiculo/${marcaId}/${modeloId}.json`);
+        years.forEach(year => {
+            $anoSelect.innerHTML += `<option value="${year.id}">${year.name}</option>`;
         });
+        M.FormSelect.init($anoSelect);
+    }
+});
+
+
+
+     
 
         // Função para obter o veículo selecionado
         function getSelectedVehicle() {
@@ -1161,6 +1368,7 @@ async function buscarServicoPorId(id) {
 
     return `${marca} ${modelo} ${ano}`.trim();
 }
+
         
 
         // Função para calcular orçamento
@@ -1245,6 +1453,7 @@ async function buscarServicoPorId(id) {
         M.toast({html: 'Erro ao calcular orçamento: ' + error.message, classes: 'rounded red'});
     }
 }
+
         function exibirResultadoOrcamento(id, cliente, servico, orcamento) {
     const resultado = `
         <h5>Orçamento #${id}</h5>
@@ -1329,24 +1538,31 @@ function showSection(sectionId) {
 
         // Função para inicializar todos os componentes do Materialize
         function initializeAllComponents() {
-    M.AutoInit(); // Isso inicializará a maioria dos componentes automaticamente
-    var elems = document.querySelectorAll('select');
-    M.FormSelect.init(elems);
-    var tabs = document.querySelectorAll('.tabs');
-    M.Tabs.init(tabs);
+    M.AutoInit(); // Inicializa a maioria dos componentes automaticamente
+
+    // Inicializar componentes específicos se necessário
+    var elemsSidenav = document.querySelectorAll('.sidenav');
+    M.Sidenav.init(elemsSidenav);
+
+    var elemsCollapsible = document.querySelectorAll('.collapsible');
+    M.Collapsible.init(elemsCollapsible);
+
+    var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
+    M.Dropdown.init(elemsDropdown, {
+        constrainWidth: false,
+        coverTrigger: false
+    });
+
+    var elemsSelect = document.querySelectorAll('select');
+    M.FormSelect.init(elemsSelect);
+
+    var elemsModal = document.querySelectorAll('.modal');
+    M.Modal.init(elemsModal);
+
+    var elemsTabs = document.querySelectorAll('.tabs');
+    M.Tabs.init(elemsTabs);
 }
 
-        // Chamada para inicializar todos os componentes quando o DOM estiver carregado
-        document.addEventListener('DOMContentLoaded', function() {
-    initializeAllComponents();
-    
-    // Event listeners
-    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
-
-    // Carregar dados iniciais
-    loadBrands();
-    carregarDados();
-});
 
     </script>
 
