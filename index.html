@@ -77,6 +77,24 @@
                 padding-right: 20px;
             }
         }
+          /* Novo estilo para garantir que o dropdown fique acima das tabs */
+  /* Novo estilo para o dropdown */
+  .dropdown-content {
+        z-index: 9999 !important;
+        opacity: 1 !important;
+        position: fixed !important;
+        top: 64px !important; /* Ajuste conforme a altura da sua navbar */
+        right: 10px !important;
+        left: auto !important;
+        width: auto !important;
+        max-width: 300px !important;
+    }
+
+    /* Garantir que outros elementos permaneçam visíveis */
+    .tabs, .container {
+        z-index: 1;
+        position: relative;
+    }
     </style>
 </head>
 <body>
@@ -93,7 +111,7 @@
     </nav>
     
     <!-- Dropdown Structure -->
-    <ul id="dropdown-config" class="dropdown-content">
+    <ul id="dropdown-config" class="dropdown-content config-dropdown">
         <li><a href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
         <li><a href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
     </ul>
@@ -1475,7 +1493,10 @@
     var elemsDropdown = document.querySelectorAll('.dropdown-trigger');
     M.Dropdown.init(elemsDropdown, {
         constrainWidth: false,
-        coverTrigger: false
+        coverTrigger: false,
+        closeOnClick: false,
+        hover: false,
+        alignment: 'right'
     });
 
     var elemsSelect = document.querySelectorAll('select');
@@ -1487,7 +1508,6 @@
     var elemsTabs = document.querySelectorAll('.tabs');
     M.Tabs.init(elemsTabs);
 }
-
 
     // Inicialização quando o documento estiver pronto
     document.addEventListener('DOMContentLoaded', function() {
@@ -1691,13 +1711,15 @@
 
 
     // Event listeners para navegação no sidenav
-    document.querySelectorAll('.sidenav a, .nav-wrapper a[href^="#"]').forEach(function(el) {
-        el.addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
+ // Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger
+document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger), .nav-wrapper a[href^="#"]:not(.dropdown-trigger)').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+        e.preventDefault();
+        var targetId = this.getAttribute('href').substring(1);
+        showSection(targetId);
     });
+});
+
     
 
 
