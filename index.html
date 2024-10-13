@@ -1096,26 +1096,15 @@ async function atualizarClienteDB(cliente) {
         }
     }
              //WHATSAPP
-             async function compartilharViaWhatsApp(orcamentoId) {
-    console.log('Iniciando função compartilharViaWhatsApp');
-    console.log('ID do orçamento:', orcamentoId);
-
+             async function compartilharViaWhatsApp(orcamentoId, element) {
     try {
         const orcamento = await buscarOrcamentoPorId(orcamentoId);
-        console.log('Orçamento encontrado:', orcamento);
-
         const cliente = await buscarClientePorId(orcamento.clienteId);
-        console.log('Cliente encontrado:', cliente);
-
         const servico = await buscarServicoPorId(orcamento.servicoId);
-        console.log('Serviço encontrado:', servico);
-
         const dadosEmpresa = await buscarDadosEmpresa();
-        console.log('Dados da empresa:', dadosEmpresa);
-
         const formasPagamento = await buscarFormasPagamento();
-        console.log('Formas de pagamento:', formasPagamento);
 
+        // Montar a mensagem
         let mensagem = `Olá ${cliente.nome}, segue o orçamento:\n\n`;
         mensagem += `Veículo: ${orcamento.veiculo}\n`;
         mensagem += `Serviço: ${servico.nome}\n`;
@@ -1132,27 +1121,40 @@ async function atualizarClienteDB(cliente) {
         mensagem += `Tel: ${dadosEmpresa.telefone}\n`;
         mensagem += `Email: ${dadosEmpresa.email}`;
 
-        console.log('Mensagem montada:', mensagem);
-
         const mensagemCodificada = encodeURIComponent(mensagem);
-        console.log('Mensagem codificada:', mensagemCodificada);
-
         const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
-        console.log('Número do WhatsApp (sem formatação):', numeroWhatsApp);
-        
         const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
-        console.log('Número formatado:', numeroFormatado);
-        
-        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
-        console.log('URL do WhatsApp:', urlWhatsApp);
 
-        console.log('Tentando abrir a URL...');
-        window.open(urlWhatsApp, '_blank');
-        console.log('Comando para abrir a URL executado');
+        // Detectar o ambiente (Android, iOS, Desktop)
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isAndroid = /android/i.test(userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+        const isMobile = isAndroid || isIOS;
 
+        let urlWhatsApp;
+
+        if (isMobile) {
+            // Dispositivos móveis
+            if (isIOS) {
+                // iOS pode usar o esquema whatsapp://
+                urlWhatsApp = `whatsapp://send?text=${mensagemCodificada}`;
+            } else {
+                // Android usa whatsapp://send com número
+                urlWhatsApp = `whatsapp://send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+            }
+        } else {
+            // Desktop usa WhatsApp Web
+            urlWhatsApp = `https://web.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+        }
+
+        // Definir o href do elemento
+        element.setAttribute('href', urlWhatsApp);
+        element.setAttribute('target', '_blank');
+
+        // Como o href foi atualizado, o navegador seguirá o link corretamente
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
-        M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
+        M.toast({ html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red' });
     }
 }
 
