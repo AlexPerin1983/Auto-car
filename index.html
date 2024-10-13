@@ -1069,7 +1069,9 @@ async function atualizarClienteDB(cliente) {
         M.FormSelect.init(selectServico);
     }
 
-    async function carregarOrcamentos() {
+   // Função para carregar orçamentos recentes
+async function carregarOrcamentos() {
+    try {
         const orcamentos = await buscarTodosOrcamentos();
         const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
         
@@ -1087,77 +1089,85 @@ async function atualizarClienteDB(cliente) {
                     <td>R$ ${orcamento.valor.toFixed(2)}</td>
                     <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
                     <td>
-                        <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id})" class="btn-floating btn-small waves-effect waves-light green">
-                            <i class="material-icons">share</i>
-                        </a>
+                        <a href="#!" class="btn-floating btn-small waves-effect waves-light green compartilhar-orcamento" data-orcamento-id="${orcamento.id}">
+    <i class="material-icons">share</i>
+</a>
                     </td>
                 </tr>
             `;
         }
-    }
-             //WHATSAPP
-    async function compartilharViaWhatsApp(orcamentoId) {
-    try {
-        const orcamento = await buscarOrcamentoPorId(orcamentoId);
-        const cliente = await buscarClientePorId(orcamento.clienteId);
-        const servico = await buscarServicoPorId(orcamento.servicoId);
-        const dadosEmpresa = await buscarDadosEmpresa();
-        const formasPagamento = await buscarFormasPagamento();
 
-        let mensagem = `Olá ${cliente.nome},\n\n`;
-        mensagem += `Segue o orçamento para o seu veículo:\n\n`;
-        mensagem += `🚗 Veículo: ${orcamento.veiculo}\n`;
-        mensagem += `🔧 Serviço: ${servico.nome}\n`;
-        mensagem += `📋 Partes selecionadas: ${orcamento.partes.join(', ') || 'Nenhuma'}\n`;
-        mensagem += `💰 Valor total: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        // Adicionar event listeners para os botões de compartilhamento
+        document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
+    botao.addEventListener('click', function(e) {
+        e.preventDefault();
+        const orcamentoId = parseInt(this.getAttribute('data-orcamento-id'));
+        console.log('ID do orçamento clicado:', orcamentoId);
+        compartilharViaWhatsApp(orcamentoId);
+    });
+});
 
-        mensagem += `Formas de Pagamento:\n`;
-        mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
-        mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
-        mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
-
-        if (orcamento.observacoes) {
-            mensagem += `Observações: ${orcamento.observacoes}\n\n`;
-        }
-
-        mensagem += `Atenciosamente,\n${dadosEmpresa.nome}\n`;
-        mensagem += `📞 ${dadosEmpresa.telefone}\n`;
-        mensagem += `📧 ${dadosEmpresa.email}`;
-
-        const mensagemCodificada = encodeURIComponent(mensagem);
-        const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
-        
-        // Use 'api.whatsapp.com' para compatibilidade entre desktop e mobile
-        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
-
-        // Detecta se é um dispositivo móvel
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (isMobile) {
-            // Em dispositivos móveis, tenta abrir diretamente o aplicativo do WhatsApp
-            window.location.href = urlWhatsApp;
-        } else {
-            // Em desktops, abre em uma nova aba
-            window.open(urlWhatsApp, '_blank');
-        }
     } catch (error) {
-        console.error('Erro ao compartilhar orçamento:', error);
-        M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
+        console.error('Erro ao carregar orçamentos:', error);
+        M.toast({html: 'Erro ao carregar orçamentos. Por favor, recarregue a página.', classes: 'rounded red'});
     }
 }
 
-    function getStatusColor(status) {
-        switch (status.toLowerCase()) {
-            case 'aprovado':
-                return 'green';
-            case 'pendente':
-                return 'yellow darken-2';
-            case 'cancelado':
-                return 'red';
-            default:
-                return 'grey';
+// Função assíncrona para compartilhar via WhatsApp
+async function compartilharViaWhatsApp(orcamentoId) {
+    console.log('Iniciando compartilhamento para o orçamento ID:', orcamentoId);
+    try {
+        const orcamento = await buscarOrcamentoPorId(orcamentoId);
+        console.log('Orçamento encontrado:', orcamento);
+
+        if (!orcamento) {
+            throw new Error('Orçamento não encontrado');
         }
+
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        console.log('Cliente encontrado:', cliente);
+
+        if (!cliente) {
+            throw new Error('Cliente não encontrado');
+        }
+
+        let numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
+        numeroWhatsApp = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : '55' + numeroWhatsApp;
+        console.log('Número formatado:', numeroWhatsApp);
+
+        let mensagem = `Olá ${cliente.nome}! Aqui está o orçamento #${orcamentoId} da AUTO-CAR Pro.\n\n`;
+        mensagem += `Detalhes do orçamento:\n`;
+        mensagem += `- Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `- Serviço: ${orcamento.servico}\n`;
+        mensagem += `- Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        mensagem += `Por favor, entre em contato para mais informações.`;
+
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
+
+        console.log('URL do WhatsApp:', urlWhatsApp);
+
+        // Tentar abrir o WhatsApp
+        window.open(urlWhatsApp, '_blank');
+
+    } catch (error) {
+        console.error('Erro detalhado ao compartilhar orçamento:', error);
+        M.toast({html: `Erro ao compartilhar orçamento: ${error.message}`, classes: 'rounded red'});
     }
+}
+// Função para determinar a cor do status (mantida como está)
+function getStatusColor(status) {
+    switch (status.toLowerCase()) {
+        case 'aprovado':
+            return 'green';
+        case 'pendente':
+            return 'yellow darken-2';
+        case 'cancelado':
+            return 'red';
+        default:
+            return 'grey';
+    }
+}
 
     // Funções para buscar cliente e serviço por ID
     async function buscarClientePorId(id) {
@@ -1180,26 +1190,23 @@ async function atualizarClienteDB(cliente) {
     }
 
     async function buscarOrcamentoPorId(id) {
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(['orcamentos'], 'readonly');
-            const store = transaction.objectStore('orcamentos');
-            const request = store.get(id);
-            
-            request.onerror = function(event) {
-                console.error("Erro ao buscar orçamento:", event.target.error);
-                reject("Erro ao buscar orçamento: " + event.target.error);
-            };
-            
-            request.onsuccess = function(event) {
-                const orcamento = event.target.result;
-                if (orcamento) {
-                    resolve(orcamento);
-                } else {
-                    reject("Orçamento não encontrado");
-                }
-            };
-        });
-    }
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orcamentos'], 'readonly');
+        const store = transaction.objectStore('orcamentos');
+        const request = store.get(parseInt(id));
+        
+        request.onerror = function(event) {
+            console.error("Erro ao buscar orçamento:", event.target.error);
+            reject("Erro ao buscar orçamento: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            const orcamento = event.target.result;
+            console.log("Orçamento encontrado:", orcamento);
+            resolve(orcamento);
+        };
+    });
+}
 
     async function buscarServicoPorId(id) {
         return new Promise((resolve, reject) => {
