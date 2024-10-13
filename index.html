@@ -6,11 +6,13 @@
     <title>AUTO-CAR Pro - Orçamentos Automotivos</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background-color: #f5f5f5;
         }
+
         .brand-logo {
             font-weight: 300;
             font-size: 1.8rem;
@@ -69,6 +71,16 @@
             min-width: 800px;
             width: 100%;
         }
+        .btn-floating .fab.fa-whatsapp {
+    font-size: 1.3rem;
+    line-height: 36px;
+}
+
+@media only screen and (max-width: 600px) {
+    .btn-floating .fab.fa-whatsapp {
+        font-size: 1.5rem;
+    }
+}
         @media only screen and (max-width: 600px) {
             .table-container {
                 margin-left: -20px;
@@ -1070,7 +1082,7 @@ async function atualizarClienteDB(cliente) {
     }
 
    // Função para carregar orçamentos recentes
-async function carregarOrcamentos() {
+   async function carregarOrcamentos() {
     try {
         const orcamentos = await buscarTodosOrcamentos();
         const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
@@ -1089,9 +1101,9 @@ async function carregarOrcamentos() {
                     <td>R$ ${orcamento.valor.toFixed(2)}</td>
                     <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
                     <td>
-                        <a href="#!" class="btn-floating btn-small waves-effect waves-light green compartilhar-orcamento" data-orcamento-id="${orcamento.id}">
-    <i class="material-icons">share</i>
-</a>
+                        <a href="#!" class="btn-floating btn-small waves-effect waves-light compartilhar-orcamento" style="background-color: #25D366;" data-orcamento-id="${orcamento.id}">
+                            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
+                        </a>
                     </td>
                 </tr>
             `;
@@ -1099,20 +1111,18 @@ async function carregarOrcamentos() {
 
         // Adicionar event listeners para os botões de compartilhamento
         document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
-    botao.addEventListener('click', function(e) {
-        e.preventDefault();
-        const orcamentoId = parseInt(this.getAttribute('data-orcamento-id'));
-        console.log('ID do orçamento clicado:', orcamentoId);
-        compartilharViaWhatsApp(orcamentoId);
-    });
-});
+            botao.addEventListener('click', function(e) {
+                e.preventDefault();
+                const orcamentoId = this.getAttribute('data-orcamento-id');
+                compartilharViaWhatsApp(orcamentoId);
+            });
+        });
 
     } catch (error) {
         console.error('Erro ao carregar orçamentos:', error);
         M.toast({html: 'Erro ao carregar orçamentos. Por favor, recarregue a página.', classes: 'rounded red'});
     }
 }
-
 // Função assíncrona para compartilhar via WhatsApp
 async function compartilharViaWhatsApp(orcamentoId) {
     console.log('Iniciando compartilhamento para o orçamento ID:', orcamentoId);
