@@ -1070,32 +1070,57 @@ async function atualizarClienteDB(cliente) {
     }
 
     async function carregarOrcamentos() {
-        const orcamentos = await buscarTodosOrcamentos();
-        const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
-        
-        tabelaOrcamentos.innerHTML = '';
-        
-        for (const orcamento of orcamentos) {
-            const cliente = await buscarClientePorId(orcamento.clienteId);
-            const servico = await buscarServicoPorId(orcamento.servicoId);
-            
-            tabelaOrcamentos.innerHTML += `
-                <tr>
-                    <td>${cliente.nome}</td>
-                    <td>${orcamento.veiculo}</td>
-                    <td>${servico.nome}</td>
-                    <td>R$ ${orcamento.valor.toFixed(2)}</td>
-                    <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                    <td>
-    <a href="#" onclick="compartilharViaWhatsApp(${orcamento.id}, this)" class="btn-floating btn-small waves-effect waves-light green">
-        <i class="material-icons">share</i>
-    </a>
-</td>
+    const orcamentos = await buscarTodosOrcamentos();
+    const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
 
+    tabelaOrcamentos.innerHTML = '';
 
-            `;
+    for (const orcamento of orcamentos) {
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        const servico = await buscarServicoPorId(orcamento.servicoId);
+        const dadosEmpresa = await buscarDadosEmpresa();
+        const formasPagamento = await buscarFormasPagamento();
+
+        // Gerar a mensagem do orçamento
+        let mensagem = `Olá ${cliente.nome}, segue o orçamento:\n\n`;
+        mensagem += `Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `Serviço: ${servico.nome}\n`;
+        mensagem += `Partes: ${orcamento.partes.join(', ') || 'Nenhuma'}\n`;
+        mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        mensagem += `Formas de Pagamento:\n`;
+        mensagem += `PIX: ${formasPagamento.chavePix}\n`;
+        mensagem += `Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
+        mensagem += `Cartão: ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% juros\n\n`;
+        if (orcamento.observacoes) {
+            mensagem += `Obs: ${orcamento.observacoes}\n\n`;
         }
+        mensagem += `${dadosEmpresa.nome}\n`;
+        mensagem += `Tel: ${dadosEmpresa.telefone}\n`;
+        mensagem += `Email: ${dadosEmpresa.email}`;
+
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
+        const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
+
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+
+        tabelaOrcamentos.innerHTML += `
+            <tr>
+                <td>${cliente.nome}</td>
+                <td>${orcamento.veiculo}</td>
+                <td>${servico.nome}</td>
+                <td>R$ ${orcamento.valor.toFixed(2)}</td>
+                <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
+                <td>
+                    <a href="${urlWhatsApp}" target="_blank" class="btn-floating btn-small waves-effect waves-light green">
+                        <i class="material-icons">share</i>
+                    </a>
+                </td>
+            </tr>
+        `;
     }
+}
+
              //WHATSAPP
              async function compartilharViaWhatsApp(orcamentoId, element) {
     try {
