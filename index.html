@@ -139,23 +139,16 @@
                 <a href="#perfil"><span class="white-text email">johndoe@example.com</span></a>
             </div>
         </li>
-        <li><a href="#dashboard"><i class="material-icons">dashboard</i>Dashboard</a></li>
-        <li><a href="#clientes"><i class="material-icons">people</i>Clientes</a></li>
-        <li><a href="#orcamentos"><i class="material-icons">description</i>Orçamentos</a></li>
-        <li><a href="#servicos"><i class="material-icons">build</i>Serviços</a></li>
+        <li><a href="#dashboard" onclick="showSection('dashboard')"><i class="material-icons">dashboard</i>Dashboard</a></li>
+        <li><a href="#novo-orcamento" onclick="showSection('novo-orcamento')"><i class="material-icons">add_circle</i>Novo Orçamento</a></li>
+        <li><a href="#clientes" onclick="showSection('clientes')"><i class="material-icons">people</i>Clientes</a></li>
+        <li><a href="#servicos" onclick="showSection('servicos')"><i class="material-icons">build</i>Serviços</a></li>
         <li>
-            <ul class="collapsible">
-                <li>
-                    <div class="collapsible-header"><i class="material-icons">settings</i>Configurações</div>
-                    <div class="collapsible-body">
-                        <ul>
-                            <li><a href="#!" class="modal-link" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
-                            <li><a href="#!" class="modal-link" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+            <div class="divider"></div>
         </li>
+        <li><a class="subheader">Configurações</a></li>
+        <li><a class="waves-effect" href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
+        <li><a class="waves-effect" href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
     </ul>
     <!-- Conteúdo principal -->
     <div class="container">
@@ -1713,39 +1706,45 @@ function getStatusColor(status) {
     });
 
     // Função para gerenciar a navegação entre seções no menu
-    function showSection(sectionId) {
-        // Esconder todas as seções
-        document.querySelectorAll('.section').forEach(function(section) {
-            section.style.display = 'none';
-        });
+ // Substitua a função showSection existente por esta:
+function showSection(sectionId) {
+    // Esconder todas as seções
+    document.querySelectorAll('.section').forEach(function(section) {
+        section.style.display = 'none';
+    });
 
-        // Mostrar a seção selecionada
-        var targetSection = document.getElementById(sectionId);
-        if (targetSection) {
-            targetSection.style.display = 'block';
-        }
+    // Mostrar a seção selecionada
+    var targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
 
-        // Fechar o sidenav no mobile
+    // Fechar o sidenav apenas em telas menores
+    if (window.innerWidth <= 992) {
         var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
-        if (sidenav && window.innerWidth < 992) { // 992px é o breakpoint padrão do Materialize para desktop
+        if (sidenav) {
             sidenav.close();
         }
     }
 
-    // Inicializar a exibição das seções
+    // Atualizar a navegação ativa
+    updateActiveNavigation(sectionId);
+}
+
+// Adicione esta nova função
+function toggleMobileMenu() {
+    var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
+    if (sidenav.isOpen) {
+        sidenav.close();
+    } else {
+        sidenav.open();
+    }
+}
 
 
 
 
 
-// Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger e modal-link
-document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger):not(.modal-link), .nav-wrapper a[href^="#"]:not(.dropdown-trigger):not(.modal-link)').forEach(function(el) {
-    el.addEventListener('click', function(e) {
-        e.preventDefault();
-        var targetId = this.getAttribute('href').substring(1);
-        showSection(targetId);
-    });
-});
 
     
 
@@ -1796,17 +1795,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Adicionar evento ao botão de calcular orçamento
     document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
 
-    // Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger e modal-link
-    document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger):not(.modal-link), .nav-wrapper a[href^="#"]:not(.dropdown-trigger):not(.modal-link)').forEach(function(el) {
-        el.addEventListener('click', function(e) {
-            e.preventDefault();
-            var targetId = this.getAttribute('href').substring(1);
-            showSection(targetId);
-        });
+    document.querySelectorAll('.sidenav a[href^="#"]:not([href="#"]):not(.dropdown-trigger):not(.modal-link), .nav-wrapper a[href^="#"]:not([href="#"]):not(.dropdown-trigger):not(.modal-link)').forEach(function(el) {
+    el.addEventListener('click', function(e) {
+        e.preventDefault();
+        var targetId = this.getAttribute('href').substring(1);
+        showSection(targetId);
     });
 });
 
 
+});
 
 </script>
 </body>
