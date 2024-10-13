@@ -1086,12 +1086,12 @@ async function atualizarClienteDB(cliente) {
                     <td>${servico.nome}</td>
                     <td>R$ ${orcamento.valor.toFixed(2)}</td>
                     <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                    <td>
-                       <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id}, this)" class="btn-floating btn-small waves-effect waves-light green">
-                       <i class="material-icons">share</i>
-                       </a>
+                 <td>
+    <a href="#!" onclick="compartilharViaWhatsApp(${orcamento.id}, this)" class="btn-floating btn-small waves-effect waves-light green">
+        <i class="material-icons">share</i>
+    </a>
+</td>
 
-                </tr>
             `;
         }
     }
