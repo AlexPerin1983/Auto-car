@@ -1143,18 +1143,19 @@ async function atualizarClienteDB(cliente) {
         const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
         console.log('Número formatado:', numeroFormatado);
         
-        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+        const urlWhatsApp = `https://wa.me/${numeroFormatado}?text=${mensagemCodificada}`;
         console.log('URL do WhatsApp:', urlWhatsApp);
 
         console.log('Tentando abrir a URL...');
-        window.open(urlWhatsApp, '_blank');
-        console.log('Comando para abrir a URL executado');
+        window.location.href = urlWhatsApp;
+        console.log('Redirecionamento realizado');
 
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
         M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
     }
 }
+
 
     function getStatusColor(status) {
         switch (status.toLowerCase()) {
