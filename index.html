@@ -1096,7 +1096,7 @@ async function atualizarClienteDB(cliente) {
         }
     }
              //WHATSAPP
-    async function compartilharViaWhatsApp(orcamentoId) {
+             async function compartilharViaWhatsApp(orcamentoId) {
     try {
         const orcamento = await buscarOrcamentoPorId(orcamentoId);
         const cliente = await buscarClientePorId(orcamento.clienteId);
@@ -1104,42 +1104,32 @@ async function atualizarClienteDB(cliente) {
         const dadosEmpresa = await buscarDadosEmpresa();
         const formasPagamento = await buscarFormasPagamento();
 
-        let mensagem = `Olá ${cliente.nome},\n\n`;
-        mensagem += `Segue o orçamento para o seu veículo:\n\n`;
-        mensagem += `🚗 Veículo: ${orcamento.veiculo}\n`;
-        mensagem += `🔧 Serviço: ${servico.nome}\n`;
-        mensagem += `📋 Partes selecionadas: ${orcamento.partes.join(', ') || 'Nenhuma'}\n`;
-        mensagem += `💰 Valor total: R$ ${orcamento.valor.toFixed(2)}\n\n`;
-
+        let mensagem = `Olá ${cliente.nome}, segue o orçamento:\n\n`;
+        mensagem += `Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `Serviço: ${servico.nome}\n`;
+        mensagem += `Partes: ${orcamento.partes.join(', ') || 'Nenhuma'}\n`;
+        mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
         mensagem += `Formas de Pagamento:\n`;
-        mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
-        mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
-        mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
-
+        mensagem += `PIX: ${formasPagamento.chavePix}\n`;
+        mensagem += `Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
+        mensagem += `Cartão: ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% juros\n\n`;
         if (orcamento.observacoes) {
-            mensagem += `Observações: ${orcamento.observacoes}\n\n`;
+            mensagem += `Obs: ${orcamento.observacoes}\n\n`;
         }
-
-        mensagem += `Atenciosamente,\n${dadosEmpresa.nome}\n`;
-        mensagem += `📞 ${dadosEmpresa.telefone}\n`;
-        mensagem += `📧 ${dadosEmpresa.email}`;
+        mensagem += `${dadosEmpresa.nome}\n`;
+        mensagem += `Tel: ${dadosEmpresa.telefone}\n`;
+        mensagem += `Email: ${dadosEmpresa.email}`;
 
         const mensagemCodificada = encodeURIComponent(mensagem);
         const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
         
-        // Use 'api.whatsapp.com' para compatibilidade entre desktop e mobile
-        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
+        // Certifique-se de que o número comece com o código do país (ex: 55 para Brasil)
+        const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
+        
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
 
-        // Detecta se é um dispositivo móvel
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (isMobile) {
-            // Em dispositivos móveis, tenta abrir diretamente o aplicativo do WhatsApp
-            window.location.href = urlWhatsApp;
-        } else {
-            // Em desktops, abre em uma nova aba
-            window.open(urlWhatsApp, '_blank');
-        }
+        // Abre o link, funcionará tanto no desktop quanto no mobile
+        window.open(urlWhatsApp, '_blank');
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
         M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
