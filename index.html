@@ -1097,12 +1097,24 @@ async function atualizarClienteDB(cliente) {
     }
              //WHATSAPP
              async function compartilharViaWhatsApp(orcamentoId) {
+    console.log('Iniciando função compartilharViaWhatsApp');
+    console.log('ID do orçamento:', orcamentoId);
+
     try {
         const orcamento = await buscarOrcamentoPorId(orcamentoId);
+        console.log('Orçamento encontrado:', orcamento);
+
         const cliente = await buscarClientePorId(orcamento.clienteId);
+        console.log('Cliente encontrado:', cliente);
+
         const servico = await buscarServicoPorId(orcamento.servicoId);
+        console.log('Serviço encontrado:', servico);
+
         const dadosEmpresa = await buscarDadosEmpresa();
+        console.log('Dados da empresa:', dadosEmpresa);
+
         const formasPagamento = await buscarFormasPagamento();
+        console.log('Formas de pagamento:', formasPagamento);
 
         let mensagem = `Olá ${cliente.nome}, segue o orçamento:\n\n`;
         mensagem += `Veículo: ${orcamento.veiculo}\n`;
@@ -1120,16 +1132,24 @@ async function atualizarClienteDB(cliente) {
         mensagem += `Tel: ${dadosEmpresa.telefone}\n`;
         mensagem += `Email: ${dadosEmpresa.email}`;
 
+        console.log('Mensagem montada:', mensagem);
+
         const mensagemCodificada = encodeURIComponent(mensagem);
+        console.log('Mensagem codificada:', mensagemCodificada);
+
         const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
+        console.log('Número do WhatsApp (sem formatação):', numeroWhatsApp);
         
-        // Certifique-se de que o número comece com o código do país (ex: 55 para Brasil)
         const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
+        console.log('Número formatado:', numeroFormatado);
         
         const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+        console.log('URL do WhatsApp:', urlWhatsApp);
 
-        // Abre o link, funcionará tanto no desktop quanto no mobile
+        console.log('Tentando abrir a URL...');
         window.open(urlWhatsApp, '_blank');
+        console.log('Comando para abrir a URL executado');
+
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
         M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
