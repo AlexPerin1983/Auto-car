@@ -1096,7 +1096,7 @@ async function atualizarClienteDB(cliente) {
         }
     }
              //WHATSAPP
-             async function compartilharViaWhatsApp(orcamentoId, element) {
+             async function compartilharViaWhatsApp(orcamentoId) {
     console.log('Iniciando função compartilharViaWhatsApp');
     console.log('ID do orçamento:', orcamentoId);
 
@@ -1139,21 +1139,16 @@ async function atualizarClienteDB(cliente) {
 
         const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
         console.log('Número do WhatsApp (sem formatação):', numeroWhatsApp);
-
+        
         const numeroFormatado = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : `55${numeroWhatsApp}`;
         console.log('Número formatado:', numeroFormatado);
-
-        // Use o esquema de URL whatsapp:// para dispositivos móveis
-        const urlWhatsApp = `whatsapp://send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
+        
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroFormatado}&text=${mensagemCodificada}`;
         console.log('URL do WhatsApp:', urlWhatsApp);
 
-        // Atualize o atributo href do elemento clicado
-        element.setAttribute('href', urlWhatsApp);
-
-        // Opcional: Defina target para _self
-        element.setAttribute('target', '_self');
-
-        // Como o usuário clicou no link, o navegador deve seguir o href atualizado
+        console.log('Tentando abrir a URL...');
+        window.open(urlWhatsApp, '_blank');
+        console.log('Comando para abrir a URL executado');
 
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
