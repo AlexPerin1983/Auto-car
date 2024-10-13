@@ -1095,7 +1095,7 @@ async function atualizarClienteDB(cliente) {
             `;
         }
     }
-
+             //WHATSAPP
     async function compartilharViaWhatsApp(orcamentoId) {
     try {
         const orcamento = await buscarOrcamentoPorId(orcamentoId);
@@ -1126,9 +1126,20 @@ async function atualizarClienteDB(cliente) {
 
         const mensagemCodificada = encodeURIComponent(mensagem);
         const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
-        const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
+        
+        // Use 'api.whatsapp.com' para compatibilidade entre desktop e mobile
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
 
-        window.open(urlWhatsApp, '_blank');
+        // Detecta se é um dispositivo móvel
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            // Em dispositivos móveis, tenta abrir diretamente o aplicativo do WhatsApp
+            window.location.href = urlWhatsApp;
+        } else {
+            // Em desktops, abre em uma nova aba
+            window.open(urlWhatsApp, '_blank');
+        }
     } catch (error) {
         console.error('Erro ao compartilhar orçamento:', error);
         M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
