@@ -110,11 +110,12 @@
         </div>
     </nav>
     
-    <!-- Dropdown Structure -->
-    <ul id="dropdown-config" class="dropdown-content config-dropdown">
-        <li><a href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
-        <li><a href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
-    </ul>
+<!-- Dropdown Structure -->
+<ul id="dropdown-config" class="dropdown-content config-dropdown">
+    <li><a href="#!" class="modal-link" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
+    <li><a href="#!" class="modal-link" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
+</ul>
+
 
     <!-- Sidenav -->
     <ul id="slide-out" class="sidenav">
@@ -136,15 +137,14 @@
                     <div class="collapsible-header"><i class="material-icons">settings</i>Configurações</div>
                     <div class="collapsible-body">
                         <ul>
-                            <li><a href="#!" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
-                            <li><a href="#!" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
+                            <li><a href="#!" class="modal-link" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
+                            <li><a href="#!" class="modal-link" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
                         </ul>
                     </div>
                 </li>
             </ul>
         </li>
     </ul>
-
     <!-- Conteúdo principal -->
     <div class="container">
         <div class="section">
@@ -830,21 +830,23 @@
         });
     }
 
-    async function atualizarCliente(cliente) {
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(['clientes'], 'readwrite');
-            const store = transaction.objectStore('clientes');
-            const request = store.put(cliente);
-            
-            request.onerror = function(event) {
-                reject("Erro ao atualizar cliente: " + event.target.error);
-            };
-            
-            request.onsuccess = function(event) {
-                resolve(event.target.result);
-            };
-        });
-    }
+ // Função para atualizar cliente no IndexedDB
+async function atualizarClienteDB(cliente) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readwrite');
+        const store = transaction.objectStore('clientes');
+        const request = store.put(cliente);
+        
+        request.onerror = function(event) {
+            reject("Erro ao atualizar cliente: " + event.target.error);
+        };
+        
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
 
     async function atualizarServico(servico) {
         return new Promise((resolve, reject) => {
@@ -1095,6 +1097,7 @@
     }
 
     async function compartilharViaWhatsApp(orcamentoId) {
+    try {
         const orcamento = await buscarOrcamentoPorId(orcamentoId);
         const cliente = await buscarClientePorId(orcamento.clienteId);
         const servico = await buscarServicoPorId(orcamento.servicoId);
@@ -1102,22 +1105,35 @@
         const formasPagamento = await buscarFormasPagamento();
 
         let mensagem = `Olá ${cliente.nome},\n\n`;
-        mensagem += `Segue seu orçamento:\n\n`;
-        mensagem += `Veículo: ${orcamento.veiculo}\n`;
-        mensagem += `Serviço: ${servico.nome}\n`;
-        mensagem += `Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        mensagem += `Segue o orçamento para o seu veículo:\n\n`;
+        mensagem += `🚗 Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `🔧 Serviço: ${servico.nome}\n`;
+        mensagem += `📋 Partes selecionadas: ${orcamento.partes.join(', ') || 'Nenhuma'}\n`;
+        mensagem += `💰 Valor total: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+
         mensagem += `Formas de Pagamento:\n`;
         mensagem += `- PIX: ${formasPagamento.chavePix}\n`;
         mensagem += `- Boleto: ${formasPagamento.prazosBoleto.join(', ')} dias\n`;
         mensagem += `- Cartão: até ${formasPagamento.parcelasSemJuros}x sem juros ou ${formasPagamento.parcelasComJuros}x com ${formasPagamento.taxaJuros}% de juros\n\n`;
-        mensagem += `Atenciosamente,\n${dadosEmpresa.nome}`;
+
+        if (orcamento.observacoes) {
+            mensagem += `Observações: ${orcamento.observacoes}\n\n`;
+        }
+
+        mensagem += `Atenciosamente,\n${dadosEmpresa.nome}\n`;
+        mensagem += `📞 ${dadosEmpresa.telefone}\n`;
+        mensagem += `📧 ${dadosEmpresa.email}`;
 
         const mensagemCodificada = encodeURIComponent(mensagem);
-        const numeroWhatsApp = cliente.telefone.replace(/\D/g, ''); // Remove caracteres não numéricos
+        const numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
         const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensagemCodificada}`;
 
         window.open(urlWhatsApp, '_blank');
+    } catch (error) {
+        console.error('Erro ao compartilhar orçamento:', error);
+        M.toast({html: 'Erro ao compartilhar orçamento. Por favor, tente novamente.', classes: 'rounded red'});
     }
+}
 
     function getStatusColor(status) {
         switch (status.toLowerCase()) {
@@ -1509,15 +1525,7 @@
     M.Tabs.init(elemsTabs);
 }
 
-    // Inicialização quando o documento estiver pronto
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeAllComponents();
-        loadBrands();
-        carregarDados();
 
-        // Adicionar evento ao botão de calcular orçamento
-        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
-    });
 
     // Função para calcular orçamento
     async function calcularOrcamento() {
@@ -1699,20 +1707,11 @@
     // Inicializar a exibição das seções
 
 
-    // Chamar a função para inicializar as seções
-    document.addEventListener('DOMContentLoaded', function() {
-    initializeAllComponents();
-    loadBrands();
-    carregarDados();
-
-    // Adicionar evento ao botão de calcular orçamento
-    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
-});
 
 
-    // Event listeners para navegação no sidenav
- // Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger
-document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger), .nav-wrapper a[href^="#"]:not(.dropdown-trigger)').forEach(function(el) {
+
+// Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger e modal-link
+document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger):not(.modal-link), .nav-wrapper a[href^="#"]:not(.dropdown-trigger):not(.modal-link)').forEach(function(el) {
     el.addEventListener('click', function(e) {
         e.preventDefault();
         var targetId = this.getAttribute('href').substring(1);
@@ -1759,20 +1758,27 @@ document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger), .nav-wr
         atualizarDashboard();
     }
 
-    // Ajuste final para garantir que todas as inicializações sejam feitas
-    document.addEventListener('DOMContentLoaded', function() {
-        initializeAllComponents();
-        initializeSections();
-        carregarSelects();
-        loadBrands();
-        carregarDados();
+// Inicialização quando o documento estiver pronto
+document.addEventListener('DOMContentLoaded', function() {
+    initializeAllComponents();
+    carregarSelects();
+    loadBrands();
+    carregarDados();
 
-        // Adicionar evento ao botão de calcular orçamento
-        document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+    // Adicionar evento ao botão de calcular orçamento
+    document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
+
+    // Event listeners para navegação no sidenav e navbar, excluindo dropdown-trigger e modal-link
+    document.querySelectorAll('.sidenav a[href^="#"]:not(.dropdown-trigger):not(.modal-link), .nav-wrapper a[href^="#"]:not(.dropdown-trigger):not(.modal-link)').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+            e.preventDefault();
+            var targetId = this.getAttribute('href').substring(1);
+            showSection(targetId);
+        });
     });
+});
 
-    // Funções para manipular dados adicionais, se necessário
-    // ... [Outras funções conforme a necessidade] ...
+
 
 </script>
 </body>
