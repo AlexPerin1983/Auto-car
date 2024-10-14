@@ -144,16 +144,15 @@
 
     <!-- Conteúdo principal -->
     <div class="container">
-        <div class="section">
-            <div class="row">
-                <div class="col s12">
-                    <ul class="tabs">
-                        <li class="tab col s3"><a href="#dashboard">Dashboard</a></li>
-                        <li class="tab col s3"><a href="#novo-orcamento">Novo Orçamento</a></li>
-                        <li class="tab col s3"><a href="#clientes">Clientes</a></li>
-                        <li class="tab col s3"><a href="#categorias">Categorias</a></li>
-                    </ul>
-                </div>
+        <!-- Abas de Navegação -->
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s3"><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li class="tab col s3"><a href="#novo-orcamento">Novo Orçamento</a></li>
+                    <li class="tab col s3"><a href="#clientes">Clientes</a></li>
+                    <li class="tab col s3"><a href="#categorias">Categorias</a></li>
+                </ul>
             </div>
         </div>
 
@@ -325,6 +324,7 @@
         </div>
     </div>
 
+    <!-- Modais -->
     <!-- Modal Dados da Empresa -->
     <div id="modal-dados-empresa" class="modal">
         <div class="modal-content">
@@ -495,19 +495,20 @@
 
     <!-- Footer -->
     <footer class="page-footer teal darken-2">
-        <div class="footer-copyright">
-            <div class="container">
-                © 2024 AUTO-CAR Pro
-                <a class="grey-text text-lighten-4 right" href="#!">Termos de Uso</a>
-            </div>
+        <div class="container">
+            © 2024 AUTO-CAR Pro
+            <a class="grey-text text-lighten-4 right" href="#!">Termos de Uso</a>
         </div>
     </footer>
 
-    <!-- Scripts do Materialize e jQuery -->
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script>
-   // Inicialização do IndexedDB
+
+<!-- Scripts do Materialize e jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+ 
+<script>
+// Parte 1: Inicialização do IndexedDB e Manipulação de Dados
+
 let db;
 const dbName = 'AutoCarDB';
 const dbVersion = 1;
@@ -611,6 +612,194 @@ async function salvarDadosEmpresaNoIndexedDB(dadosEmpresa) {
     });
 }
 
+// Função para buscar todas as categorias do IndexedDB
+async function buscarTodasCategorias() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['categorias'], 'readonly');
+        const store = transaction.objectStore('categorias');
+        const request = store.getAll();
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar categorias: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar todos os clientes do IndexedDB
+async function buscarTodosClientes() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readonly');
+        const store = transaction.objectStore('clientes');
+        const request = store.getAll();
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar clientes: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar todos os orçamentos do IndexedDB
+async function buscarTodosOrcamentos() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orcamentos'], 'readonly');
+        const store = transaction.objectStore('orcamentos');
+        const request = store.getAll();
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar orçamentos: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar um cliente pelo ID no IndexedDB
+async function buscarClientePorId(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readonly');
+        const store = transaction.objectStore('clientes');
+        const request = store.get(id);
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar cliente: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar um orçamento pelo ID no IndexedDB
+async function buscarOrcamentoPorId(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orcamentos'], 'readonly');
+        const store = transaction.objectStore('orcamentos');
+        const request = store.get(parseInt(id));
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar orçamento: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar uma categoria pelo ID no IndexedDB
+async function buscarCategoriaPorId(id) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['categorias'], 'readonly');
+        const store = transaction.objectStore('categorias');
+        const request = store.get(id);
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar categoria: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para salvar formas de pagamento no IndexedDB
+async function salvarFormasPagamentoNoIndexedDB(formasPagamento) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readwrite');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.put({ id: 'formasPagamento', ...formasPagamento });
+
+        request.onerror = function(event) {
+            reject("Erro ao salvar formas de pagamento: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para buscar formas de pagamento do IndexedDB
+async function buscarFormasPagamento() {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['configuracoes'], 'readonly');
+        const store = transaction.objectStore('configuracoes');
+        const request = store.get('formasPagamento');
+
+        request.onerror = function(event) {
+            reject("Erro ao buscar formas de pagamento: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para adicionar um novo cliente ao IndexedDB
+async function adicionarCliente(cliente) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readwrite');
+        const store = transaction.objectStore('clientes');
+        const request = store.add(cliente);
+
+        request.onerror = function(event) {
+            reject("Erro ao adicionar cliente: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para atualizar um cliente no IndexedDB
+async function atualizarClienteDB(cliente) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['clientes'], 'readwrite');
+        const store = transaction.objectStore('clientes');
+        const request = store.put(cliente);
+
+        request.onerror = function(event) {
+            reject("Erro ao atualizar cliente: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+
+// Função para adicionar um novo orçamento ao IndexedDB
+async function adicionarOrcamento(orcamento) {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['orcamentos'], 'readwrite');
+        const store = transaction.objectStore('orcamentos');
+        const request = store.add(orcamento);
+
+        request.onerror = function(event) {
+            reject("Erro ao adicionar orçamento: " + event.target.error);
+        };
+
+        request.onsuccess = function(event) {
+            resolve(event.target.result);
+        };
+    });
+}
+// Parte 2: Funções de Configuração da Empresa e Formas de Pagamento
+
 // Função para abrir o modal de dados da empresa
 function abrirModalDadosEmpresa() {
     carregarDadosEmpresa();
@@ -630,6 +819,8 @@ async function carregarDadosEmpresa() {
         if (dadosEmpresa.logo) {
             // Exibir logo, se necessário
             // Por exemplo, você pode adicionar uma tag <img> para mostrar a logo
+            // Exemplo:
+            // document.getElementById('logo_preview').src = dadosEmpresa.logo;
         }
         M.updateTextFields(); // Atualiza os campos de texto do Materialize
     }
@@ -659,67 +850,63 @@ async function salvarDadosEmpresa() {
     }
 }
 
-// Função para buscar todas as categorias do IndexedDB
-async function buscarTodasCategorias() {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['categorias'], 'readonly');
-        const store = transaction.objectStore('categorias');
-        const request = store.getAll();
-
-        request.onerror = function(event) {
-            reject("Erro ao buscar categorias: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
+// Função para abrir o modal de formas de pagamento
+function abrirModalFormasPagamento() {
+    carregarFormasPagamento();
+    var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
+    modal.open();
 }
 
-// Função para carregar a lista de categorias na interface
-async function carregarCategorias() {
-    const categorias = await buscarTodasCategorias();
-    const listaCategorias = document.getElementById('lista-categorias');
-    const selectCategoria = document.getElementById('categoria');
+// Função para carregar as formas de pagamento nos campos do modal
+async function carregarFormasPagamento() {
+    const formasPagamento = await buscarFormasPagamento();
+    if (formasPagamento) {
+        document.getElementById('chave_pix').value = formasPagamento.chavePIX || '';
+        document.getElementById('parcelas_sem_juros').value = formasPagamento.parcelasSemJuros || '';
+        document.getElementById('parcelas_com_juros').value = formasPagamento.parcelasComJuros || '';
+        document.getElementById('taxa_juros').value = formasPagamento.taxaJuros || '';
 
-    listaCategorias.innerHTML = '';
-    selectCategoria.innerHTML = '<option value="" disabled selected>Selecione a categoria</option>';
+        // Carregar os prazos de boleto
+        if (formasPagamento.prazosBoleto) {
+            const prazosSelect = document.getElementById('prazos_boleto');
+            Array.from(prazosSelect.options).forEach(option => {
+                if (formasPagamento.prazosBoleto.includes(option.value)) {
+                    option.selected = true;
+                }
+            });
+        }
 
-    categorias.forEach(categoria => {
-        // Adiciona a categoria na lista visual
-        listaCategorias.innerHTML += `
-            <div class="col s12 m6 l4">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">${categoria.nome}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Adiciona a categoria no select do formulário de orçamento
-        selectCategoria.innerHTML += `<option value="${categoria.id}">${categoria.nome}</option>`;
-    });
-
-    M.FormSelect.init(selectCategoria);
+        M.FormSelect.init(document.getElementById('prazos_boleto'));
+        M.updateTextFields(); // Atualiza os campos de texto do Materialize
+    }
 }
 
-// Função para buscar todos os clientes do IndexedDB
-async function buscarTodosClientes() {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['clientes'], 'readonly');
-        const store = transaction.objectStore('clientes');
-        const request = store.getAll();
+// Função para salvar as formas de pagamento a partir do modal
+async function salvarFormasPagamento() {
+    const chavePIX = document.getElementById('chave_pix').value;
+    const prazosBoleto = Array.from(document.getElementById('prazos_boleto').selectedOptions).map(option => option.value);
+    const parcelasSemJuros = parseInt(document.getElementById('parcelas_sem_juros').value) || 0;
+    const parcelasComJuros = parseInt(document.getElementById('parcelas_com_juros').value) || 0;
+    const taxaJuros = parseFloat(document.getElementById('taxa_juros').value) || 0;
 
-        request.onerror = function(event) {
-            reject("Erro ao buscar clientes: " + event.target.error);
-        };
+    const formasPagamento = {
+        chavePIX,
+        prazosBoleto,
+        parcelasSemJuros,
+        parcelasComJuros,
+        taxaJuros
+    };
 
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
+    try {
+        await salvarFormasPagamentoNoIndexedDB(formasPagamento);
+        M.toast({html: 'Formas de pagamento salvas com sucesso!', classes: 'rounded'});
+        M.Modal.getInstance(document.getElementById('modal-formas-pagamento')).close();
+    } catch (error) {
+        console.error('Erro ao salvar formas de pagamento:', error);
+        M.toast({html: 'Erro ao salvar formas de pagamento: ' + error, classes: 'rounded red'});
+    }
 }
+// Parte 3: Funções de Gestão de Clientes (CRUD)
 
 // Função para carregar a lista de clientes na interface
 async function carregarClientes() {
@@ -759,170 +946,6 @@ async function carregarClientes() {
     M.FormSelect.init(selectCliente);
 }
 
-// Função para buscar todos os orçamentos do IndexedDB
-async function buscarTodosOrcamentos() {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['orcamentos'], 'readonly');
-        const store = transaction.objectStore('orcamentos');
-        const request = store.getAll();
-
-        request.onerror = function(event) {
-            reject("Erro ao buscar orçamentos: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
-// Função para carregar a lista de orçamentos recentes na interface
-async function carregarOrcamentos() {
-    try {
-        const orcamentos = await buscarTodosOrcamentos();
-        const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
-
-        tabelaOrcamentos.innerHTML = '';
-
-        for (const orcamento of orcamentos) {
-            const cliente = await buscarClientePorId(orcamento.clienteId);
-            const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
-
-            tabelaOrcamentos.innerHTML += `
-                <tr>
-                    <td>${cliente.nome}</td>
-                    <td>${orcamento.veiculo}</td>
-                    <td>${categoria.nome}</td>
-                    <td>R$ ${orcamento.valor.toFixed(2)}</td>
-                    <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
-                    <td>
-                        <a href="#!" class="btn-floating btn-small waves-effect waves-light compartilhar-orcamento" style="background-color: #25D366;" data-orcamento-id="${orcamento.id}">
-                            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
-                        </a>
-                    </td>
-                </tr>
-            `;
-        }
-
-        // Adiciona event listeners para os botões de compartilhamento via WhatsApp
-        document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
-            botao.addEventListener('click', function(e) {
-                e.preventDefault();
-                const orcamentoId = this.getAttribute('data-orcamento-id');
-                compartilharViaWhatsApp(orcamentoId);
-            });
-        });
-
-    } catch (error) {
-        console.error('Erro ao carregar orçamentos:', error);
-        M.toast({html: 'Erro ao carregar orçamentos. Por favor, recarregue a página.', classes: 'rounded red'});
-    }
-}
-
-// Função para compartilhar um orçamento via WhatsApp
-async function compartilharViaWhatsApp(orcamentoId) {
-    try {
-        const orcamento = await buscarOrcamentoPorId(orcamentoId);
-        if (!orcamento) throw new Error('Orçamento não encontrado');
-
-        const cliente = await buscarClientePorId(orcamento.clienteId);
-        if (!cliente) throw new Error('Cliente não encontrado');
-
-        const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
-        if (!categoria) throw new Error('Categoria não encontrada');
-
-        // Formata o número de telefone para o padrão do WhatsApp
-        let numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
-        numeroWhatsApp = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : '55' + numeroWhatsApp;
-
-        // Monta a mensagem do WhatsApp
-        let mensagem = `Olá ${cliente.nome}! Aqui está o orçamento #${orcamentoId} da AUTO-CAR Pro.\n\n`;
-        mensagem += `Detalhes do orçamento:\n`;
-        mensagem += `- Veículo: ${orcamento.veiculo}\n`;
-        mensagem += `- Categoria: ${categoria.nome}\n`;
-        mensagem += `- Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
-        mensagem += `Por favor, entre em contato para mais informações.`;
-
-        const mensagemCodificada = encodeURIComponent(mensagem);
-        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
-
-        // Abre o WhatsApp em uma nova aba
-        window.open(urlWhatsApp, '_blank');
-
-    } catch (error) {
-        console.error('Erro ao compartilhar orçamento:', error);
-        M.toast({html: `Erro ao compartilhar orçamento: ${error.message}`, classes: 'rounded red'});
-    }
-}
-
-// Função auxiliar para obter a cor correspondente ao status do orçamento
-function getStatusColor(status) {
-    switch (status.toLowerCase()) {
-        case 'aprovado':
-            return 'green';
-        case 'pendente':
-            return 'yellow darken-2';
-        case 'cancelado':
-            return 'red';
-        default:
-            return 'grey';
-    }
-}
-
-// Função para atualizar os dados do dashboard
-async function atualizarDashboard() {
-    const totalOrcamentos = await contarOrcamentos();
-    const totalClientes = await contarClientes();
-    const totalCategorias = await contarCategorias();
-    const faturamentoTotal = await calcularFaturamentoTotal();
-
-    document.getElementById('total-orcamentos').textContent = totalOrcamentos;
-    document.getElementById('total-clientes').textContent = totalClientes;
-    document.getElementById('total-categorias').textContent = totalCategorias;
-    document.getElementById('total-faturamento').textContent = `R$ ${faturamentoTotal.toFixed(2)}`;
-}
-
-// Função para contar o total de orçamentos
-async function contarOrcamentos() {
-    const orcamentos = await buscarTodosOrcamentos();
-    return orcamentos.length;
-}
-
-// Função para contar o total de clientes
-async function contarClientes() {
-    const clientes = await buscarTodosClientes();
-    return clientes.length;
-}
-
-// Função para contar o total de categorias
-async function contarCategorias() {
-    const categorias = await buscarTodasCategorias();
-    return categorias.length;
-}
-
-// Função para calcular o faturamento total
-async function calcularFaturamentoTotal() {
-    const orcamentos = await buscarTodosOrcamentos();
-    return orcamentos.reduce((total, orcamento) => total + orcamento.valor, 0);
-}
-
-// Função para adicionar um novo cliente ao IndexedDB
-async function adicionarCliente(cliente) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['clientes'], 'readwrite');
-        const store = transaction.objectStore('clientes');
-        const request = store.add(cliente);
-
-        request.onerror = function(event) {
-            reject("Erro ao adicionar cliente: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
 // Função para salvar um novo cliente a partir do formulário
 async function salvarNovoCliente() {
     const nome = document.getElementById('nome_cliente').value;
@@ -941,23 +964,6 @@ async function salvarNovoCliente() {
     }
 }
 
-// Função para buscar um cliente pelo ID no IndexedDB
-async function buscarClientePorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['clientes'], 'readonly');
-        const store = transaction.objectStore('clientes');
-        const request = store.get(id);
-
-        request.onerror = function(event) {
-            reject("Erro ao buscar cliente: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
-}
-
 // Função para editar um cliente existente
 function editarCliente(id) {
     buscarClientePorId(id).then(cliente => {
@@ -967,23 +973,9 @@ function editarCliente(id) {
         document.getElementById('telefone_cliente_edit').value = cliente.telefone;
         M.updateTextFields(); // Atualiza os campos de texto do Materialize
         M.Modal.getInstance(document.getElementById('modal-editar-cliente')).open();
-    });
-}
-
-// Função para atualizar um cliente no IndexedDB
-async function atualizarClienteDB(cliente) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['clientes'], 'readwrite');
-        const store = transaction.objectStore('clientes');
-        const request = store.put(cliente);
-
-        request.onerror = function(event) {
-            reject("Erro ao atualizar cliente: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
+    }).catch(error => {
+        console.error('Erro ao buscar cliente para edição:', error);
+        M.toast({html: 'Erro ao buscar cliente para edição: ' + error, classes: 'rounded red'});
     });
 }
 
@@ -1034,56 +1026,120 @@ async function excluirCliente(id) {
         };
     });
 }
+// Parte 4: Funções de Cálculo de Orçamento, Compartilhamento e Inicialização da Interface
 
-// Função para buscar um orçamento pelo ID no IndexedDB
-async function buscarOrcamentoPorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['orcamentos'], 'readonly');
-        const store = transaction.objectStore('orcamentos');
-        const request = store.get(parseInt(id));
+// Função para carregar as marcas de veículos no select
+async function loadBrands() {
+    const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
 
-        request.onerror = function(event) {
-            reject("Erro ao buscar orçamento: " + event.target.error);
-        };
+    const marcaSelect = document.getElementById('marca');
+    const modeloSelect = document.getElementById('modelo');
+    const anoSelect = document.getElementById('ano');
 
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
+    marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
+
+    try {
+        const response = await fetch(`${BASE_URL}/marcas`);
+        if (!response.ok) {
+            throw new Error(`Erro ao buscar marcas: ${response.status}`);
+        }
+        const brands = await response.json();
+
+        brands.forEach(brand => {
+            marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
+        });
+
+        M.FormSelect.init(marcaSelect);
+    } catch (error) {
+        console.error('Erro ao carregar marcas:', error);
+        M.toast({html: 'Erro ao carregar marcas. Por favor, tente novamente.', classes: 'rounded red'});
+    }
 }
 
-// Função para buscar uma categoria pelo ID no IndexedDB
-async function buscarCategoriaPorId(id) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['categorias'], 'readonly');
-        const store = transaction.objectStore('categorias');
-        const request = store.get(id);
+// Evento ao selecionar uma marca para carregar os modelos
+document.getElementById('marca').addEventListener('change', async function() {
+    const marcaId = this.value;
+    const modeloSelect = document.getElementById('modelo');
+    const anoSelect = document.getElementById('ano');
 
-        request.onerror = function(event) {
-            reject("Erro ao buscar categoria: " + event.target.error);
-        };
+    modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
+    anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+    modeloSelect.disabled = true;
+    anoSelect.disabled = true;
 
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
+    if (marcaId) {
+        modeloSelect.disabled = false;
+        try {
+            const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${marcaId}/modelos`);
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar modelos: ${response.status}`);
+            }
+            const modelsData = await response.json();
+            modelsData.modelos.forEach(model => {
+                modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
+            });
+            M.FormSelect.init(modeloSelect);
+        } catch (error) {
+            console.error('Erro ao carregar modelos:', error);
+            M.toast({html: 'Erro ao carregar modelos. Por favor, tente novamente.', classes: 'rounded red'});
+        }
+    }
+});
+
+// Evento ao selecionar um modelo para carregar os anos
+document.getElementById('modelo').addEventListener('change', async function() {
+    const marcaId = document.getElementById('marca').value;
+    const modeloId = this.value;
+    const anoSelect = document.getElementById('ano');
+
+    anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
+    anoSelect.disabled = true;
+
+    if (modeloId) {
+        anoSelect.disabled = false;
+        try {
+            const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${marcaId}/modelos/${modeloId}/anos`);
+            if (!response.ok) {
+                throw new Error(`Erro ao buscar anos: ${response.status}`);
+            }
+            const years = await response.json();
+            years.forEach(year => {
+                anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
+            });
+            M.FormSelect.init(anoSelect);
+        } catch (error) {
+            console.error('Erro ao carregar anos:', error);
+            M.toast({html: 'Erro ao carregar anos. Por favor, tente novamente.', classes: 'rounded red'});
+        }
+    }
+});
+
+// Função para carregar as categorias na seção de categorias e no select do formulário
+async function carregarCategorias() {
+    const categorias = await buscarTodasCategorias();
+    const listaCategorias = document.getElementById('lista-categorias');
+    const categoriaSelect = document.getElementById('categoria');
+
+    listaCategorias.innerHTML = '';
+    categoriaSelect.innerHTML = '<option value="" disabled selected>Selecione a categoria</option>';
+
+    categorias.forEach(categoria => {
+        // Adiciona a categoria na visualização
+        listaCategorias.innerHTML += `
+            <div class="col s12 m6 l4">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">${categoria.nome}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Adiciona a categoria no select do formulário de orçamento
+        categoriaSelect.innerHTML += `<option value="${categoria.id}">${categoria.nome}</option>`;
     });
-}
 
-// Função para adicionar um novo orçamento ao IndexedDB
-async function adicionarOrcamento(orcamento) {
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(['orcamentos'], 'readwrite');
-        const store = transaction.objectStore('orcamentos');
-        const request = store.add(orcamento);
-
-        request.onerror = function(event) {
-            reject("Erro ao adicionar orçamento: " + event.target.error);
-        };
-
-        request.onsuccess = function(event) {
-            resolve(event.target.result);
-        };
-    });
+    M.FormSelect.init(categoriaSelect);
 }
 
 // Função para calcular o orçamento a partir do formulário
@@ -1155,7 +1211,7 @@ async function calcularOrcamento() {
         // Exibe o resultado do orçamento
         exibirResultadoOrcamento(id, cliente, categoria, novoOrcamento);
 
-        // Navega para o Dashboard
+        // Navega para o Dashboard sem fechar o sidenav
         const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
         if (tabsInstance) {
             tabsInstance.select('dashboard');
@@ -1191,114 +1247,151 @@ function exibirResultadoOrcamento(id, cliente, categoria, orcamento) {
 
 // Função para obter o veículo selecionado (marca, modelo e ano)
 function getSelectedVehicle() {
-    const marca = $marcaSelect.options[$marcaSelect.selectedIndex]?.text || '';
-    const modelo = $modeloSelect.options[$modeloSelect.selectedIndex]?.text || '';
-    const ano = $anoSelect.options[$anoSelect.selectedIndex]?.text || '';
+    const marcaSelect = document.getElementById('marca');
+    const modeloSelect = document.getElementById('modelo');
+    const anoSelect = document.getElementById('ano');
+
+    const marca = marcaSelect.options[marcaSelect.selectedIndex]?.text || '';
+    const modelo = modeloSelect.options[modeloSelect.selectedIndex]?.text || '';
+    const ano = anoSelect.options[anoSelect.selectedIndex]?.text || '';
 
     return `${marca} ${modelo} ${ano}`.trim();
 }
 
-// Configuração e funções para a API FIPE
-const BASE_URL = 'https://parallelum.com.br/fipe/api/v1/carros';
-
-const $marcaSelect = document.getElementById('marca');
-const $modeloSelect = document.getElementById('modelo');
-const $anoSelect = document.getElementById('ano');
-
-// Função para buscar dados da API FIPE com cache
-async function fetchFipeData(endpoint) {
-    const cacheKey = `fipe_${endpoint}`;
-    const cachedData = localStorage.getItem(cacheKey);
-
-    if (cachedData) {
-        return JSON.parse(cachedData);
-    }
-
+// Função para compartilhar um orçamento via WhatsApp
+async function compartilharViaWhatsApp(orcamentoId) {
     try {
-        const url = `${BASE_URL}${endpoint}`;
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Erro HTTP! status: ${response.status}`);
-        }
-        const data = await response.json();
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-        return data;
+        const orcamento = await buscarOrcamentoPorId(orcamentoId);
+        if (!orcamento) throw new Error('Orçamento não encontrado');
+
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        if (!cliente) throw new Error('Cliente não encontrado');
+
+        const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
+        if (!categoria) throw new Error('Categoria não encontrada');
+
+        // Formata o número de telefone para o padrão do WhatsApp
+        let numeroWhatsApp = cliente.telefone.replace(/\D/g, '');
+        numeroWhatsApp = numeroWhatsApp.startsWith('55') ? numeroWhatsApp : '55' + numeroWhatsApp;
+
+        // Monta a mensagem do WhatsApp
+        let mensagem = `Olá ${cliente.nome}! Aqui está o orçamento #${orcamentoId} da AUTO-CAR Pro.\n\n`;
+        mensagem += `Detalhes do orçamento:\n`;
+        mensagem += `- Veículo: ${orcamento.veiculo}\n`;
+        mensagem += `- Categoria: ${categoria.nome}\n`;
+        mensagem += `- Valor: R$ ${orcamento.valor.toFixed(2)}\n\n`;
+        mensagem += `Por favor, entre em contato para mais informações.`;
+
+        const mensagemCodificada = encodeURIComponent(mensagem);
+        const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagemCodificada}`;
+
+        // Abre o WhatsApp em uma nova aba
+        window.open(urlWhatsApp, '_blank');
+
     } catch (error) {
-        console.error('Erro ao buscar dados da API FIPE:', error);
-        throw error;
+        console.error('Erro ao compartilhar orçamento:', error);
+        M.toast({html: `Erro ao compartilhar orçamento: ${error.message}`, classes: 'rounded red'});
     }
 }
 
-// Função para carregar as marcas de veículos no select
-async function loadBrands() {
-    $marcaSelect.innerHTML = '<option value="" disabled selected>Selecione a marca</option>';
+// Função auxiliar para obter a cor correspondente ao status do orçamento
+function getStatusColor(status) {
+    switch (status.toLowerCase()) {
+        case 'aprovado':
+            return 'green';
+        case 'pendente':
+            return 'yellow darken-2';
+        case 'cancelado':
+            return 'red';
+        default:
+            return 'grey';
+    }
+}
+
+// Função para atualizar os dados do dashboard
+async function atualizarDashboard() {
     try {
-        const brands = await fetchFipeData('/marcas');
-        if (brands.length > 0) {
-            brands.forEach(brand => {
-                $marcaSelect.innerHTML += `<option value="${brand.codigo}">${brand.nome}</option>`;
+        const totalOrcamentos = await contarOrcamentos();
+        const totalClientes = await contarClientes();
+        const totalCategorias = await contarCategorias();
+        const faturamentoTotal = await calcularFaturamentoTotal();
+
+        document.getElementById('total-orcamentos').textContent = totalOrcamentos;
+        document.getElementById('total-clientes').textContent = totalClientes;
+        document.getElementById('total-categorias').textContent = totalCategorias;
+        document.getElementById('total-faturamento').textContent = `R$ ${faturamentoTotal.toFixed(2)}`;
+    } catch (error) {
+        console.error('Erro ao atualizar dashboard:', error);
+        M.toast({html: 'Erro ao atualizar dashboard. Por favor, recarregue a página.', classes: 'rounded red'});
+    }
+}
+
+// Função para contar o total de orçamentos
+async function contarOrcamentos() {
+    const orcamentos = await buscarTodosOrcamentos();
+    return orcamentos.length;
+}
+
+// Função para contar o total de clientes
+async function contarClientes() {
+    const clientes = await buscarTodosClientes();
+    return clientes.length;
+}
+
+// Função para contar o total de categorias
+async function contarCategorias() {
+    const categorias = await buscarTodasCategorias();
+    return categorias.length;
+}
+
+// Função para calcular o faturamento total
+async function calcularFaturamentoTotal() {
+    const orcamentos = await buscarTodosOrcamentos();
+    return orcamentos.reduce((total, orcamento) => total + orcamento.valor, 0);
+}
+
+// Função para carregar a lista de orçamentos na interface
+async function carregarOrcamentos() {
+    try {
+        const orcamentos = await buscarTodosOrcamentos();
+        const tabelaOrcamentos = document.getElementById('orcamentos-recentes');
+
+        tabelaOrcamentos.innerHTML = '';
+
+        for (const orcamento of orcamentos) {
+            const cliente = await buscarClientePorId(orcamento.clienteId);
+            const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
+
+            tabelaOrcamentos.innerHTML += `
+                <tr>
+                    <td>${cliente.nome}</td>
+                    <td>${orcamento.veiculo}</td>
+                    <td>${categoria.nome}</td>
+                    <td>R$ ${orcamento.valor.toFixed(2)}</td>
+                    <td><span class="new badge ${getStatusColor(orcamento.status)}" data-badge-caption="${orcamento.status}"></span></td>
+                    <td>
+                        <a href="#!" class="btn-floating btn-small waves-effect waves-light compartilhar-orcamento" style="background-color: #25D366;" data-orcamento-id="${orcamento.id}">
+                            <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Adiciona event listeners para os botões de compartilhamento via WhatsApp
+        document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
+            botao.addEventListener('click', function(e) {
+                e.preventDefault();
+                const orcamentoId = this.getAttribute('data-orcamento-id');
+                compartilharViaWhatsApp(orcamentoId);
             });
-        } else {
-            $marcaSelect.innerHTML += '<option value="" disabled>Nenhuma marca encontrada</option>';
-        }
+        });
+
     } catch (error) {
-        console.error('Erro ao carregar marcas:', error);
-        $marcaSelect.innerHTML += '<option value="" disabled>Erro ao carregar marcas</option>';
+        console.error('Erro ao carregar orçamentos:', error);
+        M.toast({html: 'Erro ao carregar orçamentos. Por favor, recarregue a página.', classes: 'rounded red'});
     }
-    M.FormSelect.init($marcaSelect);
 }
-
-// Evento ao selecionar uma marca
-$marcaSelect.addEventListener('change', async function() {
-    $modeloSelect.innerHTML = '<option value="" disabled selected>Selecione o modelo</option>';
-    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-    $modeloSelect.disabled = true;
-    $anoSelect.disabled = true;
-    M.FormSelect.init($modeloSelect);
-    M.FormSelect.init($anoSelect);
-
-    const marcaId = this.value;
-    if (marcaId) {
-        $modeloSelect.disabled = false;
-        try {
-            const modelsData = await fetchFipeData(`/marcas/${marcaId}/modelos`);
-            if (modelsData && modelsData.modelos) {
-                modelsData.modelos.forEach(model => {
-                    $modeloSelect.innerHTML += `<option value="${model.codigo}">${model.nome}</option>`;
-                });
-            }
-        } catch (error) {
-            console.error('Erro ao carregar modelos:', error);
-            $modeloSelect.innerHTML += '<option value="" disabled>Erro ao carregar modelos</option>';
-        }
-        M.FormSelect.init($modeloSelect);
-    }
-});
-
-// Evento ao selecionar um modelo
-$modeloSelect.addEventListener('change', async function() {
-    $anoSelect.innerHTML = '<option value="" disabled selected>Selecione o ano</option>';
-    $anoSelect.disabled = true;
-    M.FormSelect.init($anoSelect);
-
-    const modeloId = this.value;
-    const marcaId = $marcaSelect.value;
-    if (modeloId) {
-        $anoSelect.disabled = false;
-        try {
-            const years = await fetchFipeData(`/marcas/${marcaId}/modelos/${modeloId}/anos`);
-            if (years.length > 0) {
-                years.forEach(year => {
-                    $anoSelect.innerHTML += `<option value="${year.codigo}">${year.nome}</option>`;
-                });
-            }
-        } catch (error) {
-            console.error('Erro ao carregar anos:', error);
-            $anoSelect.innerHTML += '<option value="" disabled>Erro ao carregar anos</option>';
-        }
-        M.FormSelect.init($anoSelect);
-    }
-});
 
 // Função para inicializar todos os componentes do Materialize CSS
 function initializeAllComponents() {
@@ -1323,7 +1416,7 @@ function initializeAllComponents() {
     M.Dropdown.init(elemsDropdown, {
         constrainWidth: false,
         coverTrigger: false,
-        closeOnClick: false,
+        closeOnClick: true, // Alterado para fechar ao clicar
         hover: false,
         alignment: 'right'
     });
@@ -1349,14 +1442,6 @@ function showSection(sectionId) {
         targetSection.style.display = 'block';
     } else {
         console.error('Seção não encontrada:', sectionId);
-    }
-
-    // Fecha o sidenav no mobile
-    if (window.innerWidth <= 992) {
-        var sidenav = M.Sidenav.getInstance(document.querySelector('.sidenav'));
-        if (sidenav) {
-            sidenav.close();
-        }
     }
 
     // Atualiza a navegação ativa
@@ -1404,6 +1489,7 @@ async function carregarDados() {
 document.addEventListener('DOMContentLoaded', function() {
     initializeAllComponents();
     carregarDados();
+    loadBrands(); // Carrega as marcas da API FIPE
 
     // Adiciona event listeners adicionais
     document.getElementById('calcularOrcamentoBtn').addEventListener('click', calcularOrcamento);
@@ -1435,13 +1521,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Função para compartilhar orçamento via WhatsApp (Duplicata Removida)
-// Já foi definida anteriormente como compartilharViaWhatsApp
-
-// Funções para salvar dados de formas de pagamento (Implementação Similar)
-// Aqui você pode adicionar funções semelhantes para salvar e carregar formas de pagamento, se necessário
-
-// Funções adicionais podem ser adicionadas abaixo conforme necessário
 </script>
 </body>
 </html>
