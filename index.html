@@ -1017,32 +1017,40 @@ async function atualizarClienteDB(cliente) {
         await carregarOrcamentos();
         atualizarDashboard();
     }
-
     async function carregarClientes() {
-        const clientes = await buscarTodosClientes();
-        const listaClientes = document.getElementById('lista-clientes');
-        const selectCliente = document.getElementById('cliente');
+    const clientes = await buscarTodosClientes();
+    const listaClientes = document.getElementById('lista-clientes');
+    const selectCliente = document.getElementById('cliente');
+    
+    listaClientes.innerHTML = '';
+    selectCliente.innerHTML = '<option value="" disabled selected>Selecione o cliente</option>';
+    
+    clientes.forEach(cliente => {
+        listaClientes.innerHTML += `
+            <li class="collection-item" style="position: relative; padding-right: 48px; min-height: 65px;">
+                <div style="padding-right: 40px;">
+                    <span class="title" style="font-weight: bold; display: block; color: #00796b;">${cliente.nome}</span>
+                    <p style="margin: 0; font-size: 0.9em; color: rgba(0,0,0,0.7);">
+                        ${cliente.email}<br>
+                        ${cliente.telefone}
+                    </p>
+                </div>
+                <div style="position: absolute; top: 5px; right: 5px; display: flex; flex-direction: column;">
+                    <a href="#!" onclick="editarCliente(${cliente.id})" style="margin-bottom: 5px; color: #00796b;">
+                        <i class="material-icons" style="font-size: 20px;">edit</i>
+                    </a>
+                    <a href="#!" onclick="confirmarExclusaoCliente(${cliente.id})" style="color: #00796b;">
+                        <i class="material-icons" style="font-size: 20px;">delete</i>
+                    </a>
+                </div>
+            </li>
+        `;
         
-        listaClientes.innerHTML = '';
-        selectCliente.innerHTML = '<option value="" disabled selected>Selecione o cliente</option>';
-        
-        clientes.forEach(cliente => {
-            listaClientes.innerHTML += `
-                <li class="collection-item avatar">
-                    <img src="/api/placeholder/100/100" alt="" class="circle">
-                    <span class="title">${cliente.nome}</span>
-                    <p>${cliente.email}<br>${cliente.telefone}</p>
-                    <a href="#!" class="secondary-content" onclick="editarCliente(${cliente.id})"><i class="material-icons">edit</i></a>
-                    <a href="#!" class="secondary-content" onclick="confirmarExclusaoCliente(${cliente.id})"><i class="material-icons">delete</i></a>
-                </li>
-            `;
-            
-            selectCliente.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
-        });
-        
-        M.FormSelect.init(selectCliente);
-    }
-
+        selectCliente.innerHTML += `<option value="${cliente.id}">${cliente.nome}</option>`;
+    });
+    
+    M.FormSelect.init(selectCliente);
+}
     async function carregarServicos() {
         const servicos = await buscarTodosServicos();
         const listaServicos = document.getElementById('lista-servicos');
