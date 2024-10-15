@@ -261,11 +261,11 @@
                             </select>
                             <label>Categoria</label>
                         </div>
-                        <div class="input-field col s12 m6">
+                        <div class="input-field col s12">
                             <select multiple id="partesCarro">
                                 <option value="" disabled>Selecione as partes do carro</option>
-                                <option value="carro completo com para-brisa">Carro completo com para-brisa</option>
-                                <option value="carro completo sem para-brisa">Carro completo sem para-brisa</option>
+                                <option value="carro-completo-com-para-brisa">Carro completo com para-brisa</option>
+                                <option value="carro-completo-sem-para-brisa">Carro completo sem para-brisa</option>
                                 <option value="para-brisa-dianteiro">Para-brisa Dianteiro</option>
                                 <option value="para-brisa-traseiro">Para-brisa Traseiro</option>
                                 <option value="vidro-lateral-dianteiro-esquerdo">Vidro Lateral Dianteiro - Esquerdo</option>
@@ -276,7 +276,7 @@
                                 <option value="vidro-espia-traseiro">Vidro Espia Traseiro</option>
                                 <option value="vidro-vigia">Vidro Vigia (Traseiro Central)</option>
                                 <option value="teto-solar">Teto Solar</option>
-                                <option value="faixa 15cm">Faixa 15cm</option>
+                                <option value="faixa-15cm">Faixa 15cm</option>
                             </select>
                             <label>Partes do Carro</label>
                         </div>
@@ -539,6 +539,8 @@ let db;
 const dbName = 'AutoCarDB';
 const dbVersion = 1;
 
+
+
 // Abre uma conexão com o banco de dados IndexedDB
 const request = indexedDB.open(dbName, dbVersion);
 
@@ -602,6 +604,44 @@ function converterImagemParaBase64(file) {
         reader.onerror = error => reject(error);
     });
 }
+
+// Declarações globais
+const precosBaseParte = {
+    'carro-completo-com-para-brisa': 1,
+    'carro-completo-sem-para-brisa': 0.9,
+    'para-brisa-dianteiro': 0.3,
+    'para-brisa-traseiro': 0.25,
+    'vidro-lateral-dianteiro-esquerdo': 0.15,
+    'vidro-lateral-dianteiro-direito': 0.15,
+    'vidro-lateral-traseiro-esquerdo': 0.15,
+    'vidro-lateral-traseiro-direito': 0.15,
+    'vidro-espia-dianteiro': 0.05,
+    'vidro-espia-traseiro': 0.05,
+    'vidro-vigia': 0.2,
+    'teto-solar': 0.2,
+    'faixa-15cm': 0.1
+};
+
+async function calcularPrecoTotal(categoriaId, partesSelecionadas) {
+    const categoria = await buscarCategoriaPorId(categoriaId);
+    if (!categoria || !categoria.preco) {
+        throw new Error('Categoria não encontrada ou sem preço definido');
+    }
+
+    let fatorTotal = 0;
+    partesSelecionadas.forEach(parte => {
+        fatorTotal += precosBaseParte[parte] || 0;
+    });
+
+    // Se nenhuma parte foi selecionada ou o fator total é maior que 1, 
+    // consideramos como um carro completo
+    if (fatorTotal === 0 || fatorTotal > 1) {
+        fatorTotal = 1;
+    }
+
+    return categoria.preco * fatorTotal;
+}
+
 
 // Função para buscar dados da empresa no IndexedDB
 async function buscarDadosEmpresa() {
@@ -1249,25 +1289,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Função para calcular o orçamento a partir do formulário
 async function calcularOrcamento() {
-    console.log('Iniciando cálculo de orçamento');
-
-    const clienteSelect = document.getElementById('cliente');
-    const categoriaSelect = document.getElementById('categoria');
-    const partesCarro = document.getElementById('partesCarro');
-
-    if (!clienteSelect || !categoriaSelect || !partesCarro) {
-        console.error('Elementos de formulário não encontrados');
-        M.toast({html: 'Erro ao carregar formulário. Por favor, recarregue a página.', classes: 'rounded red'});
-        return;
-    }
-
-    const clienteId = parseInt(clienteSelect.value);
-    const categoriaId = parseInt(categoriaSelect.value);
+    const clienteId = parseInt(document.getElementById('cliente').value);
+    const categoriaId = parseInt(document.getElementById('categoria').value);
     const veiculo = getSelectedVehicle();
-    const partesSelecionadas = M.FormSelect.getInstance(partesCarro).getSelectedValues();
-    const observacoes = document.getElementById('observacoes')?.value || '';
-
-    console.log('Dados coletados:', { clienteId, categoriaId, veiculo, partesSelecionadas, observacoes });
+    const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
+    const observacoes = document.getElementById('observacoes').value || '';
 
     if (!clienteId || !categoriaId || !veiculo) {
         M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
@@ -1278,18 +1304,11 @@ async function calcularOrcamento() {
         const cliente = await buscarClientePorId(clienteId);
         const categoria = await buscarCategoriaPorId(categoriaId);
 
-        console.log('Cliente e categoria buscados:', { cliente, categoria });
-
         if (!cliente || !categoria) {
             throw new Error('Cliente ou categoria não encontrada');
         }
 
-        // Cálculo simplificado do valor do orçamento
-        const valorBase = 100; // Valor base de exemplo
-        const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
-        const valorTotal = valorBase + valorPartes;
-
-        console.log('Valores calculados:', { valorBase, valorPartes, valorTotal });
+        const valorTotal = await calcularPrecoTotal(categoriaId, partesSelecionadas);
 
         const novoOrcamento = {
             clienteId,
@@ -1301,8 +1320,6 @@ async function calcularOrcamento() {
             status: 'Pendente',
             data: new Date()
         };
-
-        console.log('Novo orçamento criado:', novoOrcamento);
 
         const id = await adicionarOrcamento(novoOrcamento);
         M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
@@ -1316,12 +1333,10 @@ async function calcularOrcamento() {
         // Exibe o resultado do orçamento
         exibirResultadoOrcamento(id, cliente, categoria, novoOrcamento);
 
-        // Navega para o Dashboard sem fechar o sidenav
+        // Navega para o Dashboard
         const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
         if (tabsInstance) {
             tabsInstance.select('dashboard');
-        } else {
-            console.error('Instância de tabs não encontrada');
         }
 
     } catch (error) {
