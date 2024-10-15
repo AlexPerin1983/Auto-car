@@ -99,6 +99,9 @@
             z-index: 1;
             position: relative;
         }
+        .btn-floating.btn-small {
+    margin-right: 5px;
+}
     </style>
 </head>
 <body>
@@ -531,6 +534,7 @@
 <!-- Scripts do Materialize e jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  
 <script>
 // Parte 1: Inicialização do IndexedDB e Manipulação de Dados
@@ -618,7 +622,7 @@ const precosBaseParte = {
     'vidro-espia-dianteiro': 0.05,
     'vidro-espia-traseiro': 0.05,
     'vidro-vigia': 0.2,
-    'teto-solar': 0.2,
+    'teto-solar': 0.25,
     'faixa-15cm': 0.1
 };
 
@@ -1493,17 +1497,28 @@ async function carregarOrcamentos() {
                         <a href="#!" class="btn-floating btn-small waves-effect waves-light compartilhar-orcamento" style="background-color: #25D366;" data-orcamento-id="${orcamento.id}">
                             <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
                         </a>
+                        <a href="#!" class="btn-floating btn-small waves-effect waves-light gerar-pdf-orcamento" style="background-color: #DB4437;" data-orcamento-id="${orcamento.id}">
+                            <i class="fas fa-file-pdf" style="font-size: 1.2rem;"></i>
+                        </a>
                     </td>
                 </tr>
             `;
         }
 
-        // Adiciona event listeners para os botões de compartilhamento via WhatsApp
+        // Adiciona event listeners para os botões de compartilhamento via WhatsApp e geração de PDF
         document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
             botao.addEventListener('click', function(e) {
                 e.preventDefault();
                 const orcamentoId = this.getAttribute('data-orcamento-id');
                 compartilharViaWhatsApp(orcamentoId);
+            });
+        });
+
+        document.querySelectorAll('.gerar-pdf-orcamento').forEach(botao => {
+            botao.addEventListener('click', function(e) {
+                e.preventDefault();
+                const orcamentoId = this.getAttribute('data-orcamento-id');
+                gerarPDFOrcamento(orcamentoId);
             });
         });
 
@@ -1597,6 +1612,54 @@ function formatarCNPJ(input) {
     input.value = cnpj;
 }
 
+async function gerarPDFOrcamento(orcamentoId) {
+    try {
+        const orcamento = await buscarOrcamentoPorId(orcamentoId);
+        if (!orcamento) throw new Error('Orçamento não encontrado');
+
+        const cliente = await buscarClientePorId(orcamento.clienteId);
+        if (!cliente) throw new Error('Cliente não encontrado');
+
+        const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
+        if (!categoria) throw new Error('Categoria não encontrada');
+
+        const dadosEmpresa = await buscarDadosEmpresa();
+        if (!dadosEmpresa) throw new Error('Dados da empresa não encontrados');
+
+        // Aqui você pode usar uma biblioteca como jsPDF para gerar o PDF
+        // Por exemplo:
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text('Orçamento', 105, 20, null, null, 'center');
+
+        doc.setFontSize(12);
+        doc.text(`Orçamento #${orcamentoId}`, 20, 40);
+        doc.text(`Data: ${new Date(orcamento.data).toLocaleDateString()}`, 20, 50);
+        doc.text(`Cliente: ${cliente.nome}`, 20, 60);
+        doc.text(`Veículo: ${orcamento.veiculo}`, 20, 70);
+        doc.text(`Categoria: ${categoria.nome}`, 20, 80);
+        doc.text(`Valor: R$ ${orcamento.valor.toFixed(2)}`, 20, 90);
+        doc.text(`Status: ${orcamento.status}`, 20, 100);
+
+        doc.setFontSize(10);
+        doc.text(`${dadosEmpresa.nome} - CNPJ: ${dadosEmpresa.cnpj}`, 20, 120);
+        doc.text(`${dadosEmpresa.endereco}`, 20, 130);
+        doc.text(`Tel: ${dadosEmpresa.telefone} - Email: ${dadosEmpresa.email}`, 20, 140);
+
+        // Salva o PDF
+        doc.save(`orcamento_${orcamentoId}.pdf`);
+
+    } catch (error) {
+        console.error('Erro ao gerar PDF do orçamento:', error);
+        M.toast({html: `Erro ao gerar PDF do orçamento: ${error.message}`, classes: 'rounded red'});
+    }
+}
+
+
+
+
 // Função para carregar todos os dados iniciais
 async function carregarDados() {
     await carregarClientes();
@@ -1639,6 +1702,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cnpj_empresa').addEventListener('input', function() {
         formatarCNPJ(this);
     });
+
 });
 
 </script>
