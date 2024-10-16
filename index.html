@@ -8,99 +8,142 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-        }
-        .brand-logo {
-            font-weight: 300;
-            font-size: 1.8rem;
-        }
-        nav {
-            box-shadow: none;
-        }
-        .nav-wrapper {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-        .sidenav {
-            width: 300px;
-        }
-        .sidenav li > a {
-            font-weight: 400;
-        }
-        .sidenav .user-view {
-            padding: 32px 32px 0;
-        }
-        .page-footer {
-            padding-top: 0;
-        }
-        .tabs .tab a {
-            color: #26a69a;
-        }
-        .tabs .tab a:hover, .tabs .tab a.active {
-            color: #00796b;
-        }
-        .tabs .indicator {
-            background-color: #00796b;
-        }
-        .card {
-            border-radius: 8px;
-        }
-        .card-title {
-            font-weight: 400;
-        }
-        .btn-large {
-            border-radius: 24px;
-        }
-        .collection {
-            border-radius: 8px;
-        }
-        .collection .collection-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-        .collection .collection-item:last-child {
-            border-bottom: none;
-        }
-        .table-container {
-            overflow-x: auto;
-            width: 100%;
-        }
-        .responsive-table {
-            min-width: 800px;
-            width: 100%;
-        }
-        .btn-floating .fab.fa-whatsapp {
-            font-size: 1.3rem;
-            line-height: 36px;
-        }
-        @media only screen and (max-width: 600px) {
-            .btn-floating .fab.fa-whatsapp {
-                font-size: 1.5rem;
-            }
-            .table-container {
-                margin-left: -20px;
-                margin-right: -20px;
-                padding-left: 20px;
-                padding-right: 20px;
-            }
-        }
-        .dropdown-content {
-            z-index: 9999 !important;
-            opacity: 1 !important;
-            position: fixed !important;
-            top: 64px !important;
-            right: 10px !important;
-            left: auto !important;
-            width: auto !important;
-            max-width: 300px !important;
-        }
-        .tabs, .container {
-            z-index: 1;
-            position: relative;
-        }
-        .btn-floating.btn-small {
-    margin-right: 5px;
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.main-content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1 0 auto;
+    width: 100%;
+    max-width: 1280px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.page-footer {
+    flex-shrink: 0;
+    padding-top: 0;
+}
+
+.brand-logo {
+    font-weight: 300;
+    font-size: 1.8rem;
+}
+
+nav {
+    box-shadow: none;
+}
+
+.nav-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.sidenav {
+    width: 300px;
+}
+
+.sidenav li > a {
+    font-weight: 400;
+}
+
+.sidenav .user-view {
+    padding: 32px 32px 0;
+}
+
+.tabs .tab a {
+    color: #26a69a;
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+    color: #00796b;
+}
+
+.tabs .indicator {
+    background-color: #00796b;
+}
+
+.card {
+    border-radius: 8px;
+}
+
+.card-title {
+    font-weight: 400;
+}
+
+.btn-large {
+    border-radius: 24px;
+}
+
+.collection {
+    border-radius: 8px;
+}
+
+.collection .collection-item {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.collection .collection-item:last-child {
+    border-bottom: none;
+}
+
+.table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.responsive-table {
+    min-width: 800px;
+    width: 100%;
+}
+
+.btn-floating .fab.fa-whatsapp {
+    font-size: 1.3rem;
+    line-height: 36px;
+}
+
+@media only screen and (max-width: 600px) {
+    .btn-floating .fab.fa-whatsapp {
+        font-size: 1.5rem;
+    }
+    .table-container {
+        margin-left: -15px;
+        margin-right: -15px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+.dropdown-content {
+    z-index: 9999 !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    top: 64px !important;
+    right: 10px !important;
+    left: auto !important;
+    width: auto !important;
+    max-width: 300px !important;
+}
+
+.tabs, .container {
+    z-index: 1;
+    position: relative;
 }
     </style>
 </head>
@@ -264,11 +307,11 @@
                             </select>
                             <label>Categoria</label>
                         </div>
-                        <div class="input-field col s12">
+                        <div class="input-field col s12 m6">
                             <select multiple id="partesCarro">
                                 <option value="" disabled>Selecione as partes do carro</option>
-                                <option value="carro-completo-com-para-brisa">Carro completo com para-brisa</option>
-                                <option value="carro-completo-sem-para-brisa">Carro completo sem para-brisa</option>
+                                <option value="carro completo com para-brisa">Carro completo com para-brisa</option>
+                                <option value="carro completo sem para-brisa">Carro completo sem para-brisa</option>
                                 <option value="para-brisa-dianteiro">Para-brisa Dianteiro</option>
                                 <option value="para-brisa-traseiro">Para-brisa Traseiro</option>
                                 <option value="vidro-lateral-dianteiro-esquerdo">Vidro Lateral Dianteiro - Esquerdo</option>
@@ -279,7 +322,7 @@
                                 <option value="vidro-espia-traseiro">Vidro Espia Traseiro</option>
                                 <option value="vidro-vigia">Vidro Vigia (Traseiro Central)</option>
                                 <option value="teto-solar">Teto Solar</option>
-                                <option value="faixa-15cm">Faixa 15cm</option>
+                                <option value="faixa 15cm">Faixa 15cm</option>
                             </select>
                             <label>Partes do Carro</label>
                         </div>
@@ -534,7 +577,6 @@
 <!-- Scripts do Materialize e jQuery -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
  
 <script>
 // Parte 1: Inicialização do IndexedDB e Manipulação de Dados
@@ -542,8 +584,6 @@
 let db;
 const dbName = 'AutoCarDB';
 const dbVersion = 1;
-
-
 
 // Abre uma conexão com o banco de dados IndexedDB
 const request = indexedDB.open(dbName, dbVersion);
@@ -608,44 +648,6 @@ function converterImagemParaBase64(file) {
         reader.onerror = error => reject(error);
     });
 }
-
-// Declarações globais
-const precosBaseParte = {
-    'carro-completo-com-para-brisa': 1,
-    'carro-completo-sem-para-brisa': 0.9,
-    'para-brisa-dianteiro': 0.3,
-    'para-brisa-traseiro': 0.25,
-    'vidro-lateral-dianteiro-esquerdo': 0.15,
-    'vidro-lateral-dianteiro-direito': 0.15,
-    'vidro-lateral-traseiro-esquerdo': 0.15,
-    'vidro-lateral-traseiro-direito': 0.15,
-    'vidro-espia-dianteiro': 0.05,
-    'vidro-espia-traseiro': 0.05,
-    'vidro-vigia': 0.2,
-    'teto-solar': 0.25,
-    'faixa-15cm': 0.1
-};
-
-async function calcularPrecoTotal(categoriaId, partesSelecionadas) {
-    const categoria = await buscarCategoriaPorId(categoriaId);
-    if (!categoria || !categoria.preco) {
-        throw new Error('Categoria não encontrada ou sem preço definido');
-    }
-
-    let fatorTotal = 0;
-    partesSelecionadas.forEach(parte => {
-        fatorTotal += precosBaseParte[parte] || 0;
-    });
-
-    // Se nenhuma parte foi selecionada ou o fator total é maior que 1, 
-    // consideramos como um carro completo
-    if (fatorTotal === 0 || fatorTotal > 1) {
-        fatorTotal = 1;
-    }
-
-    return categoria.preco * fatorTotal;
-}
-
 
 // Função para buscar dados da empresa no IndexedDB
 async function buscarDadosEmpresa() {
@@ -1293,11 +1295,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Função para calcular o orçamento a partir do formulário
 async function calcularOrcamento() {
-    const clienteId = parseInt(document.getElementById('cliente').value);
-    const categoriaId = parseInt(document.getElementById('categoria').value);
+    console.log('Iniciando cálculo de orçamento');
+
+    const clienteSelect = document.getElementById('cliente');
+    const categoriaSelect = document.getElementById('categoria');
+    const partesCarro = document.getElementById('partesCarro');
+
+    if (!clienteSelect || !categoriaSelect || !partesCarro) {
+        console.error('Elementos de formulário não encontrados');
+        M.toast({html: 'Erro ao carregar formulário. Por favor, recarregue a página.', classes: 'rounded red'});
+        return;
+    }
+
+    const clienteId = parseInt(clienteSelect.value);
+    const categoriaId = parseInt(categoriaSelect.value);
     const veiculo = getSelectedVehicle();
-    const partesSelecionadas = M.FormSelect.getInstance(document.getElementById('partesCarro')).getSelectedValues();
-    const observacoes = document.getElementById('observacoes').value || '';
+    const partesSelecionadas = M.FormSelect.getInstance(partesCarro).getSelectedValues();
+    const observacoes = document.getElementById('observacoes')?.value || '';
+
+    console.log('Dados coletados:', { clienteId, categoriaId, veiculo, partesSelecionadas, observacoes });
 
     if (!clienteId || !categoriaId || !veiculo) {
         M.toast({html: 'Por favor, preencha todos os campos obrigatórios.', classes: 'rounded red'});
@@ -1308,11 +1324,18 @@ async function calcularOrcamento() {
         const cliente = await buscarClientePorId(clienteId);
         const categoria = await buscarCategoriaPorId(categoriaId);
 
+        console.log('Cliente e categoria buscados:', { cliente, categoria });
+
         if (!cliente || !categoria) {
             throw new Error('Cliente ou categoria não encontrada');
         }
 
-        const valorTotal = await calcularPrecoTotal(categoriaId, partesSelecionadas);
+        // Cálculo simplificado do valor do orçamento
+        const valorBase = 100; // Valor base de exemplo
+        const valorPartes = partesSelecionadas.length * 50; // 50 reais por parte adicional
+        const valorTotal = valorBase + valorPartes;
+
+        console.log('Valores calculados:', { valorBase, valorPartes, valorTotal });
 
         const novoOrcamento = {
             clienteId,
@@ -1324,6 +1347,8 @@ async function calcularOrcamento() {
             status: 'Pendente',
             data: new Date()
         };
+
+        console.log('Novo orçamento criado:', novoOrcamento);
 
         const id = await adicionarOrcamento(novoOrcamento);
         M.toast({html: 'Orçamento calculado e salvo com sucesso!', classes: 'rounded'});
@@ -1337,10 +1362,12 @@ async function calcularOrcamento() {
         // Exibe o resultado do orçamento
         exibirResultadoOrcamento(id, cliente, categoria, novoOrcamento);
 
-        // Navega para o Dashboard
+        // Navega para o Dashboard sem fechar o sidenav
         const tabsInstance = M.Tabs.getInstance(document.querySelector('.tabs'));
         if (tabsInstance) {
             tabsInstance.select('dashboard');
+        } else {
+            console.error('Instância de tabs não encontrada');
         }
 
     } catch (error) {
@@ -1497,28 +1524,17 @@ async function carregarOrcamentos() {
                         <a href="#!" class="btn-floating btn-small waves-effect waves-light compartilhar-orcamento" style="background-color: #25D366;" data-orcamento-id="${orcamento.id}">
                             <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
                         </a>
-                        <a href="#!" class="btn-floating btn-small waves-effect waves-light gerar-pdf-orcamento" style="background-color: #DB4437;" data-orcamento-id="${orcamento.id}">
-                            <i class="fas fa-file-pdf" style="font-size: 1.2rem;"></i>
-                        </a>
                     </td>
                 </tr>
             `;
         }
 
-        // Adiciona event listeners para os botões de compartilhamento via WhatsApp e geração de PDF
+        // Adiciona event listeners para os botões de compartilhamento via WhatsApp
         document.querySelectorAll('.compartilhar-orcamento').forEach(botao => {
             botao.addEventListener('click', function(e) {
                 e.preventDefault();
                 const orcamentoId = this.getAttribute('data-orcamento-id');
                 compartilharViaWhatsApp(orcamentoId);
-            });
-        });
-
-        document.querySelectorAll('.gerar-pdf-orcamento').forEach(botao => {
-            botao.addEventListener('click', function(e) {
-                e.preventDefault();
-                const orcamentoId = this.getAttribute('data-orcamento-id');
-                gerarPDFOrcamento(orcamentoId);
             });
         });
 
@@ -1612,54 +1628,6 @@ function formatarCNPJ(input) {
     input.value = cnpj;
 }
 
-async function gerarPDFOrcamento(orcamentoId) {
-    try {
-        const orcamento = await buscarOrcamentoPorId(orcamentoId);
-        if (!orcamento) throw new Error('Orçamento não encontrado');
-
-        const cliente = await buscarClientePorId(orcamento.clienteId);
-        if (!cliente) throw new Error('Cliente não encontrado');
-
-        const categoria = await buscarCategoriaPorId(orcamento.categoriaId);
-        if (!categoria) throw new Error('Categoria não encontrada');
-
-        const dadosEmpresa = await buscarDadosEmpresa();
-        if (!dadosEmpresa) throw new Error('Dados da empresa não encontrados');
-
-        // Aqui você pode usar uma biblioteca como jsPDF para gerar o PDF
-        // Por exemplo:
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        doc.setFontSize(18);
-        doc.text('Orçamento', 105, 20, null, null, 'center');
-
-        doc.setFontSize(12);
-        doc.text(`Orçamento #${orcamentoId}`, 20, 40);
-        doc.text(`Data: ${new Date(orcamento.data).toLocaleDateString()}`, 20, 50);
-        doc.text(`Cliente: ${cliente.nome}`, 20, 60);
-        doc.text(`Veículo: ${orcamento.veiculo}`, 20, 70);
-        doc.text(`Categoria: ${categoria.nome}`, 20, 80);
-        doc.text(`Valor: R$ ${orcamento.valor.toFixed(2)}`, 20, 90);
-        doc.text(`Status: ${orcamento.status}`, 20, 100);
-
-        doc.setFontSize(10);
-        doc.text(`${dadosEmpresa.nome} - CNPJ: ${dadosEmpresa.cnpj}`, 20, 120);
-        doc.text(`${dadosEmpresa.endereco}`, 20, 130);
-        doc.text(`Tel: ${dadosEmpresa.telefone} - Email: ${dadosEmpresa.email}`, 20, 140);
-
-        // Salva o PDF
-        doc.save(`orcamento_${orcamentoId}.pdf`);
-
-    } catch (error) {
-        console.error('Erro ao gerar PDF do orçamento:', error);
-        M.toast({html: `Erro ao gerar PDF do orçamento: ${error.message}`, classes: 'rounded red'});
-    }
-}
-
-
-
-
 // Função para carregar todos os dados iniciais
 async function carregarDados() {
     await carregarClientes();
@@ -1702,7 +1670,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cnpj_empresa').addEventListener('input', function() {
         formatarCNPJ(this);
     });
-
 });
 
 </script>
