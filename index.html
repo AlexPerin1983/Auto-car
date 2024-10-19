@@ -7,6 +7,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+
     <style>
 html, body {
     height: 100%;
@@ -163,7 +166,7 @@ nav {
     <!-- Dropdown Structure -->
     <ul id="dropdown-config" class="dropdown-content config-dropdown">
         <li><a href="#!" class="modal-link" onclick="abrirModalDadosEmpresa()"><i class="material-icons">business</i>Perfil da Empresa</a></li>
-        <li><a href="#!" class="modal-link" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
+        <li><a href="#!" class="waves-effect" onclick="abrirModalFormasPagamento()"><i class="material-icons">payment</i>Formas de Pagamento</a></li>
     </ul>
 
     <!-- Sidenav -->
@@ -371,7 +374,6 @@ nav {
     </div>
 
     <!-- Modais -->
-     <!-- Modal Detalhes da Categoria -->
 <!-- Modal Editar Categoria -->
 <div id="modal-categoria" class="modal">
     <div class="modal-content">
@@ -449,54 +451,146 @@ nav {
         </div>
     </div>
 
-    <!-- Modal Formas de Pagamento -->
-    <div id="modal-formas-pagamento" class="modal">
-        <div class="modal-content">
-            <h4>Formas de Pagamento</h4>
-            <form id="formFormasPagamento">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="chave_pix" type="text" class="validate">
-                        <label for="chave_pix">Chave PIX</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <select multiple id="prazos_boleto">
-                            <option value="15">15 dias</option>
-                            <option value="30">30 dias</option>
-                            <option value="45">45 dias</option>
-                            <option value="60">60 dias</option>
-                            <option value="90">90 dias</option>
-                        </select>
-                        <label>Prazos de Boleto</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input id="parcelas_sem_juros" type="number" class="validate" min="1">
-                        <label for="parcelas_sem_juros">Parcelas sem Juros</label>
-                    </div>
-                    <div class="input-field col s6">
-                        <input id="parcelas_com_juros" type="number" class="validate" min="1">
-                        <label for="parcelas_com_juros">Parcelas com Juros</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="taxa_juros" type="number" step="0.1" class="validate" min="0">
-                        <label for="taxa_juros">Taxa de Juros (%)</label>
-                    </div>
-                </div>
-            </form>
+  
+<div id="popupPaymentMethods" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out max-w-md w-full mx-4 sm:mx-0">
+        <div class="flex justify-between items-center p-4 border-b border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-100">Formas de Pagamento</h2>
+            <button onclick="fecharModalFormasPagamento()" class="text-gray-300 hover:text-gray-100 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-            <a href="#!" class="waves-effect waves-green btn teal darken-2" onclick="salvarFormasPagamento()">Salvar</a>
-        </div>
-    </div>
 
-    <!-- Modal Novo Cliente -->
+        <form id="paymentMethodsForm" class="p-6 space-y-4">
+            <!-- Pix -->
+            <div class="flex items-center">
+                <input type="checkbox" id="pix" name="payment_methods" value="pix" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="pix" class="ml-2 text-gray-300">Pix</label>
+            </div>
+
+            <!-- Boleto -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boleto" name="payment_methods" value="boleto" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="boleto" class="ml-2 text-gray-300">Boleto</label>
+            </div>
+
+            <!-- Parcelado sem Juros -->
+            <div class="flex items-center">
+                <input type="checkbox" id="parcelado_sem_juros" name="payment_methods" value="parcelado_sem_juros" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="parcelado_sem_juros" class="ml-2 text-gray-300">Até 12x sem Juros</label>
+            </div>
+            <div class="ml-6">
+                <label for="parcelas_sem_juros" class="block text-sm text-gray-400">Número de Parcelas:</label>
+                <input type="number" id="parcelas_sem_juros" name="parcelas_sem_juros" min="1" max="12" placeholder="Até 12" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Parcelado com Juros -->
+            <div class="flex items-center">
+                <input type="checkbox" id="parcelado_com_juros" name="payment_methods" value="parcelado_com_juros" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="parcelado_com_juros" class="ml-2 text-gray-300">12x com Juros</label>
+            </div>
+            <div class="ml-6">
+                <label for="parcelas_com_juros" class="block text-sm text-gray-400">Número de Parcelas:</label>
+                <input type="number" id="parcelas_com_juros" name="parcelas_com_juros" min="1" max="12" placeholder="Até 12" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="ml-6">
+                <label for="taxa_juros" class="block text-sm text-gray-400">Taxa de Juros (%):</label>
+                <input type="number" id="taxa_juros" name="taxa_juros" step="0.01" placeholder="Ex: 2.99" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Solicitar Adiantamento -->
+            <div class="flex items-center">
+                <input type="checkbox" id="solicitar_adiantamento" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="solicitar_adiantamento" class="ml-2 text-gray-300">Solicitar Adiantamento</label>
+                <input type="number" id="porcentagem_adiantamento" placeholder="Porcentagem (%)" class="ml-4 p-1 border border-gray-600 rounded-md w-24 bg-gray-700 text-gray-100">
+            </div>
+
+            <!-- Adicionar Observação -->
+            <div class="flex items-center">
+                <input type="checkbox" id="adicionar_observacao" class="form-checkbox h-4 w-4 text-blue-600 rounded">
+                <label for="adicionar_observacao" class="ml-2 text-gray-300">Adicionar Observação</label>
+            </div>
+            <div>
+                <textarea id="observacao" placeholder="Escreva sua observação aqui..." class="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-100"></textarea>
+            </div>
+
+            <!-- Botão de Salvar -->
+            <button type="submit" class="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 shadow-md">Salvar</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="popupPaymentMethods" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-gray-800 rounded-lg shadow-lg transform transition-transform duration-300 ease-in-out max-w-md w-full mx-4 sm:mx-0">
+        <div class="flex justify-between items-center p-4 border-b border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-100">Formas de Pagamento</h2>
+            <button onclick="fecharModalFormasPagamento()" class="text-gray-300 hover:text-gray-100 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form id="paymentMethodsForm" class="p-6 space-y-4">
+            <!-- Pix -->
+            <div class="flex items-center">
+                <input type="checkbox" id="pix" name="payment_methods" value="pix" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500" checked>
+                <label for="pix" class="ml-2 text-gray-300">Pix</label>
+            </div>
+
+            <!-- Boleto -->
+            <div class="flex items-center">
+                <input type="checkbox" id="boleto" name="payment_methods" value="boleto" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500" checked>
+                <label for="boleto" class="ml-2 text-gray-300">Boleto</label>
+            </div>
+
+            <!-- Parcelado sem Juros -->
+            <div class="flex items-center">
+                <input type="checkbox" id="parcelado_sem_juros" name="payment_methods" value="parcelado_sem_juros" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                <label for="parcelado_sem_juros" class="ml-2 text-gray-300">Até 12x sem Juros</label>
+            </div>
+            <div class="ml-6">
+                <label for="parcelas_sem_juros" class="block text-sm text-gray-400">Número de Parcelas:</label>
+                <input type="number" id="parcelas_sem_juros" name="parcelas_sem_juros" min="1" max="12" placeholder="Até 12" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Parcelado com Juros -->
+            <div class="flex items-center">
+                <input type="checkbox" id="parcelado_com_juros" name="payment_methods" value="parcelado_com_juros" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                <label for="parcelado_com_juros" class="ml-2 text-gray-300">12x com Juros</label>
+            </div>
+            <div class="ml-6">
+                <label for="parcelas_com_juros" class="block text-sm text-gray-400">Número de Parcelas:</label>
+                <input type="number" id="parcelas_com_juros" name="parcelas_com_juros" min="1" max="12" placeholder="Até 12" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="ml-6">
+                <label for="taxa_juros" class="block text-sm text-gray-400">Taxa de Juros (%):</label>
+                <input type="number" id="taxa_juros" name="taxa_juros" step="0.01" placeholder="Ex: 2.99" class="mt-1 block w-full p-2 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-gray-100 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Solicitar Adiantamento -->
+            <div class="flex items-center">
+                <input type="checkbox" id="solicitar_adiantamento" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                <label for="solicitar_adiantamento" class="ml-2 text-gray-300">Solicitar Adiantamento</label>
+                <input type="number" id="porcentagem_adiantamento" placeholder="Porcentagem (%)" class="ml-4 p-1 border border-gray-600 rounded-md w-24 bg-gray-700 text-gray-100">
+            </div>
+
+            <!-- Adicionar Observação -->
+            <div class="flex items-center">
+                <input type="checkbox" id="adicionar_observacao" class="h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+                <label for="adicionar_observacao" class="ml-2 text-gray-300">Adicionar Observação</label>
+            </div>
+            <div>
+                <textarea id="observacao" placeholder="Escreva sua observação aqui..." class="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-gray-100"></textarea>
+            </div>
+
+            <!-- Botão de Salvar -->
+            <button type="submit" class="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 shadow-md">Salvar</button>
+        </form>
+    </div>
+</div>
+
+
+    
     <div id="modal-novo-cliente" class="modal">
         <div class="modal-content">
             <h4>Novo Cliente</h4>
@@ -930,10 +1024,26 @@ async function salvarDadosEmpresa() {
 
 // Função para abrir o modal de formas de pagamento
 function abrirModalFormasPagamento() {
-    carregarFormasPagamento();
-    var modal = M.Modal.getInstance(document.getElementById('modal-formas-pagamento'));
-    modal.open();
+    const popup = document.getElementById('popupPaymentMethods');
+    if (popup) {
+        popup.classList.remove('hidden');  // Remove a classe 'hidden' para mostrar o modal
+        popup.classList.add('flex');       // Adiciona 'flex' para garantir o layout correto
+    } else {
+        console.error("Modal de formas de pagamento não encontrado.");
+    }
 }
+
+function fecharModalFormasPagamento() {
+    const popup = document.getElementById('popupPaymentMethods');
+    if (popup) {
+        popup.classList.add('hidden');  // Adiciona 'hidden' para esconder o modal
+        popup.classList.remove('flex'); // Remove 'flex' para garantir que ele não ocupe espaço na tela
+    } else {
+        console.error("Modal de formas de pagamento não encontrado.");
+    }
+}
+
+
 
 // Função para carregar as formas de pagamento nos campos do modal
 async function carregarFormasPagamento() {
